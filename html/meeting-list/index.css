@@ -6,6 +6,12 @@ body {
 
     font-size: 14px;
     font-style: normal;
+
+    color: #495057;
+
+    /*width: 120%;*/
+
+    /*z-index: -1;*/
 }
 
 div, ul, span, li, a {
@@ -21,13 +27,22 @@ ul {
     list-style: none;
 }
 
-.wrapper {
-    width: 100%;
+.clear{
+    clear: both;
+}
+
+#wrapper {
+    width: 100%;        /*100%是浏览器当前窗口的宽度*/
+    height: auto;
+    min-width:1184px;   /*当浏览器当前窗口小于1184px时，移动窗口，会出现设置width是100%的元素未能覆盖被移动出来的部分*/
 }
 
 .inner {
     width: 1184px;
+    /*height: auto;*/
     margin: 0 auto;
+
+    /*border: 1px solid darkcyan;*/
 }
 
 /*header start*/
@@ -96,13 +111,21 @@ ul {
 /*header end*/
 
 #tip {
+    margin-top: 1px;
+    height: 50px;
+    width: 100%;
+    line-height: 50px;
     text-align: center;
     color: #6b1110;
     background-color: #f5d2d2;
     border-color: #f1c1c0;
+
+    white-space: nowrap;
 }
 
+
 #main {
+    padding-top: 40px;
     border: 1px solid green;
     width: 100%;
     /*height: 1000px;*/
@@ -110,21 +133,158 @@ ul {
 }
 
 .meeting-operation {
-    height: 300px;
+    height: 450px;
 
     border: 1px solid red;
+}
+
+.meeting-title{
+    height: 150px;
+}
+
+.meeting-title h2{
+    font-size: 45px;
+    height: 30px;
+}
+
+.meeting-title p{
+    font-size: 18px;
+    color: gray;
 }
 
 .create-meeting {
-float: left;
+    float: left;
+    height: 150px;
 
     border: 1px solid red;
 }
 
+.meeting-link {
+    height: 100px;
+
+    border: 1px solid blue;
+}
+
+.copy {
+    float: left;
+}
+
+.copy-label {
+    font-weight: 900;
+}
+
+.copy .ipt input {
+    width: 400px;
+    height: 20px;
+    padding: 10px 40px;
+    font-size: 15px;
+
+}
+
+.copy .ipt button {
+    width: 120px;
+    height: 44px;
+    font-size: 15px;
+    margin-left: 20px;
+    cursor: pointer;
+    background-color: royalblue;
+    color: white;
+}
+
+.copy .ipt button:hover {
+    background-color: dodgerblue;
+}
+
 .start-meeting {
-
-
+    float: right;
+    line-height: 100px;
+    vertical-align: center;
     border: 1px solid red;
+}
+
+.start-meeting button {
+    width: 250px;
+    height: 60px;
+    font-size: 25px;
+    font-weight: 900;
+    background-color: royalblue;
+    color: #fff;
+    outline: none;
+    cursor: pointer;
+}
+
+.start-meeting button:hover {
+    background-color: dodgerblue;
+}
+
+.two-meeting {
+    margin-top: 40px;
+    height: 70px;
+
+    border: 1px solid green;
+}
+
+.last-meeting {
+    padding: 0px 0px;
+    float: left;
+    width: 35%;
+    height: 100%;
+    cursor: pointer;
+
+    border: 1px solid green;
+}
+
+.last-meeting-icon {
+    float: left;
+    width: 20px;
+    height: 20px;
+    border: 1px solid green;
+}
+
+.meeting-brief {
+    float: left;
+    margin-left: 60px;
+
+}
+
+.meeting-brief h4{
+    margin-top: 10px;
+    height: 10px;
+    font-size: 16px;
+}
+
+.meeting-brief p{
+    line-height: 0px;
+    font-size: 13px;
+    color: gray;
+}
+
+.new-meeting {
+    float: left;
+    width: 35%;
+    height: 100%;
+    line-height: 70px;
+    font-size: 16px;
+    font-weight: 900;
+
+    cursor: pointer;
+
+    text-align: center;
+
+    margin-left: 40px;
+
+    border: 1px dashed gray;
+}
+
+.new-meeting:hover{
+    background-color: darkgray;
+}
+
+.add-meeting-icon{
+    float: left;
+    width: 20px;
+    height: 20px;
+    border: 1px solid green;
 }
 
 .my-table {

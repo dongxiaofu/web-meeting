@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <!--<link rel="stylesheet" href="https://use.fontawesome.com/0cf80a1607.css">-->
     <link rel="stylesheet" type="text/css" href="index.css">
 </head>
 <body>
@@ -22,44 +23,51 @@
             </div>
         </div>
     </div>
-    <div id="tip">Due to increased demand, recordings are temporarily disabled and the maximum duration of a meeting has
+    <div id="tip">
+        Due to increased demand, recordings are temporarily disabled and the maximum duration of a meeting has
         been reduced to 60 minutes on this server.
     </div>
     <div id="main">
         <div class="inner">
             <div class="meeting-operation">
-                <div class="create-meeting">
-                    <h3>主会议室<i class="home"></i></h3>
-                    <p>5 会议|0会议录像</p>
-                    <p>邀请参与者的链接</p>
-                    <p>
-                        <span>
-                            <i class="icon-link"></i>
-                            <input type="text" value="https://demo.bigbluebutton.org/gl/chu-iya-aqz-dgv">
-                        </span>
-                        <span>
-                            <button><i class="icon-copy"></i>复制</button>
-                        </span>
-                    </p>
-                    <div class="two-meeting">
-                        <div class="last-meeting">
-                            <div class="last-meeting-icon"></div>
-                            <div class="meeting-brief">
-                                <h4>主会议室</h4>
-                                <p>上一次会议十月07,2020</p>
-                            </div>
-                            <div class="operation-list"></div>
-                        </div>
-                        <div class="new-meeting">
-                            <div class="operation-add"></div>
-                            创建会议室
-                        </div>
+                <div class="meeting-title">
+                    <h2>主会议室<i class="home"></i></h2>
+                    <p>5&nbsp;会议&nbsp;|&nbsp;0&nbsp;会议录像</p>
+                </div>
+                <div class="meeting-link">
+                    <div class="copy">
+                        <p class="copy-label">邀请参与者的链接</p>
+                        <p class="ipt">
+                            <span>
+                                <i class="icon-link"></i>
+                                <input type="text" value="https://demo.bigbluebutton.org/gl/chu-iya-aqz-dgv">
+                            </span>
+                            <span>
+                                <button><i class="icon-copy"></i>复制</button>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="start-meeting">
+                        <button>加入</button>
                     </div>
                 </div>
-                <div class="start-meeting">
-                    <button>加入</button>
+                <div class="clear"></div>
+                <div class="two-meeting">
+                    <div class="last-meeting">
+                        <div class="last-meeting-icon"></div>
+                        <div class="meeting-brief">
+                            <h4>主会议室</h4>
+                            <p>上一次会议十月07,2020</p>
+                        </div>
+                    </div>
+                    <div class="new-meeting">
+                        <!--<div class="add-meeting-icon"></div>-->
+                        创建会议室
+                    </div>
                 </div>
+
             </div>
+            <div class="clear"></div>
             <div class="meeting-list">
                 <div class="list-title">
                     <div class="title">会议录像</div>
