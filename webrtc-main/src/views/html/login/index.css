@@ -1,0 +1,265 @@
+body {
+    margin: 0;
+    padding: 0;
+
+    background-color: white;
+
+    font-size: 14px;
+    font-style: normal;
+
+    color: #495057;
+
+    /*width: 120%;*/
+
+    /*z-index: -1;*/
+}
+
+div, ul, span, li, a {
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+ul {
+    list-style: none;
+}
+
+.clear {
+    clear: both;
+}
+
+#wrapper {
+    width: 100%; /*100%是浏览器当前窗口的宽度*/
+    height: auto;
+    min-width: 1184px; /*当浏览器当前窗口小于1184px时，移动窗口，会出现设置width是100%的元素未能覆盖被移动出来的部分*/
+}
+
+.inner {
+    width: 1184px;
+    /*height: auto;*/
+    margin: 0 auto;
+
+    /*border: 1px solid darkcyan;*/
+}
+
+/*header start*/
+#my-head {
+    /*border: 1px solid red;*/
+    width: 100%;
+    height: 50px;
+    line-height: 50px;
+    background-color: #fff;
+}
+
+#logo {
+    float: left;
+
+}
+
+#menu {
+    float: right;
+}
+
+#menu .home {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+
+    background-image: url("home.png");
+    background-position: 0px 0px;
+    background-repeat: no-repeat;
+    background-size: contain; /*至关重要，没有这句，背景图不显示。原因未知。*/
+
+    position: absolute;
+    top: 11px;
+    left: -21px;
+
+    /*background-color: red;*/
+    /*position: relative;*/
+}
+
+#menu .video {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+
+    background-image: url("camera.png");
+    background-position: 0px 0px;
+    background-repeat: no-repeat;
+    background-size: contain; /*至关重要，没有这句，背景图不显示。原因未知。*/
+
+    position: absolute;
+    top: 14px;
+    left: -20px;
+
+    /*background-color: red;*/
+    /*position: relative;*/
+}
+
+#menu li {
+    display: inline-block;
+    margin-left: 25px;
+    position: relative;
+}
+
+#menu a {
+    color: gray;
+}
+
+#menu a:hover {
+    display: inline-block;
+    height: 100%;
+    color: dodgerblue;
+    border-bottom: 1px solid green;
+}
+
+#first-letter {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    background-color: red;
+    border: 1px solid red;
+    font-size: 20px;
+    border-radius: 100%;
+    color: white;
+    /*border-radius: 60px;*/
+}
+
+/*header end*/
+
+#tip {
+    margin-top: 1px;
+    height: 50px;
+    width: 100%;
+    line-height: 50px;
+    text-align: center;
+    color: #6b1110;
+    background-color: #f5d2d2;
+    border-color: #f1c1c0;
+
+    white-space: nowrap;
+}
+
+
+#main {
+    padding-top: 40px;
+    /*border: 1px solid green;*/
+    width: 100%;
+    height: 560px;
+    /*height: auto;*/
+}
+
+#left-bar{
+    width: 48%;
+    height: 340px;
+    float: left;
+
+    text-align: center;
+    vertical-align: middle;
+
+    /*border: 1px solid red;*/
+
+    position: relative;
+}
+
+#left-bar img{
+    display: inline-block;
+    width: 492px;
+    height: 309px;
+
+    position: absolute;
+    top: 15px;
+    left: 39px;
+}
+
+#register-box{
+    width: 48%;
+    height: 340px;
+    float: right;
+
+    /*border: 1px solid red;*/
+}
+
+#register-box-inner{
+    width: 80%;
+    margin: 20px auto;
+}
+
+.form-line{
+    width: 410px;
+    height: 40px;
+    line-height: 40px;
+    margin-bottom: 30px;
+    /*border: 1px solid red;*/
+}
+
+.form-line label{
+    display: inline-block;
+    height: 40px;
+    width: 100px;
+    color: gray;
+    font-size: 15px;
+
+    /*border: 1px solid greenyellow;*/
+}
+
+.form-line input{
+    display: inline-block;
+    height: 40px;
+    width: 210px;
+    outline: none;
+
+    /*border: 1px solid greenyellow;*/
+}
+
+#send-verify-code{
+    height: 42px;
+    width: 72px;
+    background-color: dodgerblue;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    outline: none;
+}
+
+.btn{
+    /*position: relative;*/
+}
+
+.btn button{
+    float: right;
+    /*position: absolute;*/
+    /*top: 0px;*/
+    /*right: 0px;*/
+    position: relative;
+    right: 86px;
+
+    background-color: dodgerblue;
+    color: white;
+    width: 100px;
+    height: 40px;
+
+    cursor: pointer;
+    outline: none;
+    font-size: 16px;
+
+    margin-left: 20px;
+}
+
+.tips{
+    font-size: 10px;
+    color: gray;
+}
+
+#my-foot {
+    /*border: 1px solid green;*/
+    width: 100%;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+}
