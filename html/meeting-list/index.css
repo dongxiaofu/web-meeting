@@ -27,14 +27,14 @@ ul {
     list-style: none;
 }
 
-.clear{
+.clear {
     clear: both;
 }
 
 #wrapper {
-    width: 100%;        /*100%是浏览器当前窗口的宽度*/
+    width: 100%; /*100%是浏览器当前窗口的宽度*/
     height: auto;
-    min-width:1184px;   /*当浏览器当前窗口小于1184px时，移动窗口，会出现设置width是100%的元素未能覆盖被移动出来的部分*/
+    min-width: 1184px; /*当浏览器当前窗口小于1184px时，移动窗口，会出现设置width是100%的元素未能覆盖被移动出来的部分*/
 }
 
 .inner {
@@ -47,7 +47,7 @@ ul {
 
 /*header start*/
 #my-head {
-    border: 1px solid red;
+    /*border: 1px solid red;*/
     width: 100%;
     height: 50px;
     line-height: 50px;
@@ -67,30 +67,52 @@ ul {
     display: inline-block;
     width: 20px;
     height: 20px;
-    border: 1px solid red;
 
-    /*background-color: red;*/
-    position: relative;
-}
-
-#menu .home::before {
-    content: "\f015";
-    font-size: 21px;
-
+    background-image: url("home.png");
+    background-position: 0px 0px;
+    background-repeat: no-repeat;
+    background-size: contain; /*至关重要，没有这句，背景图不显示。原因未知。*/
 
     position: absolute;
-    top: 0px;
-    left: 0px;
+    top: 11px;
+    left: -21px;
+
+    /*background-color: red;*/
+    /*position: relative;*/
+}
+
+#menu .video {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+
+    background-image: url("camera.png");
+    background-position: 0px 0px;
+    background-repeat: no-repeat;
+    background-size: contain; /*至关重要，没有这句，背景图不显示。原因未知。*/
+
+    position: absolute;
+    top: 14px;
+    left: -20px;
+
+    /*background-color: red;*/
+    /*position: relative;*/
 }
 
 #menu li {
     display: inline-block;
-    margin-left: 20px;
+    margin-left: 25px;
+    position: relative;
+}
+
+#menu a {
+    color: gray;
 }
 
 #menu a:hover {
     display: inline-block;
     height: 100%;
+    color: dodgerblue;
     border-bottom: 1px solid green;
 }
 
@@ -126,7 +148,7 @@ ul {
 
 #main {
     padding-top: 40px;
-    border: 1px solid green;
+    /*border: 1px solid green;*/
     width: 100%;
     /*height: 1000px;*/
     height: auto;
@@ -135,19 +157,19 @@ ul {
 .meeting-operation {
     height: 450px;
 
-    border: 1px solid red;
+    /*border: 1px solid red;*/
 }
 
-.meeting-title{
+.meeting-title {
     height: 150px;
 }
 
-.meeting-title h2{
+.meeting-title h2 {
     font-size: 45px;
     height: 30px;
 }
 
-.meeting-title p{
+.meeting-title p {
     font-size: 18px;
     color: gray;
 }
@@ -156,13 +178,11 @@ ul {
     float: left;
     height: 150px;
 
-    border: 1px solid red;
+    /*border: 1px solid red;*/
 }
 
 .meeting-link {
     height: 100px;
-
-    border: 1px solid blue;
 }
 
 .copy {
@@ -178,7 +198,42 @@ ul {
     height: 20px;
     padding: 10px 40px;
     font-size: 15px;
+    color: gray;
+    outline: none;
+}
 
+.copy .ipt span {
+    position: relative;
+}
+
+.copy .ipt span .icon-link {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-image: url("link.png");
+
+    position: absolute;
+    top: 2px;
+    left: 18px;
+}
+
+.copy .ipt button{
+    position: relative;
+}
+
+.copy .ipt button .icon-copy{
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-image: url("copy.png");
+
+    position: absolute;
+    top: 10px;
+    left: 18px;
 }
 
 .copy .ipt button {
@@ -199,7 +254,7 @@ ul {
     float: right;
     line-height: 100px;
     vertical-align: center;
-    border: 1px solid red;
+    /*border: 1px solid red;*/
 }
 
 .start-meeting button {
@@ -221,7 +276,7 @@ ul {
     margin-top: 40px;
     height: 70px;
 
-    border: 1px solid green;
+    /*border: 1px solid green;*/
 }
 
 .last-meeting {
@@ -231,29 +286,38 @@ ul {
     height: 100%;
     cursor: pointer;
 
-    border: 1px solid green;
+    position: relative;
+
+    border: 1px solid gray;
 }
 
 .last-meeting-icon {
     float: left;
-    width: 20px;
-    height: 20px;
-    border: 1px solid green;
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    background-color: royalblue;
+    border-radius: 2px;
+
+    position: relative;
+    top: 19px;
+    left: 100px;
 }
 
 .meeting-brief {
     float: left;
-    margin-left: 60px;
-
+    margin-left: 130px;
+    position: relative;
+    top: 3px;
 }
 
-.meeting-brief h4{
+.meeting-brief h4 {
     margin-top: 10px;
     height: 10px;
     font-size: 16px;
 }
 
-.meeting-brief p{
+.meeting-brief p {
     line-height: 0px;
     font-size: 13px;
     color: gray;
@@ -274,17 +338,31 @@ ul {
     margin-left: 40px;
 
     border: 1px dashed gray;
+
+    position: relative;
 }
 
-.new-meeting:hover{
+.new-meeting:hover {
     background-color: darkgray;
 }
 
-.add-meeting-icon{
+.add-meeting-icon {
+    display: inline-block;
     float: left;
-    width: 20px;
-    height: 20px;
-    border: 1px solid green;
+    width: 25px;
+    height: 25px;
+    line-height: 25px;  /*无这句，标签的内容会出现在标签之外*/
+    font-style: normal;
+    background-color: royalblue;
+
+    color: white;
+    font-size: 20px;
+
+    position: absolute;
+    top: 21px;
+    left: 120px;
+
+    /*border: 1px solid green;*/
 }
 
 .my-table {
@@ -306,6 +384,7 @@ ul {
 
 .list-title .search-ipt {
     float: right;
+    position: relative;
 }
 
 .list-title .search-ipt input {
@@ -313,18 +392,24 @@ ul {
     outline: none;
     width: 250px;
     height: 30px;
-
-    position: relative;
 }
 
 .search-icon {
     display: inline-block;
-    width: 20px;
-    height: 20px;
+    width: 30px;
+    height: 30px;
     background-repeat: no-repeat;
-    background-position: 0px -120px;
-    background-image: url("icons.png");
-    border: 1px solid green;
+    background-size: contain;
+    /*background-position: 0px -120px;*/
+    background-image: url("search.png");
+    /*border: 1px solid green;*/
+    cursor: pointer;
+
+    position: absolute;
+    top: 26px;
+    right: 0px;
+    z-index: 200;
+
 }
 
 .meeting-list li {
@@ -369,7 +454,7 @@ ul {
 }
 
 #my-foot {
-    border: 1px solid green;
+    /*border: 1px solid green;*/
     width: 100%;
     height: 50px;
     line-height: 50px;
