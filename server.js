@@ -47,14 +47,19 @@ app._io.on('connection', sock => {
             if (!users[data.roomid]) {
                 users[data.roomid] = [];
             }
+            if(data.account != undefined){
+
+            }
             let obj = {
                 account: data.account,
                 id: sock.id
             };
+            // 房间内是否存在当前进入房间的用户
             let arr = users[data.roomid].filter(v => v.account === data.account);
             if (!arr.length) {
                 users[data.roomid].push(obj);
             }
+            // 留着做转发使用
             sockS[data.account] = sock;
             app._io.in(data.roomid).emit('joined', users[data.roomid], data.account, sock.id); // 发给房间内所有人
             // sock.to(data.roomid).emit('joined',data.account);

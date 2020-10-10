@@ -602,17 +602,23 @@ ul {
 
 /*视频列表*/
 #video-list {
-    width: 600px;
-    height: 100px;
+    width: auto;
+    max-width: 100px;
+    max-height: 400px;
+    height: auto;
 
     position: absolute;
     z-index: 200;
 
     top: 20px;
-    /*left: 100px;*/
 
-    /*border: 1px solid forestgreen;*/
-    /*background-color: #6b1110;*/
+    border: 1px solid red;
+}
+
+#video-list li{
+    position: relative;
+    margin: 0;
+    padding: 0;
 }
 
 #video-list .video-mine {
@@ -621,6 +627,22 @@ ul {
     width: 100px;
     height: 100px;
     outline: none;
+}
+
+.video-user{
+    position: absolute;
+    left: 0px;
+    bottom: -12px;
+    display: inline-block;
+    width: 60px;
+    height: 20px;
+    line-height: 20px;
+    text-align: left;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 6px;
+
+    /*border: 1px solid red;*/
 }
 
 /*画板*/

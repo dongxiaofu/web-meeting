@@ -20,7 +20,7 @@
         methods: {
             join() {
                 if (this.account && this.roomid) {
-                    this.$router.push({name: 'room2', params: {roomid: this.roomid, account: this.account}})
+                    this.$router.push({name: 'detail', params: {roomid: this.roomid, account: this.account}})
                 }
             }
         }

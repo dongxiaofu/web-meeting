@@ -124,11 +124,15 @@
                     <!--切换幻灯片等工具 end-->
                     <!--视频区 start-->
                     <div id="video-list">
-                        <ul class="video-box" ref="video-box">
-                            <li>
+                        <!--<div class="video-box" ref="video-box">-->
+                        <!--<video class="video-mine" autoplay controls ref="video-mine"></video>-->
+                        <!--</div>-->
+                        <div class="video-box" ref="video-box">
+                            <div>
                                 <video class="video-mine" autoplay controls ref="video-mine"></video>
-                            </li>
-                        </ul>
+                                <span class="video-user">{{account}}</span>
+                            </div>
+                        </div>
                         <!--<video src="" id="rtcB-Board" playsinline autoplay></video>-->
                         <!--<h5>演示画面</h5>-->
                         <!--<button @click="call2" :disabled="allowCall">call</button>-->
@@ -208,7 +212,7 @@
     import {Palette} from '../../../utils/palette';
 
     export default {
-        name: 'home',
+        name: 'index',
         data() {
             return {
                 // 画板start
@@ -265,7 +269,9 @@
                 // 参会用户
                 participants: [],
                 // 参会用户数量
-                participantNumber:0,
+                participantNumber: 0,
+                // 当前用户
+                account: 'Default',
             }
         },
         watch: {
@@ -282,6 +288,26 @@
             }
         },
         methods: {
+            initPeer() {
+                // 创建输出端 PeerConnection
+                let PeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;
+                this.peer = new PeerConnection();
+                // 监听ICE候选信息 如果收集到，就发送给对方
+                this.peer.onicecandidate = (event) => {
+                    if (event.candidate) {
+                        socket.emit('__ice_candidate', {
+                            'candidate': event.candidate,
+                            roomid: this.$route.params.roomid,
+                            account: v.account
+                        });
+                    }
+                };
+            },
+            async createP2P() {
+                this.loading = true;
+                // this.loadingText = '正在建立通话连接';
+                await this.initPeer(); // 获取到媒体流后，调用函数初始化 RTCPeerConnection
+            },
             // 保存canvas中的图片
             saveImageInfo() {
                 var mycanvas = document.getElementById("my-canvas");
@@ -307,6 +333,7 @@
                         this.localStream = stream;
                         resolve();
                     }, function (error) {
+                        alert(777)
                         reject(error);
                         // console.log(error);
                         //处理媒体流创建失败错误
@@ -334,19 +361,26 @@
                 //如果检测到媒体流连接到本地，将其绑定到一个video标签上输出
                 peer.onaddstream = function (event) {
                     // console.log('event-stream', event);
-                    alert(0)
                     let videos = document.querySelector('#' + v.account);
                     if (videos) {
-                        alert(1)
                         videos.srcObject = event.stream;
                     } else {
-                        alert(2)
+                        let li = document.createElement('li')
                         let video = document.createElement('video');
+                        video.setAttribute('class', 'video-mine');
                         video.controls = true;
                         video.autoplay = 'autoplay';
                         video.srcObject = event.stream;
                         video.id = v.account;
-                        videoBox.append(video);
+                        li.append(video)
+                        let videoUser = document.createElement('span')
+                        videoUser.setAttribute('class', 'video-user')
+                        videoUser.innerText = v.user
+                        li.append(videoUser)
+                        console.log('============= getPeerConnection start')
+                        console.log(videoBox)
+                        console.log('============= getPeerConnection end')
+                        videoBox.append(li);
                     }
                 };
                 //发送ICE候选到其他客户端
@@ -366,10 +400,8 @@
                 this.createDataChannel(v.account);
                 // 必须是这个先后顺序
                 this.onDataChannel(v.account); // 接收 DataChannel
-
-
-                this.initPeer2()
-
+                // 不需要
+                // this.initPeer2()
 
             },
             createOffer(account, peer) {
@@ -460,7 +492,8 @@
                         drawColor: this.color,
                         drawType: this.currHandle,
                         lineWidth: this.lineWidth,
-                        allowCallback: this.allowCallback
+                        allowCallback: this.allowCallback,
+                        moveCallback:this.moveCallback,
                     });
 
                     let isExists = false
@@ -502,7 +535,8 @@
                 // }
             },
             moveCallback(...arr) { // 同步到对方
-                // console.log('moveCallback', arr);
+                console.log('moveCallback', arr);
+                // alert('move')
                 this.send(arr);
             },
             allowCallback(cancel, go) {
@@ -656,9 +690,9 @@
                 this.peerB = new PeerConnection();
                 this.peerB.onaddstream = (event) => { // 监听是否有媒体流接入，如果有就赋值给 rtcB 的 src
 //                    console.log('event-stream', event.stream);
-                    let video = document.querySelector('#rtcB-Board');
-                    video.srcObject = event.stream;
-                    // this.initPalette(); // 初始化画板
+//                     let video = document.querySelector('#rtcB-Board');
+//                     video.srcObject = event.stream;
+                    this.initPalette(); // 初始化画板
                 };
                 this.allowCall = false
                 this.initPalette(); // 初始化画板
@@ -674,8 +708,8 @@
             ,
             async createMedia2() {
                 // 保存本地流到全局
-                this.boardLocalStream = this.$refs['canvas'].captureStream();
-                this.initPeer2(); // 获取到媒体流后，调用函数初始化 RTCPeerConnection
+                // this.boardLocalStream = this.$refs['canvas'].captureStream();
+                this.createP2P(); // 获取到媒体流后，调用函数初始化 RTCPeerConnection
             }
             ,
             createDataChannel(account) { // 创建 DataChannel
@@ -726,8 +760,10 @@
 
 
             handleChannel(channel) { // 处理 channel
+                alert('handleChannel')
                 channel.binaryType = 'arraybuffer';
                 channel.onopen = (event) => { // 连接成功
+                    alert('handleChannel open')
                     console.log('channel onopen', event);
                     this.isToPeer = true; // 连接成功
                     this.loading = false;
@@ -737,10 +773,12 @@
                     console.log('channel onclose', event)
                 };
                 channel.onmessage = (e) => { // 收到消息
+                    let palette = this.palette[this.currentCanvasIndex]
                     if (Array.isArray(JSON.parse(e.data))) {
                         let [type, ...arr] = JSON.parse(e.data);
-                        // console.log('onmessage', type, arr);
-                        this.palette[type](...arr);
+                        // alert('channel.onmessage')
+                        console.log('onmessage', type, arr);
+                        palette[type](...arr);
                     } else {
                         let msg = JSON.parse(e.data)
                         this.messageList.push(msg);
@@ -785,6 +823,11 @@
             },
         },
         mounted() {
+            // 没有用户名跳转到进入房间页面
+            if (this.$route.params.account == undefined) {
+                this.$router.push('/meeting');
+                return
+            }
             this.$nextTick(() => {
 
                 for (var i = 0; i < 1; i++) {
@@ -813,23 +856,24 @@
                 this.allowHangup = false;
 
                 this.getUserMedia().then(() => {
+                    // 防止重复进入或无名用户进入
+                    alert('emit join')
+                    if (this.$route.params.account == undefined) {
+                        this.$route.params.account = undefined
+                        this.account = $cookies.get('account')
+                    } else {
+                        this.account = this.$route.params.account
+                        $cookies.set('account', this.account)
+                        // localStorage.setItem('account', this.account)
+                    }
                     this.account = this.$route.params.account
-                    socket.emit('join', {roomid: this.roomid, account: this.$route.params.account});
+                    alert('emit join：' + this.account)
+                    socket.emit('join', {roomid: this.roomid, account: this.account});
                 });
                 this.socketInit();
                 this.boardLocalStream = this.$refs['canvas'].captureStream();
 
-                // // test start
-                //
-                // this.allowCall = true;
-                // this.allowHangup = false;
-                // test end
-
-                // this.call2()
-
-
                 socket.on('joined', (data, account) => {
-                    console.log('==============joined', data.length);
                     this.participants = data
                     this.participantNumber = data.length
 
@@ -838,6 +882,8 @@
                             let obj = {};
                             let arr = [v.account, this.$route.params.account];
                             obj.account = arr.sort().join('-');
+                            obj.user = v.account
+                            // 自己和自己不建立P2P连接
                             if (!this.peerList[obj.account] && v.account !== this.$route.params.account) {
                                 // console.log('obj', obj);
                                 this.getPeerConnection(obj);
