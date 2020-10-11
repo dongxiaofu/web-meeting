@@ -61,7 +61,7 @@ app._io.on('connection', sock => {
             }
             // 留着做转发使用
             sockS[data.account] = sock;
-            app._io.in(data.roomid).emit('joined', users[data.roomid], data.account, sock.id); // 发给房间内所有人
+            app._io.in(data.roomid).emit('joined', users[data.roomid], data.account, data.is_host, sock.id); // 发给房间内所有人
             // sock.to(data.roomid).emit('joined',data.account);
         });
     });
@@ -74,7 +74,7 @@ app._io.on('connection', sock => {
         sock.to(data.roomid).emit('answer', data);
     });
     sock.on('__ice_candidate', data => {
-        // console.log('__ice_candidate', data);
+        console.log('__ice_candidate', data);
         sock.to(data.roomid).emit('__ice_candidate', data);
     });
 

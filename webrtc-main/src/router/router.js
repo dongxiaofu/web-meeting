@@ -93,9 +93,21 @@ export default new Router({
             component: _import('html/list/index')
         },
         {
-            path: '/detail/:roomid/:account',       /*注意这个写法*/
+            path: '/detail/:roomid/:account/:hostFlag',       /*注意这个写法*/
             name: 'detail',     /*detail 由作用，在route的push中使用，否则会报错找不到这个路由*/
             component: _import('html/meeting-detail/index')
+        },
+
+
+        {
+            path: '/test',
+            name: 'test',
+            component: _import('webrtc/test')
+        },
+        {
+            path: '/test2',
+            name: 'test2',
+            component: _import('webrtc/test2')
         },
     ],
 });

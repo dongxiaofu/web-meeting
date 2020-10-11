@@ -2,6 +2,7 @@
     <div class="many">
         <div class="center">
             登录名：<input type="text" v-model="account"> <br>
+            主持人：<input type="text" v-model="hostFlag"> <br>
             房间号：<input type="text" v-model="roomid"> <br>
             <button @click="join">加入房间</button>
         </div>
@@ -14,13 +15,15 @@
         data() {
             return {
                 roomid: 'mt',
-                account: ''
+                account: '',
+                hostFlag:0,
             }
         },
         methods: {
             join() {
                 if (this.account && this.roomid) {
-                    this.$router.push({name: 'detail', params: {roomid: this.roomid, account: this.account}})
+                    let params = {roomid: this.roomid, account: this.account,hostFlag:this.hostFlag}
+                    this.$router.push({name: 'detail', params: params})
                 }
             }
         }
