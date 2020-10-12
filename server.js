@@ -62,6 +62,49 @@ app._io.on('connection', sock => {
             dataService.getMeetingPromise(meetingId).then(function (serviceResponse) {
                 console.log(serviceResponse)
                 // todo 错误检查：无这个会议，先不做
+                console.log('会议存在:' + data.roomid)
+                let meeting = serviceResponse.result;
+                data.roomid = meeting._id;
+                meetingId = data.roomid
+
+                let users = serviceResponse.result.users;
+
+                // 用户加入房间
+                // 房间内是否存在当前进入房间的用户
+                let arr = users.filter(v => v.account === data.account);
+                if (!arr.length) {
+                    users.push(obj);
+                    // 存储到数据库
+                    dataService.addUserPromise(meetingId, obj.account, obj.sockId).then(function (serviceResponse) {
+                        console.log('用户进房间：' + serviceResponse.result);
+                    })
+                }
+
+                // 加入房间后，获取参会者、聊天记录、画板内容
+                let msgList = meeting.msg;
+                let paintContent = meeting.paint;
+                // todo 聊天记录后续不能存储到会议表，要单独存储
+
+                // 对房间内的所有用户触发joined事件
+                console.log('会议ID:' + meetingId);
+                console.log('非主持人users start')
+                for (let k = 0; k < users.length; k++) {
+                    console.log('user:' + users[k])
+                }
+                console.log('非主持人users end')
+                app._io.in(meetingId).emit('joined',
+                    users,
+                    data.account,
+                    data.is_host,
+                    msgList, paintContent,
+                    sock.id); // 发给房间内所有人
+            });
+
+            return;
+
+            dataService.getMeetingPromise(meetingId).then(function (serviceResponse) {
+                console.log(serviceResponse)
+                // todo 错误检查：无这个会议，先不做
                 if (serviceResponse.result == undefined) {
                     console.log('会议不存在:' + meetingId)
                     dataService.createMeetingPromise(obj).then(function (serviceResponse) {
@@ -91,13 +134,13 @@ app._io.on('connection', sock => {
                         let paintContent = meeting.paint;
                         // todo 聊天记录后续不能存储到会议表，要单独存储
                         console.log('主持人users start')
-                        for(let k = 0; k < users.length; k++){
+                        for (let k = 0; k < users.length; k++) {
                             console.log('user:' + users[k])
                         }
                         console.log('主持人users end')
 
                         console.log('sockS start:')
-                        for( let k in sockS){
+                        for (let k in sockS) {
                             // console.log(k)
                             console.log(sockS[k])
                         }
@@ -139,7 +182,7 @@ app._io.on('connection', sock => {
                     // 对房间内的所有用户触发joined事件
                     console.log('会议ID:' + meetingId);
                     console.log('非主持人users start')
-                    for(let k = 0; k < users.length; k++){
+                    for (let k = 0; k < users.length; k++) {
                         console.log('user:' + users[k])
                     }
                     console.log('非主持人users end')
@@ -196,7 +239,10 @@ app._io.on('connection', sock => {
             let usersArray = serviceResponse.result.users;
             let users = [];
             for (let k = 0; k < usersArray.length; k++) {
-                users.push(usersArray[k].account);
+                // 不发送给自己
+                if(usersArray[k].account != data.account){
+                    users.push(usersArray[k].account);
+                }
             }
             console.log('manychat users:' + users);
             app._io.in(meetingId).emit('test',
@@ -214,10 +260,18 @@ app._io.on('connection', sock => {
         dataService.savePaintPromise(data.roomid, data.paint).then(function (serviceResponse) {
             console.log('保存画板内容:' + serviceResponse);
             sockS[data.account].emit('why', data);
-            app._io.in(meetingId).emit('test',
-                users, data.account, data.time2,
-                data.mes2, data.type, sock.id
-            ); // 发给房间内所有人
+            // app._io.in(meetingId).emit('test',
+            //     users, data.account, data.time2,
+            //     data.mes2, data.type, sock.id
+            // ); // 发给房间内所有人
+        });
+    });
+    // 建立会议室
+    sock.on('meeting', data => {
+        dataService.createMeetingPromise(data.account).then(function (serviceResponse) {
+            console.log('建立会议室:' + serviceResponse.result);
+            sockS[data.account] = sock;
+            sockS[data.account].emit('have-a-meeting', serviceResponse.result);
         });
     });
 });

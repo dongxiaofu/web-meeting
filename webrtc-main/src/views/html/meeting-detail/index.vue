@@ -301,7 +301,7 @@
                     if (event.candidate) {
                         socket.emit('__ice_candidate', {
                             'candidate': event.candidate,
-                            roomid: this.$route.params.roomid,
+                            roomid: this.$route.query.roomid,
                             account: event.account,
                             type: 'video',
                         });
@@ -396,7 +396,7 @@
                     if (event.candidate) {
                         socket.emit('__ice_candidate', {
                             'candidate': event.candidate,
-                            roomid: this.$route.params.roomid,
+                            roomid: this.$route.query.roomid,
                             account: v.account,
                             type: 'video',
                             user: this.account
@@ -432,7 +432,7 @@
                     peer.setLocalDescription(desc, () => {
                         socket.emit('offer', {
                             'sdp': peer.localDescription,
-                            roomid: this.$route.params.roomid,
+                            roomid: this.$route.query.roomid,
                             account: account,
                             type: type,
                         });
@@ -450,7 +450,7 @@
                     peer.setLocalDescription(desc, () => {
                         socket.emit('offer', {
                             'sdp': peer.localDescription,
-                            roomid: this.$route.params.roomid,
+                            roomid: this.$route.query.roomid,
                             account: account,
                             type: type,
                         });
@@ -473,7 +473,7 @@
                             peerList[v.account].setLocalDescription(desc, () => {
                                 socket.emit('answer', {
                                     'sdp': peerList[v.account].localDescription,
-                                    roomid: this.$route.params.roomid,
+                                    roomid: this.$route.query.roomid,
                                     account: v.account,
                                     type: type,
                                 });
@@ -533,10 +533,10 @@
                 socket.on('test', (observers, account, msg_time, msg, type) => {
                     console.log('manychat start')
                     let params = {
-                        account: account,
+                        user: account,
                         time: msg_time,
                         // time: this.formatTime(new Date()),
-                        mes: msg,
+                        content: msg,
                         type: type,
                     };
                     console.log(params)
@@ -550,6 +550,7 @@
                     console.log(data)
                     console.log('manychat end')
                 });
+
             },
 
             // 画板 start
@@ -603,9 +604,9 @@
                     console.log('channelList.length: = ' + channelKey)
                     if (arr[0] === 'text') {
                         let params = {
-                            account: this.account,
+                            user: this.account,
                             time: this.formatTime(new Date()),
-                            mes: this.sendText + '-------cg',
+                            content: this.sendText + '-------cg',
                             type: 'text'
                         };
                         channel.send(JSON.stringify(params));
@@ -750,7 +751,7 @@
                     if (event.candidate) {
                         socket.emit('__ice_candidate', {
                             'candidate': event.candidate,
-                            roomid: this.$route.params.roomid,
+                            roomid: this.$route.query.roomid,
                             account: v.account,
                             type: 'paint',
                             user: v.user
@@ -880,9 +881,10 @@
             },
             // 保存画板
             savePaint() {
-                let paint = 'hello'
+                let canvas = document.getElementById('my-canvas0');
+                let paint = canvas.toDataURL();
                 alert(paint)
-                let params = {roomid: this.roomid, paint: paint}
+                let params = {roomid: this.roomid, paint: paint,account:this.account}
                 socket.emit('savepaint', params);
             },
             // 画板 end
@@ -925,18 +927,16 @@
             // socket.emit('join', {roomid: this.roomid, account: this.account, is_host: this.hostFlag});
             // return
             // 没有用户名跳转到进入房间页面
-            // if (this.$route.params.account == undefined) {
+            // if (this.$route.query.account == undefined) {
             //     this.$router.push('/meeting');
             //     return
             // }
             this.$nextTick(() => {
 
-                if (this.hostFlag == 0 && this.roomid == 0) {
-                    this.hostFlag = 1
-                }
+                this.hostFlag = this.$route.query.hostFlag
                 // 是0时才需要初始化，否则，使用上次的值。
                 if (this.roomid == 0) {
-                    this.roomid = this.$route.params.roomid
+                    this.roomid = this.$route.query.roomid
                 }
 
                 console.log('this.roomid:' + this.roomid)
@@ -945,8 +945,7 @@
                 this.allowHangup = false;
 
                 this.getUserMedia().then(() => {
-                    this.account = this.$route.params.account
-                    alert('emit join：' + this.account)
+                    this.account = this.$route.query.account
                     socket.emit('join',
                         {
                             roomid: this.roomid,
@@ -954,7 +953,6 @@
                             is_host: this.hostFlag
                         }
                     );
-                    alert('join end')
                 });
                 this.socketInit();
                 this.boardLocalStream = this.$refs['canvas'].captureStream();
@@ -974,21 +972,21 @@
                     if (data.length >= 1) {
                         data.forEach(v => {
                             let obj = {};
-                            let arr = [v.account, this.$route.params.account];
+                            let arr = [v.account, this.$route.query.account];
                             obj.account = arr.sort().join('-');         // 必须如此
                             obj.user = this.account
                             // 不管有没有建立连接，画板都要可以使用。在这里耗费了33分钟才找出问题。
                             this.initPalette();
                             // 自己和自己不建立P2P连接。实际上是忽视了这里的判断条件。
-                            if (!this.peerList[obj.account] && v.account !== this.$route.params.account) {
-                                // if (v.account !== this.$route.params.account) {
+                            if (!this.peerList[obj.account] && v.account !== this.$route.query.account) {
+                                // if (v.account !== this.$route.query.account) {
                                 // this.getPeerConnection(obj);
                                 if (data.is_host != 1) {
                                     this.getPaintPeerConnection(obj)
                                 }
                             }
                         });
-                        if (account === this.$route.params.account) {
+                        if (account === this.$route.query.account) {
                             // console.log('account', account);
                             for (let k in this.peerList) {
                                 console.log('=======k start')

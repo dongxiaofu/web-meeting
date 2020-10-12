@@ -87,3 +87,6 @@ db.dropDatabase()#正确
 meeting.dropDatabase()#错误
 
 db.meetings.find().pretty()
+
+检出某个分支的文件到当前分支
+git checkout v1 dataService.js

@@ -41,7 +41,7 @@ const dataService = {
         var promise = new Promise(function (resolve) {
             const meeting = new Meeting();
             meeting.host = host.account;
-            meeting.users = [host];
+            // meeting.users = [host];
             // 存储数据
             meeting.save(function (err, meeting) {
                 console.log('创建会议：' + err);
