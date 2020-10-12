@@ -548,6 +548,7 @@
             // 画板 start
             initPalette() {
                 for (var i = 0; i < this.canvas.length; i++) {
+                    console.log('this.palette.push' + 1)
                     let canvas = this.canvas[i]
                     let context = this.context[i]
                     var imgData = context.getImageData(0, 0, canvas.width, canvas.height)
@@ -565,43 +566,19 @@
                     for (var j = 0; j < this.palette.length; j++) {
                         let p = this.palette[j]
                         if (canvas.id == p.canvas.id) {
+                            console.log('this.palette.push' + 2)
                             isExists = true
                         }
                     }
 
                     if (isExists == false) {
+                        console.log('this.palette.push' + palette)
                         this.palette.push(palette)
                     }
                 }
-
-
-                // this.palette = new Palette(this.canvas, {
-                //     paint: this.context,
-                //     imgDataInit: imgData,
-                //     drawColor: this.color,
-                //     drawType: this.currHandle,
-                //     lineWidth: this.lineWidth,
-                //     allowCallback: this.allowCallback
-                // });
-                // console.log('=============this.palette start')
-                // console.log(this.palette)
-                // console.log('=============this.palette end')
-                // if (this.palette == null) {
-                //     var imgData = this.context.getImageData(0, 0, this.canvas.width, this.canvas.height)
-                //     this.palette = new Palette(this.canvas, {
-                //         paint: this.context,
-                //         imgDataInit: imgData,
-                //         drawColor: this.color,
-                //         drawType: this.currHandle,
-                //         lineWidth: this.lineWidth,
-                //         allowCallback: this.allowCallback,
-                //         moveCallback: this.moveCallback,
-                //     });
-                // }
             },
             moveCallback(...arr) { // 同步到对方
                 console.log('moveCallback', arr);
-                // alert('move')
                 this.send(arr);
             },
             allowCallback(cancel, go) {
@@ -664,6 +641,9 @@
                 console.log('========================this.palette end')
                 // return;
                 let palette = this.palette[this.currentCanvasIndex]
+                // if(palette == undefined){
+                //     return
+                // }
                 if (['cancel', 'go', 'clear'].includes(v.type)) {
                     palette[v.type]();
                     return;
@@ -835,16 +815,11 @@
                     console.log('channel onopen', event);
                     this.isToPeer = true; // 连接成功
                     this.loading = false;
-                    this.initPalette();     // 在这里传输画板信息吗？
+                    // this.initPalette();     // 在这里传输画板信息吗？
                 };
 
-                channel.onconnecting = (event) => { // 连接成功
-                    // console.log('channel onopen', event);
-                    // // this.loading = false;
-                };
-
-                // queuedSendMsg
-
+                // channel.onconnecting = (event) => { // 连接中
+                // };
 
                 channel.onclose = function (event) { // 连接关闭
                     console.log('channel onclose', event)
@@ -965,13 +940,13 @@
                         data.forEach(v => {
                             let obj = {};
                             let arr = [v.account, this.$route.params.account];
-                            obj.account = arr.sort().join('');         // 必须如此
-                            // obj.account = arr.join('-');
+                            obj.account = arr.sort().join('-');         // 必须如此
                             obj.user = this.account
-                            // 自己和自己不建立P2P连接
+                            // 不管有没有建立连接，画板都要可以使用。在这里耗费了33分钟才找出问题。
+                            this.initPalette();
+                            // 自己和自己不建立P2P连接。实际上是忽视了这里的判断条件。
                             if (!this.peerList[obj.account] && v.account !== this.$route.params.account) {
                                 // if (v.account !== this.$route.params.account) {
-                                // console.log('obj', obj);
                                 // this.getPeerConnection(obj);
                                 if (data.is_host != 1){
                                     this.getPaintPeerConnection(obj)
