@@ -23,6 +23,7 @@
     "koa-send": "^5.0.0",
     "koa-socket": "^4.4.0",
     "koa-static": "^5.0.0",
+    "mongoose": "^5.10.9",
     "vue-cookies": "^1.7.4",
     "ylru": "^1.2.1"
   }

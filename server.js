@@ -1,12 +1,13 @@
 /**
  * Created by wyw on 2018/10/14.
  */
+
 const Koa = require('koa');
 const path = require('path');
 const koaSend = require('koa-send');
 const static = require('koa-static');
 const socket = require('koa-socket');
-const users = {}; // 保存用户
+// const users = {}; // 保存用户
 const sockS = {}; // 保存客户端对应的socket
 const io = new socket({
     ioOptions: {
@@ -14,6 +15,7 @@ const io = new socket({
         pingInterval: 2000,
     }
 });
+var dataService = require('./dataService');
 
 // 创建一个Koa对象表示web app本身:
 const app = new Koa();
@@ -41,28 +43,114 @@ app.use(async (ctx, next) => {
 });
 // io.on('join', ctx=>{ // event data socket.id
 // });
+
+
 app._io.on('connection', sock => {
     sock.on('join', data => {
         sock.join(data.roomid, () => {
-            if (!users[data.roomid]) {
-                users[data.roomid] = [];
-            }
-            if(data.account != undefined){
-
-            }
+            let meetingId = data.roomid;
+            console.log('会议不存在0:' + data.roomid)
             let obj = {
                 account: data.account,
-                id: sock.id
+                sockId: sock.id
             };
-            // 房间内是否存在当前进入房间的用户
-            let arr = users[data.roomid].filter(v => v.account === data.account);
-            if (!arr.length) {
-                users[data.roomid].push(obj);
-            }
             // 留着做转发使用
+            console.log('sockS[data.account]:' + data.account)
             sockS[data.account] = sock;
-            app._io.in(data.roomid).emit('joined', users[data.roomid], data.account, data.is_host, sock.id); // 发给房间内所有人
-            // sock.to(data.roomid).emit('joined',data.account);
+            console.log('sockS[data.account]:' + sockS)
+
+            dataService.getMeetingPromise(meetingId).then(function (serviceResponse) {
+                console.log(serviceResponse)
+                // todo 错误检查：无这个会议，先不做
+                if (serviceResponse.result == undefined) {
+                    console.log('会议不存在:' + meetingId)
+                    dataService.createMeetingPromise(obj).then(function (serviceResponse) {
+                        console.log('创建会议结果：' + serviceResponse.result);
+
+                        let meeting = serviceResponse.result;
+                        data.roomid = meeting._id;
+                        meetingId = data.roomid
+
+                        let users = serviceResponse.result.users;
+
+                        console.log('createMeetingPromise会议ID:' + meetingId);
+
+                        // 用户加入房间
+                        // 房间内是否存在当前进入房间的用户
+                        let arr = users.filter(v => v.account === data.account);
+                        if (!arr.length) {
+                            users.push(obj);
+                            // 存储到数据库
+                            dataService.addUserPromise(meetingId, obj.account, obj.sockId).then(function (serviceResponse) {
+                                console.log('用户进房间：' + serviceResponse);
+                            })
+                        }
+
+                        // 加入房间后，获取参会者、聊天记录、画板内容
+                        let msgList = meeting.msg;
+                        let paintContent = meeting.paint;
+                        // todo 聊天记录后续不能存储到会议表，要单独存储
+                        console.log('主持人users start')
+                        for(let k = 0; k < users.length; k++){
+                            console.log('user:' + users[k])
+                        }
+                        console.log('主持人users end')
+
+                        console.log('sockS start:')
+                        for( let k in sockS){
+                            // console.log(k)
+                            console.log(sockS[k])
+                        }
+                        console.log('sockS end:')
+
+                        // 对房间内的所有用户触发joined事件
+                        console.log('会议ID:' + meetingId);
+                        app._io.in(meetingId).emit('joined',
+                            users,
+                            data.account,
+                            data.is_host,
+                            msgList, paintContent,
+                            sock.id); // 发给房间内所有人
+                    });
+                } else {
+                    console.log('会议存在:' + data.roomid)
+                    let meeting = serviceResponse.result;
+                    data.roomid = meeting._id;
+                    meetingId = data.roomid
+
+                    let users = serviceResponse.result.users;
+
+                    // 用户加入房间
+                    // 房间内是否存在当前进入房间的用户
+                    let arr = users.filter(v => v.account === data.account);
+                    if (!arr.length) {
+                        users.push(obj);
+                        // 存储到数据库
+                        dataService.addUserPromise(meetingId, obj.account, obj.sockId).then(function (serviceResponse) {
+                            console.log('用户进房间：' + serviceResponse.result);
+                        })
+                    }
+
+                    // 加入房间后，获取参会者、聊天记录、画板内容
+                    let msgList = meeting.msg;
+                    let paintContent = meeting.paint;
+                    // todo 聊天记录后续不能存储到会议表，要单独存储
+
+                    // 对房间内的所有用户触发joined事件
+                    console.log('会议ID:' + meetingId);
+                    console.log('非主持人users start')
+                    for(let k = 0; k < users.length; k++){
+                        console.log('user:' + users[k])
+                    }
+                    console.log('非主持人users end')
+                    app._io.in(meetingId).emit('joined',
+                        users,
+                        data.account,
+                        data.is_host,
+                        msgList, paintContent,
+                        sock.id); // 发给房间内所有人
+                }
+            });
         });
     });
     sock.on('offer', data => {
@@ -75,6 +163,7 @@ app._io.on('connection', sock => {
     });
     sock.on('__ice_candidate', data => {
         console.log('__ice_candidate', data);
+        // data.roomid不知有何用
         sock.to(data.roomid).emit('__ice_candidate', data);
     });
 
@@ -101,21 +190,35 @@ app._io.on('connection', sock => {
     });
     sock.on('manychat', data => {
         console.log('on manychat start')
+        let meetingId = data.roomid;
         sockS[data.account] = sock;
-        app._io.in(data.roomid).emit('test',
-            users[data.roomid], data.account, data.time2,
-            data.mes2, data.type,sock.id
-        ); // 发给房间内所有人
-        // sock.to(data.roomid).emit('test',data.account, data.time2,
-        //     data.mes2, data.type);
-        // sock.to(data.roomid).emit('manychated',data);
-        // sock.to(data.account).emit('disconnected',3);
-        console.log(data)
-        // sockS[data.roomid].emit('test', data.account, data.time,
-        //     data.mes, data.type).then().throw(function (e) {
-        //     console.log(e)
-        // });
-        console.log('on manychat end')
+        dataService.getMeetingPromise(meetingId).then(function (serviceResponse) {
+            let usersArray = serviceResponse.result.users;
+            let users = [];
+            for (let k = 0; k < usersArray.length; k++) {
+                users.push(usersArray[k].account);
+            }
+            console.log('manychat users:' + users);
+            app._io.in(meetingId).emit('test',
+                users, data.account, data.time2,
+                data.mes2, data.type, sock.id
+            ); // 发给房间内所有人
+        });
+
+        dataService.saveUserMsgPromise(meetingId, data.account, data.mes2).then(function (serviceResponse) {
+            console.log('保存聊天记录:' + serviceResponse);
+        });
+    });
+
+    sock.on('savepaint', data => {
+        dataService.savePaintPromise(data.roomid, data.paint).then(function (serviceResponse) {
+            console.log('保存画板内容:' + serviceResponse);
+            sockS[data.account].emit('why', data);
+            app._io.in(meetingId).emit('test',
+                users, data.account, data.time2,
+                data.mes2, data.type, sock.id
+            ); // 发给房间内所有人
+        });
     });
 });
 app._io.on('disconnect', (sock) => {
