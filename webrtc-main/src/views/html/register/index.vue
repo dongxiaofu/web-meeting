@@ -9,7 +9,7 @@
                             <router-link :to="{path:'meeting-list'}"><i class="home"></i>首页</router-link>
                         </li>
                         <li>
-                            <router-link :to="{path:'meeting-list'}"><i class="video"></i>首页</router-link>
+                            <router-link :to="{path:'meeting-list'}"><i class="video"></i>注册</router-link>
                         </li>
                         <!--<li>-->
                         <!--<span id="first-letter">C</span>-->

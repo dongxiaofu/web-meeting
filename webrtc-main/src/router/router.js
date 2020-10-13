@@ -100,9 +100,9 @@ export default new Router({
 
 
         {
-            path: '/test',
-            name: 'test',
-            component: _import('webrtc/test')
+            path: '/invite',
+            name: 'invite',
+            component: _import('html/invite/index')
         },
         {
             path: '/test2',
