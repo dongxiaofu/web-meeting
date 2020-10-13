@@ -28,8 +28,8 @@
                             <p id="main-room">主会议室</p>
                         </div>
                         <div class="host">
-                            <span id="content-first-letter">C</span>
-                            chuganghong（主持人）
+                            <span id="content-first-letter">{{host.slice(0,1)}}</span>
+                            {{host}}（主持人）
                         </div>
                     </div>
                     <div class="enter-op">
@@ -123,6 +123,7 @@
             },
         },
         mounted() {
+            this.host = this.$route.query.host;
         }
     };
 </script>

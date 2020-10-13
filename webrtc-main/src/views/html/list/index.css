@@ -280,11 +280,16 @@ ul {
 }
 
 .last-meeting {
-    padding: 0px 0px;
+    display: inline-block;
+    padding: 8px 0px;
     float: left;
     width: 35%;
     height: 100%;
+    /*line-height: 70px;*/
     cursor: pointer;
+
+    margin-left: 30px;
+    margin-bottom: 30px;
 
     position: relative;
 
@@ -324,6 +329,7 @@ ul {
 }
 
 .new-meeting {
+    display: inline-block;
     float: left;
     width: 35%;
     height: 100%;
@@ -335,7 +341,7 @@ ul {
 
     text-align: center;
 
-    margin-left: 40px;
+    margin-left: 29px;
 
     border: 1px dashed gray;
 
@@ -459,4 +465,8 @@ ul {
     height: 50px;
     line-height: 50px;
     text-align: center;
+}
+
+.active-meeting{
+    border: 1px solid red;
 }
