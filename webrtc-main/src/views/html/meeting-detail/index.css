@@ -85,8 +85,13 @@ ul {
 
     border: 1px solid gray;
 
-
     /*margin-left: 200px;*/
+}
+
+#canvas-txt{
+    position: absolute;
+    top: 200px;
+    right: 70px;
 }
 
 #my-title {

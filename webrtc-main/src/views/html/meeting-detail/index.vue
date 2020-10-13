@@ -105,6 +105,7 @@
                 <div id="paint-board-container">
                     <!--my-canvas-->
                     <canvas ref="canvas" id="my-canvas0" class="my-canvas" width="1040" height="675"></canvas>
+                    <!--<input id="canvas-txt"></input>-->
                     <!--切换幻灯片等工具 start-->
                     <div id="tool">
                         <div id="switch">
@@ -233,6 +234,7 @@
                     {name: '矩形', type: 'rect'},
                     {name: '多边形', type: 'polygon'},
                     {name: '橡皮擦', type: 'eraser'},
+                    // {name: '文字', type: 'txt'},
                     {name: '撤回', type: 'cancel'},
                     {name: '前进', type: 'go'},
                     {name: '清屏', type: 'clear'},
@@ -560,9 +562,11 @@
                     let canvas = this.canvas[i]
                     let context = this.context[i]
                     var imgData = context.getImageData(0, 0, canvas.width, canvas.height)
+                    var inputElement = document.getElementById('canvas-txt');
                     let palette = new Palette(canvas, {
                         paint: context,
                         imgDataInit: imgData,
+                        inputElement: inputElement,
                         drawColor: this.color,
                         drawType: this.currHandle,
                         lineWidth: this.lineWidth,
@@ -884,7 +888,7 @@
                 let canvas = document.getElementById('my-canvas0');
                 let paint = canvas.toDataURL();
                 alert(paint)
-                let params = {roomid: this.roomid, paint: paint,account:this.account}
+                let params = {roomid: this.roomid, paint: paint, account: this.account}
                 socket.emit('savepaint', params);
             },
             // 画板 end
