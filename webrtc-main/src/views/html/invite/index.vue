@@ -103,13 +103,18 @@
             return {
                 participant: '',             // 参会者名字
                 roomid: '',
+                host: '',                     // 主持人
             }
         },
         methods: {
             join() {
                 this.roomid = this.$route.query.roomid
-                if (this.roomid && this.participant) {
-                    let params = {account: this.participant, roomid: this.roomid}
+                if (this.roomid && this.participant && this.host) {
+                    let params = {
+                        account: this.participant,
+                        roomid: this.roomid,
+                        host: this.host,
+                    }
                     // url中不带查询参数，除非路由写成和带查询参数一样的格式。
                     // this.$router.push({name: 'detail', params: params})
                     // url中带查询查询，不需要路由配合
