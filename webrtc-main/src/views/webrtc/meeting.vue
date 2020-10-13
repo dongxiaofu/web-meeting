@@ -10,7 +10,7 @@
                 <router-link :to="{path:'detail',query:{roomid:roomid,account:account,hostFlag:1}}">进入会议</router-link>
             </p>
             <p>
-                <router-link :to="{path:'meeting-list',query:{roomid:roomid}}">参会者进入会议</router-link>
+                <router-link :to="{path:'invite',query:{roomid:roomid}}">参会者进入会议</router-link>
             </p>
         </div>
         <hr/>

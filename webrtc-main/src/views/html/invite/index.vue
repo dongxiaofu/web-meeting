@@ -5,8 +5,12 @@
                 <div id="logo">在线会议</div>
                 <div id="menu">
                     <ul>
-                        <li><router-link :to="{path:'login'}">登录</router-link></li>
-                        <li><router-link :to="{path:'register'}">注册</router-link></li>
+                        <li>
+                            <router-link :to="{path:'login'}">登录</router-link>
+                        </li>
+                        <li>
+                            <router-link :to="{path:'register'}">注册</router-link>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -29,8 +33,8 @@
                         </div>
                     </div>
                     <div class="enter-op">
-                        <input type="text" placeholder="请输入您的名字！">
-                        <button>加入</button>
+                        <input type="text" placeholder="请输入您的名字" v-model="participant">
+                        <button @click="join">加入</button>
                     </div>
                 </div>
                 <div class="clear"></div>
@@ -96,9 +100,23 @@
     export default {
         name: 'index',
         data() {
-            return {}
+            return {
+                participant: '',             // 参会者名字
+                roomid: '',
+            }
         },
-        methods: {},
+        methods: {
+            join() {
+                this.roomid = this.$route.query.roomid
+                if (this.roomid && this.participant) {
+                    let params = {account: this.participant, roomid: this.roomid}
+                    // url中不带查询参数，除非路由写成和带查询参数一样的格式。
+                    // this.$router.push({name: 'detail', params: params})
+                    // url中带查询查询，不需要路由配合
+                    this.$router.push({path: 'detail', query: params})
+                }
+            },
+        },
         mounted() {
         }
     };
