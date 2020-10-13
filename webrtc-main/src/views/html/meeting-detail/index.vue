@@ -566,7 +566,7 @@
                     let palette = new Palette(canvas, {
                         paint: context,
                         imgDataInit: imgData,
-                        inputElement: inputElement,
+                        // inputElement: inputElement,
                         drawColor: this.color,
                         drawType: this.currHandle,
                         lineWidth: this.lineWidth,
