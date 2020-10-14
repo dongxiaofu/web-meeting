@@ -101,3 +101,14 @@ import Clipboard from 'clipboard';
 
 使用不成功，放弃。无太大价值的复制粘贴。 
 
+
+(node:95307) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 disconnect listeners added. Use emitter.setMaxListeners() to increase limit
+
+(node:96070) UnhandledPromiseRejectionWarning: TypeError: undefined is not a function
+    at Array.map (<anonymous>)
+    at /Users/cg/data/www/web-meeting/server.js:310:47
+    at internalTickCallback (internal/process/next_tick.js:77:7)
+    at _tickCallback (internal/process/next_tick.js:47:5)
+    at processImmediate (timers.js:605:7)
+(node:96070) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). (rejection id: 1)
+(node:96070) [DEP0018] DeprecationWarning: Unhandled promise rejections are deprecated. In the future, promise rejections that are not handled will terminate the Node.js process with a non-zero exit code.

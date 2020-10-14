@@ -148,8 +148,11 @@
                                 <span class="fold-btn" @click="hideTool($event)">-</span>
                             </p>
                             <ul>
+                                <li v-show="!hostFlag">
+                                    <button @click="logout">退出会议</button>
+                                </li>
                                 <li v-show="hostFlag">
-                                    <button>注销会议</button>
+                                    <button @click="hangup">注销会议</button>
                                 </li>
                                 <li v-show="hostFlag">
                                     <button @click="invite($event)">邀请参会</button>
@@ -286,7 +289,7 @@
                 queuedSendMsg: [],       // 待发送数据
 
                 hostFlag: 0,         // 是否主持人，0.不是；1.是
-                host: '主持人',
+                host: 'meetingHost',
 
                 // 菜单
                 msgMenuIsActive: false,
@@ -559,7 +562,7 @@
                 socket.on('test', (observers, account, msg_time, msg, type) => {
                     console.log('manychat start')
                     let content = msg;
-                    content = this.ab2str(content,'utf-8');
+                    content = this.ab2str(content, 'utf-8');
                     let params = {
                         user: account,
                         time: msg_time,
@@ -580,6 +583,36 @@
                     console.log('manychat end')
                 });
 
+                socket.on('hangup', (data) => {
+                    this.closePeers();
+
+                    // 会议已经注销
+                    console.log('会议已经注销')
+                });
+
+
+                socket.on('1v1hangup', _ => { // 通话挂断
+                    this.$message({
+                        message: '对方已断开连接！',
+                        type: 'warning'
+                    });
+                    this.peer.close();
+                    // this.peer = null;
+                    // this.isToPeer = false;
+                    // this.isCall = false;
+                });
+
+            },
+
+            // 断开所有P2P.
+            closePeers() {
+                for (let k in this.peerList) {
+                    if(this.peerList[k] != null){
+                        this.peerList[k].close();
+                        this.peerList[k] = null;
+                        console.log('断开P2P：' + k);
+                    }
+                }
             },
 
             // 画板 start
@@ -1021,7 +1054,32 @@
                 window.open(url);   // 新窗口打开
             },
 
+            // 主持人注销会议，中间服务器广播会议注销，并要求参会者执行非主持人退出会议操作
+            hangup() {
+                console.log('注销会议')
+                // socket.emit('hangup', {roomid: this.roomid, host: this.host});
+                // let params = {roomid: this.roomid, host: this.host};
+                let params = {roomid: this.roomid, host: this.account};
+                console.log('注销：' + params.roomid + ',' + params.host)
+                // let params = {roomid: 33333, host: 'cg'};
+                socket.emit('hangup', params);
+                this.closePeers();
 
+                this.$message({
+                    message: '主持人已经注销会议！',
+                    type: 'warning'
+                });
+            },
+
+            // 非主持人退出会议，由中间服务器广播用户A退出会议消息，不做其他事情。
+            // todo 退会后，通知有连接的其他用户断开连接
+            logout() {
+                console.log('退出会议')
+                let params = {roomid: this.roomid, host: this.host, account: this.account};
+                console.log('退出：' + params.host + ',' + params.account)
+                socket.emit('logout', params);
+                this.closePeers();
+            },
         },
 
         messageList: function () {

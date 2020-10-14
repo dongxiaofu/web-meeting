@@ -37,15 +37,16 @@ const dataService = {
         return promise;
     },
     // 主持人进入房间，创建会议
-    createMeetingPromise: function (host) {
+    createMeetingPromise: function (host, title) {
         var promise = new Promise(function (resolve) {
             const meeting = new Meeting();
-            meeting.host = host.account;
+            meeting.host = host;
+            meeting.title = title
             // meeting.users = [host];
             // 存储数据
             meeting.save(function (err, meeting) {
-                console.log('创建会议：' + err);
-                console.log(meeting)
+                // console.log('创建会议：' + err);
+                // console.log(meeting)
                 resolve({err: err, result: meeting});
             })
         });
