@@ -294,6 +294,9 @@
                 // 菜单
                 msgMenuIsActive: false,
                 userMenuIsActive: true,
+
+                // 是否参加会议，false，不是；true，是
+                isInMeeting: false,
             }
         },
         beforeDestroy() {
@@ -570,12 +573,12 @@
                     console.log('manychat end')
 
                     // 若是退出会议，更新参会人员列表
-                    if(type == 'logout'){
+                    if (type == 'logout') {
                         // 若退出会议的是自己
-                        if(account == this.account){
+                        if (account == this.account) {
                             this.participants = [];
                             this.participantNumber = 0
-                        }else{  // 若退出会议的不是自己
+                        } else {  // 若退出会议的不是自己
                             this.participants = observers;
                             this.participantNumber = observers.length
                         }
@@ -615,7 +618,7 @@
             // 断开所有P2P.
             closePeers() {
                 for (let k in this.peerList) {
-                    if(this.peerList[k] != null){
+                    if (this.peerList[k] != null) {
                         this.peerList[k].close();
                         this.peerList[k] = null;
                         console.log('断开P2P：' + k);
@@ -938,9 +941,19 @@
             },
 
             sendMsg() { // 本地发送消息
+                if (this.isInMeeting == false) {
+                    this.$message({
+                        message: '您已经退出会议！\n请刷新页面重新进入会议后发信息。',
+                        type: 'error'
+                    });
+                    return
+                }
                 if (this.sendText == '') {
                     //
-                    alert('请输入聊天信息');
+                    this.$message({
+                        message: '请输入聊天信息。',
+                        type: 'warning'
+                    });
                     return
                 }
                 let msg = new Buffer(this.sendText);
@@ -1087,6 +1100,11 @@
                 console.log('退出：' + params.host + ',' + params.account)
                 socket.emit('logout', params);
                 this.closePeers();
+
+                this.$message({
+                    message: '您已经退出会议！\n刷新页面可以重新进入会议。',
+                    type: 'warning'
+                });
             },
         },
 
