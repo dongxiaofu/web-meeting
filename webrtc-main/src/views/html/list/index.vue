@@ -32,10 +32,14 @@
                             <p class="ipt">
                             <span>
                                 <i class="icon-link"></i>
-                                <input type="text" v-model="meetingUrl">
+                                <input type="text" v-model="meetingUrl" id="url-read">
                             </span>
                                 <span>
-                                <button><i class="icon-copy"></i>复制</button>
+
+                                <button
+
+                                        @click="copy"
+                                ><i class="icon-copy"></i>复制</button>
                             </span>
                             </p>
                         </div>
@@ -55,7 +59,7 @@
                             >
                                 <i class="last-meeting-icon"></i>
                                 <div class="meeting-brief" title="请点击空白区域">
-                                    <h4>主会议室</h4>
+                                    <h4>{{meeting.title}}</h4>
                                     <p>上一次会议十月07,2020</p>
                                 </div>
                             </li>
@@ -184,6 +188,7 @@
 <script>
 
     import socket from '../../../utils/socket';     // 这是相对于本文件的路径
+    import Clipboard from 'clipboard';
 
     export default {
         name: 'index',
@@ -200,9 +205,66 @@
                 hostFlag: 1,
                 meetingsList: [],        // 会议集合,
                 meeting: null,             // 当前选中的会议
+                meetings: [],
+
+                apiHost: 'http://127.0.0.1:4000',
+                getMeetingListApi: '/list',
             }
         },
         methods: {
+
+            copy() {
+
+                let url = document.querySelector('#url-read');
+                url.select(); // 选择对象
+                document.execCommand("Copy");
+
+                // var clipboard = new Clipboard('#url-read')
+                // alert(333)
+                // clipboard.on('success', e => {
+                //     alert(2)
+                //     // success("复制成功");//这里你如果引入了elementui的提示就可以用，没有就注释即可
+                //     // 释放内存
+                //     clipboard.destroy()
+                // })
+                // clipboard.on('error', e => {
+                //     alert(111)
+                //     // 不支持复制
+                //     console.log('该浏览器不支持自动复制')
+                //     // 释放内存
+                //     clipboard.destroy()
+                // })
+            },
+
+            getMeetings: function () {
+                let getMeetingListApi = this.apiHost + this.getMeetingListApi;
+                this.$http.get((getMeetingListApi), {params: {host: this.host}}).then(response => {
+                    this.meetings = response.body.data;
+                    console.log(response)
+                    let meetings = this.meetings;
+                    for (let i = 0; i < meetings.length; i++) {
+                        console.log('m:' + meetings[i])
+                        let roomid = meetings[i].roomid;
+                        let meetingUrl = this.hostAddress + '/#/invite' + '?roomid=' + roomid
+                            + '&host=' + this.host
+                        let meetingItem = {meetingUrl: meetingUrl, host: this.host, roomid: roomid}
+                        console.log('mi:' + meetingItem)
+                        this.meetingsList.push(meetingItem)
+                    }
+
+
+                }, response => {
+                    console.log(response)
+                    alert("出问题啦")
+                }).finally(
+                    response => {
+                        // alert('over')
+                        // this.reload()
+                    }
+                )
+            },
+
+
             initSocket() {
                 socket.on('have-a-meeting', (data) => {
                     console.log('have-a-meeting start')
@@ -251,13 +313,35 @@
                 this.meeting = meeting;
                 localStorage.setItem('meeting', meeting);
             }
-        },
+        }
+        ,
         mounted() {
 
-            this.meeting = null;
+            // this.getMeetingListApi = this.apiHost + this.getMeetingListApi
+            // 记住这段巨坑无比的代码 start
+            this.getMeetings();
+            // 执行完上面的代码后，在上面代码中赋值过的this.meetings仍是data中的初始数据。
+            // 原因是，上面的方法和下面的方法，执行顺序，不是先后顺序
+            // let meetings = this.meetings;
+            // console.log(meetings.length);
+            // console.log(this.meetings);
+            //
+            // for (let i = 0; i < meetings.length; i++) {
+            //     console.log('m:' + meeting)
+            //     let roomid = meetings[i].roomid;
+            //     let meetingUrl = this.hostAddress + '/#/invite' + '?roomid=' + roomid
+            //         + '&host=' + this.host
+            //     let meetingItem = {meetingUrl: meetingUrl, host: this.host, roomid: roomid}
+            //     console.log('mi:' + meetingItem)
+            //     this.meetingsList.push(meetingItem)
+            // }
+            // 记住这段巨坑无比的代码 end
+
+            // this.meeting = null;
 
             this.$nextTick(() => {
-                this.initSocket();
+
+                // this.initSocket();
             });
 
             if (this.meeting == null
@@ -274,7 +358,8 @@
             // console.log(roomid, host, path);
 
         }
-    };
+    }
+    ;
 </script>
 <style scoped>
     @import "./index.css";

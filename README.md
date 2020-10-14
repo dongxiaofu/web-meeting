@@ -90,3 +90,14 @@ db.meetings.find().pretty()
 
 检出某个分支的文件到当前分支
 git checkout v1 dataService.js
+
+vue 复制粘贴
+
+cnpm install clipboard --save 
+
+引入，可以在mian.js中全局引入也可以在单个vue中引入
+
+import Clipboard from 'clipboard'; 
+
+使用不成功，放弃。无太大价值的复制粘贴。 
+

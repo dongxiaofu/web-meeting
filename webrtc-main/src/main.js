@@ -8,13 +8,22 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 // es2015 module
 import VueCookies from 'vue-cookies'
+// 需要先安装依赖：cnpm install vue-resource
+import VueResource from 'vue-resource'
+//
+// import Clipboard from 'clipboard';
+// Vue.prototype.Clipboard=Clipboard;
+
+// 可以使用 this.$http.post
+Vue.use(VueResource)
+Vue.config.productionTip = false
 
 Vue.use(ElementUI);
 Vue.use(VueCookies)
 
 // set global cookie
-Vue.$cookies.set('theme','default');
-Vue.$cookies.set('hover-time','10s');
+Vue.$cookies.set('theme', 'default');
+Vue.$cookies.set('hover-time', '10s');
 
 socket.on('connect', () => {
     console.log('连接成功');
