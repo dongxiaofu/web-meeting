@@ -294,10 +294,13 @@ app._io.on('connection', sock => {
         dataService.getMeetingPromise(meetingId).then(function (serviceResponse) {
             let usersArray = serviceResponse.result.users;
             let users = [];
+            let filterdUsers = [];  // 去掉退出会议者后的用户数据
             for (let k = 0; k < usersArray.length; k++) {
                 // 不发送给自己
                 if (usersArray[k].account != data.account) {
-                    users.push(usersArray[k].account);
+
+                    users.push({account:usersArray[k].account});
+                    filterdUsers.push(usersArray[k]);
                 }
             }
 
@@ -316,12 +319,17 @@ app._io.on('connection', sock => {
 
             console.log('date:' + time)
 
+            // 更新参会人员
+            dataService.saveUserPromise(meetingId, filterdUsers);
+
             app._io.in(meetingId).emit('test',
                 users, data.account, time,
-                msg, 'text', sock.id
+                msg, 'logout', sock.id
             ); // 发给房间内所有人
 
             console.log('退出会议执行结束')
+
+
         });
     });
     // app._io.on('disconnect', (sock) => {

@@ -282,6 +282,7 @@
             // todo 实现主持人自定义会议名称
             createMeeting() {
                 let title = '会议名称'
+                title = new Buffer(title);
                 socket.emit('meeting',
                     {
                         account: this.host,

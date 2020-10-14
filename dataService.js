@@ -99,6 +99,20 @@ const dataService = {
         return promise;
     },
 
+    saveUserPromise: function (id, users) {
+        var promise = new Promise(function (resolve) {
+            Meeting.findOneAndUpdate({_id: id}, {
+                $set: {
+                    users: users
+                }
+            }, {new: true}, function (err) {
+                // console.log('保存聊天记录:' + err);
+                resolve({err: err});
+            });
+        });
+        return promise;
+    },
+
     // addUserPromise: function (userCallback) {
     //     var promise = new Promise(function (resolve) {
     //         Meeting.findOneAndUpdate({_id: id}, {

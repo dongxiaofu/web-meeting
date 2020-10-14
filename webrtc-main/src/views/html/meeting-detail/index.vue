@@ -296,13 +296,6 @@
                 userMenuIsActive: true,
             }
         },
-        watch: {
-            userList: {
-                handler() {
-                },
-                deep: true
-            }
-        },
         beforeDestroy() {
             for (let k in this.peerList) {
                 this.peerList[k].close();
@@ -575,6 +568,21 @@
                     this.messageList.push(params);
                     console.log(this.messageList)
                     console.log('manychat end')
+
+                    // 若是退出会议，更新参会人员列表
+                    if(type == 'logout'){
+                        // 若退出会议的是自己
+                        if(account == this.account){
+                            this.participants = [];
+                            this.participantNumber = 0
+                        }else{  // 若退出会议的不是自己
+                            this.participants = observers;
+                            this.participantNumber = observers.length
+                        }
+
+                        console.log('logout:' + this.participants + ',' + this.participantNumber)
+                    }
+
                 });
 
                 socket.on('why', (data) => {
