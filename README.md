@@ -88,6 +88,12 @@ meeting.dropDatabase()#错误
 
 db.meetings.find().pretty()
 
+值设置为null后，无法更新为[]。
+db.meetings.update({'_id':'5f86f135b0b68c73cddb8c56'},{$set:{'users':[]}})
+
+db.meetings.remove({'_id':'5f86f135b0b68c73cddb8c56'})
+
+
 检出某个分支的文件到当前分支
 git checkout v1 dataService.js
 
@@ -114,3 +120,18 @@ import Clipboard from 'clipboard';
 (node:96070) [DEP0018] DeprecationWarning: Unhandled promise rejections are deprecated. In the future, promise rejections that are not handled will terminate the Node.js process with a non-zero exit code.
 
 (node:97579) [DEP0005] DeprecationWarning: Buffer() is deprecated due to security and usability issues. Please use the Buffer.alloc(), Buffer.allocUnsafe(), or Buffer.from() methods instead.
+
+node.js 更改代码后自动重启
+
+cnpm install --global nodemon
+
+nodemon server.js
+
+chugangdeMacBook-Pro:web-meeting cg$ nodemon server.js
+[nodemon] 2.0.5
+[nodemon] to restart at any time, enter `rs`
+[nodemon] watching path(s): *.*
+[nodemon] watching extensions: js,mjs,json
+[nodemon] starting `node server.js`
+
+==================

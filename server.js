@@ -66,6 +66,15 @@ app._io.on('connection', sock => {
                 meetingId = data.roomid
 
                 let users = serviceResponse.result.users;
+                // 主持人还没有进入会议，不允许非主持人参会者进入会议
+                console.log('参会:' + users + 'user数量：' + users.length + ',is_host = ' + data.is_host)
+                if (data.is_host == 0 || data.is_host == undefined) {
+                    if (users == null || users.length == 0) {
+                        return
+                    }
+                }
+                // users可能为null，因为我在注销会议时将users字段设置为了null。
+                if (users == null) users = [];
 
                 // 用户加入房间
                 // 房间内是否存在当前进入房间的用户
@@ -282,14 +291,14 @@ app._io.on('connection', sock => {
         // todo 检测host和会议是否匹配
         console.log('注销会议开始，roomid:' + meetingId)
         app._io.in(meetingId).emit('hangup', sock.id); // 发给房间内所有人
+        // 更新参会人员，清空所有参会者
+        dataService.saveUserPromise(meetingId, null);   // 怎么将数组类型字段设置为[]？null不行。
         console.log('注销会议结束')
 
     });
 
     // 退出会议
     sock.on('logout', data => {
-        // console.log('退出会议');
-        // return
         let meetingId = data.roomid;
         dataService.getMeetingPromise(meetingId).then(function (serviceResponse) {
             let usersArray = serviceResponse.result.users;
@@ -299,7 +308,7 @@ app._io.on('connection', sock => {
                 // 不发送给自己
                 if (usersArray[k].account != data.account) {
 
-                    users.push({account:usersArray[k].account});
+                    users.push({account: usersArray[k].account});
                     filterdUsers.push(usersArray[k]);
                 }
             }

@@ -597,6 +597,10 @@
                 socket.on('hangup', (data) => {
                     this.closePeers();
 
+                    this.participants = [];
+                    this.participantNumber = 0;
+                    console.log('会议已经注销：participants=' + this.participants + ',participantNumber=' + this.participantNumber);
+
                     // 会议已经注销
                     console.log('会议已经注销')
                 });
@@ -1140,7 +1144,7 @@
                         {
                             roomid: this.roomid,
                             account: this.account,
-                            is_host: this.hostFlag
+                            is_host: this.hostFlag == undefined ? 0: this.hostFlag
                         }
                     );
                 });

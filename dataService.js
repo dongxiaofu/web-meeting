@@ -100,6 +100,7 @@ const dataService = {
     },
 
     saveUserPromise: function (id, users) {
+        if (users == null) users = new Array();
         var promise = new Promise(function (resolve) {
             Meeting.findOneAndUpdate({_id: id}, {
                 $set: {
