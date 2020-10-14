@@ -38,7 +38,7 @@
                         <!--</div>-->
                         <div class="form-line">
                             <label>电子邮箱:</label>
-                            <input type="text" placeholder="请输入电子邮箱"/>
+                            <input type="text" placeholder="请输入电子邮箱" v-model="email"/>
                         </div>
                         <!--<div class="form-line">-->
                         <!--<label>验证码:</label>-->
@@ -47,11 +47,11 @@
                         <!--</div>-->
                         <div class="form-line">
                             <label>密码:</label>
-                            <input type="password" placeholder="请输入密码"/>
+                            <input type="password" placeholder="请输入密码" v-model="password"/>
                         </div>
                         <div class="form-line btn">
-                            <button>重置</button>
-                            <button>登录</button>
+                            <button @click="reset">重置</button>
+                            <button @click="login">登录</button>
                         </div>
                         <div class="tips">
                             没有有账号？
@@ -70,11 +70,55 @@
 
 <script>
     export default {
-        name: 'index',
+        name: 'index',          // 必须和路由中的路径一致
         data() {
-            return {}
+            return {
+                apiHost: 'http://127.0.0.1:4000',
+
+                email: '',
+                password: ''
+            }
         },
-        methods: {},
+        methods: {
+            login() {
+                if (!this.email || !this.password) {
+                    this.$message({
+                        message: '邮箱和密码都必须填写',
+                        type: 'error'
+                    });
+                    return;
+                }
+                let api = this.apiHost + '/noauth/users/login'
+                let params = {
+                    username: this.email,
+                    password: this.password
+                }
+                this.$http.post((api), params, {emulateJSON: true}).then(response => {
+                    let result = response.body;
+                    console.log(result)
+
+                    this.$message({
+                        message: '登录成功，即将进入您的主页',
+                        type: 'success'
+                    });
+
+
+                }, response => {
+                    console.log(response)
+                    this.$message({
+                        message: '出问题啦',
+                        type: 'error'
+                    });
+                }).finally(response => {
+                    this.reload()
+                })
+            },
+
+            reset() {
+                this.email = ''
+                this.password = ''
+            },
+        },
         mounted() {
         }
     };

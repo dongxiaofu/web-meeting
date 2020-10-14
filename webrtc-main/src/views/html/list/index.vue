@@ -208,7 +208,9 @@
                 meetings: [],
 
                 apiHost: 'http://127.0.0.1:4000',
-                getMeetingListApi: '/list',
+                getMeetingListApi: '/api/list',
+
+                token: '',          //jwt
             }
         },
         methods: {
@@ -238,7 +240,19 @@
 
             getMeetings: function () {
                 let getMeetingListApi = this.apiHost + this.getMeetingListApi;
-                this.$http.get((getMeetingListApi), {params: {host: this.host}}).then(response => {
+                // let config = {
+                //     headers: {
+                //         'Content-Type': 'multipart/form-data',
+                //         'authorization': 'Bearer ' + this.$route.params.token
+                //     }
+                // }
+                let config =
+                    {
+                        // 'Content-Type': 'multipart/form-data',
+                        'authorization': 'Bearer ' + this.token
+                    }
+
+                this.$http.get((getMeetingListApi), {params: {host: this.host}, headers: config}).then(response => {
                     this.meetings = response.body.data;
                     console.log(response)
                     let meetings = this.meetings;
@@ -255,7 +269,6 @@
 
                 }, response => {
                     console.log(response)
-                    alert("出问题啦")
                 }).finally(
                     response => {
                         // alert('over')
@@ -316,11 +329,29 @@
                 };
                 this.meeting = meeting;
                 localStorage.setItem('meeting', meeting);
+            },
+
+            checkLogin() {
+                this.token = this.$route.params.token
+                if (this.token == null || this.token == '') {
+                    this.token = localStorage.getItem('token')
+                } else {
+                    localStorage.setItem('token', this.token)
+                }
+                if (this.token == null || this.token == '') {
+                    this.$message({
+                        message: '您未登录，请先登录！',
+                        type: 'error'
+                    });
+                    this.$router.push({name: 'login'});
+                }
             }
         }
         ,
         mounted() {
-
+            // 检测登录
+            // myComm.checkLogin() // TypeError: Cannot read property 'params' of undefined
+            this.checkLogin();
             // this.getMeetingListApi = this.apiHost + this.getMeetingListApi
             // 记住这段巨坑无比的代码 start
             this.getMeetings();
