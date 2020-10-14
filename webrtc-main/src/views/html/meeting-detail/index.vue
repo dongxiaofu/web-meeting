@@ -154,7 +154,7 @@
                                 <li v-show="hostFlag">
                                     <button @click="invite($event)">邀请参会</button>
                                     <!--<router-link :to="{path:'invite',query:{roomid:roomid}}"-->
-                                                 <!--style="display: none">-->
+                                    <!--style="display: none">-->
                                     <!--</router-link>-->
                                     <router-link :to="{path:'meeting-list',query:{roomid:roomid,host:host}}"
                                                  style="display: none">
@@ -286,7 +286,7 @@
                 queuedSendMsg: [],       // 待发送数据
 
                 hostFlag: 0,         // 是否主持人，0.不是；1.是
-                host:   '主持人',
+                host: '主持人',
 
                 // 菜单
                 msgMenuIsActive: false,
@@ -477,6 +477,12 @@
                     });
                 });
             },
+            // 可用的解码函数，解决了socket.io发送中文乱码的问题。
+            ab2str(arrayBuf, encodeType) {
+                var decoder = new TextDecoder(encodeType)
+                var u8arr = new Uint8Array(arrayBuf)
+                return decoder.decode(u8arr)
+            },
             socketInit() {
                 socket.on('offer', v => {
                     // console.log('take_offer', this.peerList[v.account]);
@@ -552,14 +558,17 @@
                 //     data.mes2, data.type,sock.id
                 socket.on('test', (observers, account, msg_time, msg, type) => {
                     console.log('manychat start')
+                    let content = msg;
+                    content = this.ab2str(content,'utf-8');
                     let params = {
                         user: account,
                         time: msg_time,
                         // time: this.formatTime(new Date()),
-                        content: msg,
+                        content: content,
                         type: type,
                     };
                     console.log(params)
+                    // ArrayBuffer在网页会自动解码
                     this.messageList.push(params);
                     console.log(this.messageList)
                     console.log('manychat end')
@@ -893,11 +902,13 @@
                     alert('请输入聊天信息');
                     return
                 }
+                let msg = new Buffer(this.sendText);
+                msg.toString();
                 let params = {
                     roomid: this.roomid,
                     account: this.account,
                     time2: this.formatTime(new Date()),
-                    mes2: this.sendText,
+                    mes2: msg,
                     type: 'text'
                 };
                 console.log('发送----------start')
@@ -1012,6 +1023,12 @@
 
 
         },
+
+        messageList: function () {
+            console.log("changed");
+            // this.show();
+        },
+
         mounted() {
             // socket.emit('join', {roomid: this.roomid, account: this.account, is_host: this.hostFlag});
             // return
