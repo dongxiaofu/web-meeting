@@ -308,10 +308,10 @@
         },
         beforeDestroy() {
             for (let k in this.peerList) {
-                this.peerList[k].close();
+                this.peerList[k] != null && this.peerList[k].close();
                 this.peerList[k] = null;
 
-                this.paintPeerList[k].close();
+                this.peerList[k] != null && this.paintPeerList[k].close();
                 this.paintPeerList[k] = null;
             }
         },
@@ -433,6 +433,12 @@
                 this.peerList[v.account] = peer;
             },
 
+            // 正确的顺序必须是：先建立接收onDataChannel，再建立发送createDataChannel。
+            // 不管主持人和非主持人谁先进入会议，必须保证这个顺序。
+            // 已存在的规则是：主持人进入会议后，才允许非主持人参会者进入会议。
+            // 主持人在无其他非主持人参会者进入会议的时候，不能建立P2P。否则，不能保证上面要求的顺序。
+            // 与已经存在的规则衔接，还需这样的规则：参会者入会时，检查现有参会人数是否大于1。若大于1，建立P2P。
+            // 这实际上是针对主持人的。因为非主持人参会时，现有参会人数总是大于1.
             getPaintPeerConnection(v) {
                 // 文字没有用webrct传输
                 let paintPeer = this.initPeer2(v)
@@ -603,13 +609,22 @@
 
                 socket.on('hangup', (data) => {
                     this.closePeers();
-
                     this.participants = [];
                     this.participantNumber = 0;
                     console.log('会议已经注销：participants=' + this.participants + ',participantNumber=' + this.participantNumber);
 
                     // 会议已经注销
                     console.log('会议已经注销')
+
+                    this.$message({
+                        message: '主持人已经注销会议！',
+                        type: 'warning'
+                    });
+                    if(this.hostFlag == 1){
+                        this.$router.push({name:'meeting-list'})
+                    }else{
+                        this.$router.push({name:'login'})
+                    }
                 });
 
 
@@ -1096,16 +1111,14 @@
                 // let params = {roomid: 33333, host: 'cg'};
                 socket.emit('hangup', params);
                 this.closePeers();
-
-                this.$message({
-                    message: '主持人已经注销会议！',
-                    type: 'warning'
-                });
             },
 
             // 非主持人退出会议，由中间服务器广播用户A退出会议消息，不做其他事情。
             // todo 退会后，通知有连接的其他用户断开连接
             logout() {
+                if(this.isInMeeting == false){
+                    return
+                }
                 console.log('退出会议')
                 let params = {roomid: this.roomid, host: this.host, account: this.account};
                 console.log('退出：' + params.host + ',' + params.account)
@@ -1116,6 +1129,8 @@
                     message: '您已经退出会议！\n刷新页面可以重新进入会议。',
                     type: 'warning'
                 });
+
+                this.isInMeeting = false
             },
 
             //获取会议详情
@@ -1129,9 +1144,30 @@
                     this.host = this.meeting.host
                     this.status = this.meeting.status
                     // 参会者用户名等于该会议的主持人，则该参会者是主持人
+                    this.account = localStorage.getItem('account');
                     if (this.host == this.account) {
                         this.hostFlag = 1
                     }
+                    console.log('this.account start')
+                    console.log(this.account + ':' + this.host + ':' + this.hostFlag)
+                    console.log('this.account end')
+                    // 会议已经注销并且不是主持人
+                    if (this.hostFlag == 0 && this.status == 0) {
+                        this.$message({
+                            message: '会议已经结束',
+                            type: 'warning'
+                        });
+                        this.$router.push({name: 'login'})
+                        return
+                    }
+
+                    // 检查当前参会者是否仍在参会状态，初始化状态，无人参会，但
+                    for (let i = 0; i < this.meeting.users.length; i++) {
+                        if (this.account == this.meeting.users[i].account) {
+                            this.isInMeeting = true
+                        }
+                    }
+
                 }, response => {
                     console.log('error:')
                     console.log(response)
@@ -1150,28 +1186,28 @@
         },
 
         mounted() {
-
-
             this.$nextTick(() => {
-
                 this.userId = localStorage.getItem('userId')
                 this.username = localStorage.getItem('username');
                 this.account = localStorage.getItem('account');
-                if (this.account == '' || this.status == 0) {
-                    this.$message({
-                        message: '会议已经结束',
-                        type: 'warning'
-                    });
-                    this.$router.push({name:'login'})
-                    return
-                }
 
                 // 是0时才需要初始化，否则，使用上次的值。
                 if (this.roomid == 0) {
                     this.roomid = this.$route.query.roomid
                 }
 
-                this.getMeeting();
+                // this.getMeeting();
+                // 又遇到了，上面的代码，和下面被注释的代码，不是先后执行的顺序，
+                // 虽然它们的位置是先后顺序。
+                // // 会议已经注销并且不是主持人
+                // if (this.hostFlag == 0 && this.status == 0) {
+                //     this.$message({
+                //         message: '会议已经结束',
+                //         type: 'warning'
+                //     });
+                //     // this.$router.push({name:'login'})
+                //     return
+                // }
 
 
                 console.log('this.roomid:' + this.roomid)
@@ -1184,43 +1220,87 @@
                         {
                             roomid: this.roomid,
                             account: this.account,
-                            is_host: this.hostFlag == undefined ? 0 : this.hostFlag
                         }
                     );
                 });
                 this.socketInit();
                 this.boardLocalStream = this.$refs['canvas'].captureStream();
 
-                socket.on('joined', (data, account, is_host, msgList, paintContent) => {
+                socket.on('joined', (users, meeting) => {
+                    if (meeting == null) {
+                        return
+                    }
+                    this.account = localStorage.getItem('account');
+                    let msgList = meeting.msg
+                    let paintContent = meeting.paint
+                    // 和joined事件重复了，根本就不应该写这个方法
+                    // this.getMeeting();
+
+                    // 为了兼容而已
+                    this.meeting = meeting;
+                    this.host = this.meeting.host
+                    this.status = this.meeting.status
+                    // 参会者用户名等于该会议的主持人，则该参会者是主持人
+
+                    if (this.host == this.account) {
+                        this.hostFlag = 1
+                    }
+                    console.log('this.account start')
+                    console.log(this.account + ':' + this.host + ':' + this.hostFlag)
+                    console.log('this.account end')
+                    // 会议已经注销并且不是主持人
+                    if (this.hostFlag == 0 && this.status == 0) {
+                        this.$message({
+                            message: '会议已经结束',
+                            type: 'warning'
+                        });
+                        this.$router.push({name: 'login'})
+                        return
+                    }
+
+                    // 检查当前参会者是否仍在参会状态，初始化状态，无人参会，但
+                    for (let i = 0; i < users.length; i++) {
+                        if (this.account == users[i].account) {
+                            this.isInMeeting = true
+                        }
+                    }
+
                     this.messageList = msgList;
                     console.log('主持人users start')
-                    for (let k = 0; k < data.length; k++) {
-                        console.log('user:' + data[k])
+                    for (let k = 0; k < users.length; k++) {
+                        console.log('user:' + users[k])
                     }
                     console.log('主持人users end')
-                    this.participants = data
-                    this.participantNumber = data.length
+                    this.participants = users
+                    this.participantNumber = users.length
                     // 创建canvas
                     this.createCanvas(paintContent)
-                    console.log('data.length:' + data.length)
-                    if (data.length >= 1) {
-                        data.forEach(v => {
+                    // 参会人数
+                    let userNum = users.length
+                    console.log('userNum:' + userNum)
+                    if (userNum >= 1) {     // 这个条件，实际没啥用。空数组forEach不会执行。
+                        users.forEach(v => {
                             let obj = {};
-                            let arr = [v.account, this.$route.query.account];
+                            let arr = [v.account, this.account];
                             obj.account = arr.sort().join('-');         // 必须如此
                             obj.user = this.account
                             // 不管有没有建立连接，画板都要可以使用。在这里耗费了33分钟才找出问题。
                             this.initPalette();
                             // 自己和自己不建立P2P连接。实际上是忽视了这里的判断条件。
-                            if (!this.peerList[obj.account] && v.account !== this.$route.query.account) {
-                                // if (v.account !== this.$route.query.account) {
+                            if (!this.peerList[obj.account] && v.account !== this.account) {
                                 this.getPeerConnection(obj);
-                                if (data.is_host != 1) {
+                                // 非主持人建立P2P后，主持人才能建立
+                                // 优化为，所有非主持人建立P2P后，主持人才能建立。但是几乎不可能，因为总会有参会者
+                                // 随时加入进来
+                                // 主持人是被叫方B，非主持人是呼叫方H
+                                // B收到H建立的所有P2P连接，检查有没有和自己相关的，若没有，自己不建立P20；若有，自己
+                                // 建立P2P。如此，可保证：H在B之前建立P2P。
+                                if (userNum > 1) {
                                     this.getPaintPeerConnection(obj)
                                 }
                             }
                         });
-                        if (account === this.$route.query.account) {
+                        if (this.account != null) {
                             // console.log('account', account);
                             for (let k in this.peerList) {
                                 console.log('=======k start')

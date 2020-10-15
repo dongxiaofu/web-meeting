@@ -65,10 +65,16 @@ app._io.on('connection', sock => {
                 data.roomid = meeting._id;
                 meetingId = data.roomid
 
+                let host = meeting.host
+                let is_host = 0;
+                if (host == data.account) {
+                    is_host = 1;
+                }
+
                 let users = serviceResponse.result.users;
                 // 主持人还没有进入会议，不允许非主持人参会者进入会议
-                console.log('参会:' + users + 'user数量：' + users.length + ',is_host = ' + data.is_host)
-                if (data.is_host == 0 || data.is_host == undefined) {
+                console.log('参会:' + users + 'user数量：' + users.length + ',is_host = ' + is_host)
+                if (is_host == 0) {
                     if (users == null || users.length == 0) {
                         return
                     }
@@ -101,9 +107,7 @@ app._io.on('connection', sock => {
                 console.log('非主持人users end')
                 app._io.in(meetingId).emit('joined',
                     users,
-                    data.account,
-                    data.is_host,
-                    msgList, paintContent,
+                    meeting,
                     sock.id); // 发给房间内所有人
             });
 

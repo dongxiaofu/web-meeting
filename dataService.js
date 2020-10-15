@@ -12,7 +12,7 @@ db.once('open', function () {
 const meetingSchema = new mongoose.Schema({
     title: String,       // 会议名称
     creatorId: String,   // 会议创建者ID
-    status: Boolean,       // 会议状态：true：正常；false：已经注销
+    status: {type: Boolean, default: false},       // 会议状态：true：正常；false：已经注销
     host: String,        // 主持人
     users: [{account: String, sockId: String}],           // 参会者
     paint: String,       // 画板内容
@@ -82,13 +82,17 @@ const dataService = {
         });
         return promise;
     },
-
+    // 参会者进入会议，将会议状态设置为正常中
+    // todo 不需要每次参会者进入会议都如此
     addUserPromise: function (id, user, sockId) {
         var promise = new Promise(function (resolve) {
             Meeting.findOneAndUpdate({_id: id}, {
                     $push: {
                         // user: {user: user, sockId: sockId}
                         users: {account: user, sockId: sockId}
+                    },
+                    $set: {
+                        status: true
                     },
                 },
                 function (err, res) {
@@ -101,13 +105,13 @@ const dataService = {
         return promise;
     },
 
-    saveUserPromise: function (id, users,status) {
+    saveUserPromise: function (id, users, status) {
         if (users == null) users = new Array();
         var promise = new Promise(function (resolve) {
             Meeting.findOneAndUpdate({_id: id}, {
                 $set: {
                     users: users,
-                    status:status
+                    status: status
                 }
             }, {new: true}, function (err) {
                 // console.log('保存聊天记录:' + err);
