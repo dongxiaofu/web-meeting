@@ -104,9 +104,14 @@
                     });
                     let params = {
                         token:result.token,
-                        roomid:result.roomid,
+                        userId:result._id,
                         account:result.username,
                     }
+
+                    localStorage.setItem('token', result.token)
+                    localStorage.setItem('userId', result.userId)
+                    localStorage.setItem('username',result.username)
+
                     // this.$route.push({path:'meeting-list',params:params});   // 错误
                     this.$router.push({name: 'meeting-list', params: params})
 

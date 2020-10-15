@@ -10,6 +10,8 @@ db.once('open', function () {
 
 // 数据库操作
 const meetingSchema = new mongoose.Schema({
+    title: String,       // 会议名称
+    creatorId: String,   // 会议创建者ID
     status: Boolean,       // 会议状态：true：正常；false：已经注销
     host: String,        // 主持人
     users: [{account: String, sockId: String}],           // 参会者
@@ -99,12 +101,13 @@ const dataService = {
         return promise;
     },
 
-    saveUserPromise: function (id, users) {
+    saveUserPromise: function (id, users,status) {
         if (users == null) users = new Array();
         var promise = new Promise(function (resolve) {
             Meeting.findOneAndUpdate({_id: id}, {
                 $set: {
-                    users: users
+                    users: users,
+                    status:status
                 }
             }, {new: true}, function (err) {
                 // console.log('保存聊天记录:' + err);

@@ -292,7 +292,7 @@ app._io.on('connection', sock => {
         console.log('注销会议开始，roomid:' + meetingId)
         app._io.in(meetingId).emit('hangup', sock.id); // 发给房间内所有人
         // 更新参会人员，清空所有参会者
-        dataService.saveUserPromise(meetingId, null);   // 怎么将数组类型字段设置为[]？null不行。
+        dataService.saveUserPromise(meetingId, null, 0);   // 怎么将数组类型字段设置为[]？null不行。
         console.log('注销会议结束')
 
     });

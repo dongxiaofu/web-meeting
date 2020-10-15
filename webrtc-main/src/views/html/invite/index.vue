@@ -103,27 +103,58 @@
             return {
                 participant: '',             // 参会者名字
                 roomid: '',
-                host: '',                     // 主持人
+                host: '',                    // 主持人
+                meeting: {},                  // 会议详情
+
+                hostAddress: 'http://127.0.0.1:4000',
+                getMeetingApi: '/noauth/meeting',
             }
         },
         methods: {
             join() {
-                this.roomid = this.$route.query.roomid
-                if (this.roomid && this.participant && this.host) {
+                if (this.roomid && this.participant) {
                     let params = {
                         account: this.participant,
                         roomid: this.roomid,
-                        host: this.host,
                     }
+                    // 存储参会者名称
+                    localStorage.setItem('account', this.participant)
                     // url中不带查询参数，除非路由写成和带查询参数一样的格式。
                     // this.$router.push({name: 'detail', params: params})
                     // url中带查询查询，不需要路由配合
                     this.$router.push({path: 'detail', query: params})
                 }
+                this.$message({
+                    message: '请填写您的名字',
+                    type: 'error'
+                });
             },
+            //获取会议详情
+            getMeeting() {
+                let getMeetingApi = this.hostAddress + this.getMeetingApi
+                this.$http.get((getMeetingApi), {
+                    params: {roomid: this.roomid},
+                }).then(response => {
+                    console.log(response)
+                    this.meeting = response.body.data;
+                    this.host = this.meeting.host
+                }, response => {
+                    console.log('error:')
+                    console.log(response)
+                }).finally(
+                    response => {
+                        // alert('over')
+                        // this.reload()
+                    }
+                )
+            }
         },
         mounted() {
-            this.host = this.$route.query.host;
+            this.roomid = this.$route.query.roomid
+            this.roomid == undefined ? '' : this.roomid
+            if(this.roomid != ''){
+                this.getMeeting()
+            }
         }
     };
 </script>

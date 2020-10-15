@@ -24,7 +24,7 @@
                                 D
                             </span>
                                 <span v-else>
-                                {{user.account.slice(0,1)}}
+                                <!--{{user.account.slice(0,1)}}-->
                             </span>
                             </i>
                             <span v-if="user.account == undefined">
@@ -159,7 +159,7 @@
                                     <!--<router-link :to="{path:'invite',query:{roomid:roomid}}"-->
                                     <!--style="display: none">-->
                                     <!--</router-link>-->
-                                    <router-link :to="{path:'meeting-list',query:{roomid:roomid,host:host}}"
+                                    <router-link :to="{path:'meeting-list',query:{roomid:roomid}}"
                                                  style="display: none">
                                     </router-link>
                                 </li>
@@ -284,12 +284,13 @@
                 participants: [],
                 // 参会用户数量
                 participantNumber: 0,
-                // 当前用户
-                account: 'Default',
+                // 参会者名称
+                account: '',
                 queuedSendMsg: [],       // 待发送数据
 
                 hostFlag: 0,         // 是否主持人，0.不是；1.是
-                host: 'meetingHost',
+                host: '',             // 主持人
+                status: 0,              // 会议状态
 
                 // 菜单
                 msgMenuIsActive: false,
@@ -297,6 +298,12 @@
 
                 // 是否参加会议，false，不是；true，是
                 isInMeeting: false,
+
+                // 获取会议详情
+                hostAddress: 'http://127.0.0.1:4000',
+                getMeetingApi: '/noauth/meeting',
+
+                meeting: {},         // 当前会议
             }
         },
         beforeDestroy() {
@@ -1110,6 +1117,31 @@
                     type: 'warning'
                 });
             },
+
+            //获取会议详情
+            getMeeting() {
+                let getMeetingApi = this.hostAddress + this.getMeetingApi
+                this.$http.get((getMeetingApi), {
+                    params: {roomid: this.roomid},
+                }).then(response => {
+                    console.log(response)
+                    this.meeting = response.body.data;
+                    this.host = this.meeting.host
+                    this.status = this.meeting.status
+                    // 参会者用户名等于该会议的主持人，则该参会者是主持人
+                    if (this.host == this.account) {
+                        this.hostFlag = 1
+                    }
+                }, response => {
+                    console.log('error:')
+                    console.log(response)
+                }).finally(
+                    response => {
+                        // alert('over')
+                        // this.reload()
+                    }
+                )
+            }
         },
 
         messageList: function () {
@@ -1118,20 +1150,29 @@
         },
 
         mounted() {
-            // socket.emit('join', {roomid: this.roomid, account: this.account, is_host: this.hostFlag});
-            // return
-            // 没有用户名跳转到进入房间页面
-            // if (this.$route.query.account == undefined) {
-            //     this.$router.push('/meeting');
-            //     return
-            // }
+
+
             this.$nextTick(() => {
 
-                this.hostFlag = this.$route.query.hostFlag
+                this.userId = localStorage.getItem('userId')
+                this.username = localStorage.getItem('username');
+                this.account = localStorage.getItem('account');
+                if (this.account == '' || this.status == 0) {
+                    this.$message({
+                        message: '会议已经结束',
+                        type: 'warning'
+                    });
+                    this.$router.push({name:'login'})
+                    return
+                }
+
                 // 是0时才需要初始化，否则，使用上次的值。
                 if (this.roomid == 0) {
                     this.roomid = this.$route.query.roomid
                 }
+
+                this.getMeeting();
+
 
                 console.log('this.roomid:' + this.roomid)
 
@@ -1139,12 +1180,11 @@
                 this.allowHangup = false;
 
                 this.getUserMedia().then(() => {
-                    this.account = this.$route.query.account
                     socket.emit('join',
                         {
                             roomid: this.roomid,
                             account: this.account,
-                            is_host: this.hostFlag == undefined ? 0: this.hostFlag
+                            is_host: this.hostFlag == undefined ? 0 : this.hostFlag
                         }
                     );
                 });

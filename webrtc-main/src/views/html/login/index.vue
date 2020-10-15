@@ -102,6 +102,10 @@
                         type: 'success'
                     });
 
+                    localStorage.setItem('token', result.token)
+                    localStorage.setItem('userId', result.userId)
+                    localStorage.setItem('username',result.username)
+
 
                 }, response => {
                     console.log(response)

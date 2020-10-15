@@ -24,7 +24,7 @@
                 <div class="meeting-operation">
                     <div class="meeting-title">
                         <h2>主会议室<i class="home"></i></h2>
-                        <p>5&nbsp;会议&nbsp;|&nbsp;0&nbsp;会议录像</p>
+                        <p>{{meetingNum}}&nbsp;会议&nbsp;|&nbsp;0&nbsp;会议录像</p>
                     </div>
                     <div class="meeting-link">
                         <div class="copy">
@@ -199,43 +199,31 @@
 
                 activeMeetingIndex: 0,       // 当前选中的会议
 
-                host: 'cg',
+                account: '',        // 参会者名称。本想改成Host，但在会议详情里，account用得太广泛了。
                 roomid: 0,
-                // account: '',
                 hostFlag: 1,
-                meetingsList: [],        // 会议集合,
+                meetingsList: [],        // 将meetings格式化后的会议列表
                 meeting: null,             // 当前选中的会议
-                meetings: [],
+                meetings: [],              // 从API获取的元素会议列表
+                userId: '',                 // 当前登录的用户ID
+                username: '',                // 当前登录的用户的用户名
+                meetingTitle: '碰头会',          // 会议标题
 
                 apiHost: 'http://127.0.0.1:4000',
                 getMeetingListApi: '/api/list',
+                createMeetingApi: '/api/create-meeting',
 
                 token: '',          //jwt
+                meetingNum: 0,        // 会议数量
+                maxMeetingNum: 5,     // 能创建的会议数量的最大值
             }
         },
         methods: {
 
             copy() {
-
                 let url = document.querySelector('#url-read');
                 url.select(); // 选择对象
                 document.execCommand("Copy");
-
-                // var clipboard = new Clipboard('#url-read')
-                // alert(333)
-                // clipboard.on('success', e => {
-                //     alert(2)
-                //     // success("复制成功");//这里你如果引入了elementui的提示就可以用，没有就注释即可
-                //     // 释放内存
-                //     clipboard.destroy()
-                // })
-                // clipboard.on('error', e => {
-                //     alert(111)
-                //     // 不支持复制
-                //     console.log('该浏览器不支持自动复制')
-                //     // 释放内存
-                //     clipboard.destroy()
-                // })
             },
 
             getMeetings: function () {
@@ -248,25 +236,27 @@
                 // }
                 let config =
                     {
-                        // 'Content-Type': 'multipart/form-data',
                         'authorization': 'Bearer ' + this.token
                     }
 
-                this.$http.get((getMeetingListApi), {params: {host: this.host}, headers: config}).then(response => {
+                this.$http.get((getMeetingListApi), {
+                    params: {creatorId: this.userId},
+                    headers: config
+                }).then(response => {
                     this.meetings = response.body.data;
                     console.log(response)
                     let meetings = this.meetings;
                     for (let i = 0; i < meetings.length; i++) {
                         console.log('m:' + meetings[i])
                         let roomid = meetings[i].roomid;
+                        let title = meetings[i].title;
                         let meetingUrl = this.hostAddress + '/#/invite' + '?roomid=' + roomid
-                            + '&host=' + this.host
-                        let meetingItem = {meetingUrl: meetingUrl, host: this.host, roomid: roomid}
-                        console.log('mi:' + meetingItem)
+                            + '&creatorId=' + this.userId
+                        let meetingItem = {meetingUrl: meetingUrl, account: this.account, roomid: roomid, title: title}
+                        console.log(meetingItem)
                         this.meetingsList.push(meetingItem)
+                        this.meetingNum = this.meetingsList.length
                     }
-
-
                 }, response => {
                     console.log(response)
                 }).finally(
@@ -277,31 +267,73 @@
                 )
             },
 
-
-            initSocket() {
-                socket.on('have-a-meeting', (data) => {
-                    console.log('have-a-meeting start')
-                    console.log(data)
-                    console.log('have-a-meeting end')
-                    this.roomid = data._id
-
-                    let meetingUrl = this.hostAddress + '/#/invite' + '?roomid=' + this.roomid
-                        + '&host=' + this.host
-                    let meeting = {meetingUrl: meetingUrl, host: this.host, roomid: this.roomid}
-                    this.meetingsList.push(meeting)
-                });
-            },
-
-            // todo 实现主持人自定义会议名称
             createMeeting() {
-                let title = '会议名称'
-                title = new Buffer(title);
-                socket.emit('meeting',
-                    {
-                        account: this.host,
-                        title: title
+                // 这种简单的逻辑，还搞错了两三次。忽略了meetingNum不会自增，却把它当成了会增加到6或大于maxMeetingNum
+                if (this.meetingNum == this.maxMeetingNum) {
+                    this.$message({
+                        message: '最多只能创建' + this.maxMeetingNum,
+                        type: 'warning'
+                    });
+                    return;
+                }
+
+                // 分散在系统各处的多重用户名称体系，感觉会成为以后的大麻烦。
+                // 存储参会者名称。没有填写，默认就是当前登录用户名。
+                // todo 会议创建者自定义参会者名称
+                if (this.account == '') {
+                    this.account = this.username
+                }
+                localStorage.setItem('account', this.account)
+
+
+                let api = this.apiHost + this.createMeetingApi
+                let params = {
+                    account: this.account,
+                    title: this.meetingTitle,
+                    creatorId: this.userId
+                }
+                let headers = {
+                    'authorization': 'Bearer ' + this.token
+                }
+                let config = {
+                    emulateJSON: true,
+                    headers: headers
+                }
+                this.$http.post((api), params, config).then(response => {
+                    let meetingOriginal = response.body.meeting;
+                    console.log(response)
+                    this.roomid = meetingOriginal.roomid
+                    let meetingUrl = this.hostAddress + '/#/invite' + '?roomid=' + this.roomid
+                        + '&account=' + this.account
+                    let meeting = {
+                        meetingUrl: meetingUrl,
+                        host: this.account,
+                        roomid: this.roomid,
+                        title: meetingOriginal.title
                     }
-                );
+                    this.meetingsList.push(meeting)
+
+                }, response => {
+                    console.log(response)
+                    this.$message({
+                        message: '创建会议失败',
+                        type: 'error'
+                    });
+                }).finally(response => {
+                    console.log(response)
+                    // this.reload()
+                })
+
+
+                // 用API代替
+                // let title = '会议名称'
+                // title = new Buffer(title);
+                // socket.emit('meeting',
+                //     {
+                //         account: this.host,
+                //         title: title
+                //     }
+                // );
             },
 
             join() {
@@ -332,19 +364,21 @@
             },
 
             checkLogin() {
-                this.token = this.$route.params.token
                 if (this.token == null || this.token == '') {
                     this.token = localStorage.getItem('token')
-                } else {
-                    localStorage.setItem('token', this.token)
                 }
+
                 if (this.token == null || this.token == '') {
                     this.$message({
                         message: '您未登录，请先登录！',
                         type: 'error'
                     });
                     this.$router.push({name: 'login'});
+                    return
                 }
+
+                this.userId = localStorage.getItem('userId')
+                this.username = localStorage.getItem('username');
             }
         }
         ,
@@ -373,24 +407,6 @@
             // 记住这段巨坑无比的代码 end
 
             // this.meeting = null;
-
-            this.$nextTick(() => {
-
-                // this.initSocket();
-            });
-
-            if (this.meeting == null
-            ) {
-                // this.meeting = localStorage.getItem('meeting');
-            }
-
-            //
-            //
-            // let roomid = this.$route.query.roomid;
-            // let host = this.$route.query.host;
-            // let path = this.$route.path;
-            //
-            // console.log(roomid, host, path);
 
         }
     }
