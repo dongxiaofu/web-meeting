@@ -363,7 +363,7 @@
                         resolve();
                     }, function (error) {
                         reject(error);
-                        // console.log(error);
+                        // // console.log(error);
                         //处理媒体流创建失败错误
                     });
                 })
@@ -391,6 +391,7 @@
                 // let videoBox = this.$refs['video-box'];
                 //如果检测到媒体流连接到本地，将其绑定到一个video标签上输出
                 peer.onaddstream = function (event) {
+                    console.log(event.stream)
                     let videos = document.querySelector('#' + v.account);
                     if (videos) {
                         videos.srcObject = event.stream;
@@ -411,9 +412,9 @@
                         videoUser.setAttribute('class', 'video-user')
                         videoUser.innerText = 'todo'
                         div.append(videoUser)
-                        console.log('============= getPeerConnection start')
-                        console.log(videoBox)
-                        console.log('============= getPeerConnection end')
+                        // console.log('============= getPeerConnection start')
+                        // console.log(videoBox)
+                        // console.log('============= getPeerConnection end')
                         videoBox.append(div);
                     }
                 };
@@ -429,7 +430,7 @@
                         });
                     }
                 };
-                // console.log('v.account', v.account);
+                // // console.log('v.account', v.account);
                 this.peerList[v.account] = peer;
             },
 
@@ -442,17 +443,19 @@
             getPaintPeerConnection(v) {
                 // 文字没有用webrct传输
                 let paintPeer = this.initPeer2(v)
-                console.log('paintPeer start')
-                console.log(paintPeer)
-                console.log(v.account)
-                console.log('paintPeer end')
+                // console.log('paintPeer start')
+                // console.log(paintPeer)
+                // console.log(v.account)
+                // console.log('paintPeer end')
                 this.paintPeerList[v.account] = paintPeer
                 // 同一个P2P能同时产生接收和发送数据的channel吗？可以，运行过这样的例子了。
                 if (this.hostFlag == 1) {
                     // 建立DataChannel
+                    console.log(this.account + 'channel offer ' + v.account)
                     this.createDataChannel(v.account);
                     this.createOfferPaint(v.account, this.paintPeerList[v.account], 'paint');
                 } else {
+                    console.log(this.account + 'on channel ' + v.account)
                     this.onDataChannel(v.account); // 接收 DataChannel
                 }
             },
@@ -460,7 +463,7 @@
             createOfferPaint(account, peer, type) {
                 //发送offer，发送本地session描述
                 peer.createOffer().then((desc) => {
-                    // console.log('send-offer', desc);
+                    // // console.log('send-offer', desc);
                     peer.setLocalDescription(desc, () => {
                         socket.emit('offer', {
                             'sdp': peer.localDescription,
@@ -478,7 +481,7 @@
                     offerToReceiveAudio: 0,
                     offerToReceiveVideo: 1
                 }).then((desc) => {
-                    // console.log('send-offer', desc);
+                    // // console.log('send-offer', desc);
                     peer.setLocalDescription(desc, () => {
                         socket.emit('offer', {
                             'sdp': peer.localDescription,
@@ -497,7 +500,7 @@
             },
             socketInit() {
                 socket.on('offer', v => {
-                    // console.log('take_offer', this.peerList[v.account]);
+                    // // console.log('take_offer', this.peerList[v.account]);
                     let type = v.type;
                     let peerList = {}
                     if (type == 'paint') {
@@ -507,7 +510,7 @@
                     }
                     peerList[v.account] && peerList[v.account].setRemoteDescription(v.sdp, () => {
                         peerList[v.account].createAnswer().then((desc) => {
-                            // console.log('send-answer', desc);
+                            // // console.log('send-answer', desc);
                             peerList[v.account].setLocalDescription(desc, () => {
                                 socket.emit('answer', {
                                     'sdp': peerList[v.account].localDescription,
@@ -517,11 +520,11 @@
                                 });
                             });
                         });
-                    }, () => {// console.log(err)
+                    }, () => {// // console.log(err)
                     });
                 });
                 socket.on('answer', v => {
-                    console.log('take_answer', v.sdp);
+                    // console.log('take_answer', v.sdp);
                     let type = v.type;
                     let peerList = {}
                     if (type == 'paint') {
@@ -533,11 +536,11 @@
                     }, () => {
 
                     }).catch((err) => {
-                        console.log(err)
+                        // console.log(err)
                     });
                 });
                 socket.on('__ice_candidate', v => {
-                    // console.log('take_candidate', v.candidate);
+                    // // console.log('take_candidate', v.candidate);
                     //如果是一个ICE的候选，则将其加入到PeerConnection中
                     // if (v.user == this.account) {
                     //     return
@@ -551,13 +554,13 @@
                     }
                     if (v.candidate) {
                         peerList[v.account] && peerList[v.account].addIceCandidate(v.candidate).catch((e) => {
-                                console.log('__ice_candidate_err', e)
-                            }// console.log('err', e)
+                                // console.log('__ice_candidate_err', e)
+                            }// // console.log('err', e)
                         );
                     }
                 });
                 socket.on('disconnected', id => {
-                    console.log('disconnected======', id);
+                    // console.log('disconnected======', id);
                     let dom = document.querySelector('#' + id);
                     if (dom) {
                         dom.remove();
@@ -569,7 +572,7 @@
                 // users[data.roomid], data.account, data.time2,
                 //     data.mes2, data.type,sock.id
                 socket.on('test', (observers, account, msg_time, msg, type) => {
-                    console.log('manychat start')
+                    // console.log('manychat start')
                     let content = msg;
                     content = this.ab2str(content, 'utf-8');
                     let params = {
@@ -579,11 +582,11 @@
                         content: content,
                         type: type,
                     };
-                    console.log(params)
+                    // console.log(params)
                     // ArrayBuffer在网页会自动解码
                     this.messageList.push(params);
-                    console.log(this.messageList)
-                    console.log('manychat end')
+                    // console.log(this.messageList)
+                    // console.log('manychat end')
 
                     // 若是退出会议，更新参会人员列表
                     if (type == 'logout') {
@@ -596,25 +599,25 @@
                             this.participantNumber = observers.length
                         }
 
-                        console.log('logout:' + this.participants + ',' + this.participantNumber)
+                        // console.log('logout:' + this.participants + ',' + this.participantNumber)
                     }
 
                 });
 
                 socket.on('why', (data) => {
-                    console.log('wy start')
-                    console.log(data)
-                    console.log('manychat end')
+                    // console.log('wy start')
+                    // console.log(data)
+                    // console.log('manychat end')
                 });
 
                 socket.on('hangup', (data) => {
                     this.closePeers();
                     this.participants = [];
                     this.participantNumber = 0;
-                    console.log('会议已经注销：participants=' + this.participants + ',participantNumber=' + this.participantNumber);
+                    // console.log('会议已经注销：participants=' + this.participants + ',participantNumber=' + this.participantNumber);
 
                     // 会议已经注销
-                    console.log('会议已经注销')
+                    // console.log('会议已经注销')
 
                     this.$message({
                         message: '主持人已经注销会议！',
@@ -647,7 +650,7 @@
                     if (this.peerList[k] != null) {
                         this.peerList[k].close();
                         this.peerList[k] = null;
-                        console.log('断开P2P：' + k);
+                        // console.log('断开P2P：' + k);
                     }
                 }
             },
@@ -655,7 +658,7 @@
             // 画板 start
             initPalette() {
                 for (var i = 0; i < this.canvas.length; i++) {
-                    console.log('this.palette.push' + 1)
+                    // console.log('this.palette.push' + 1)
                     let canvas = this.canvas[i]
                     let context = this.context[i]
                     var imgData = context.getImageData(0, 0, canvas.width, canvas.height)
@@ -675,34 +678,34 @@
                     for (var j = 0; j < this.palette.length; j++) {
                         let p = this.palette[j]
                         if (canvas.id == p.canvas.id) {
-                            console.log('this.palette.push' + 2)
+                            // console.log('this.palette.push' + 2)
                             isExists = true
                         }
                     }
 
                     if (isExists == false) {
-                        console.log('this.palette.push' + palette)
+                        // console.log('this.palette.push' + palette)
                         this.palette.push(palette)
                     }
                 }
             },
             moveCallback(...arr) { // 同步到对方
-                console.log('moveCallback', arr);
+                // console.log('moveCallback', arr);
                 this.send(arr);
             },
             allowCallback(cancel, go) {
-                console.log('cancle=' + cancel)
+                // console.log('cancle=' + cancel)
                 this.allowCancel = !cancel;
                 this.allowGo = !go;
             },
             send(arr) { // 发送消息
-                console.log('send ==========' + this.channelList)
+                // console.log('send ==========' + this.channelList)
                 for (let channelKey in this.channelList) {
                     let channel = this.channelList[channelKey]
-                    console.log('channelList.length: = ' + channel)
-                    console.log('channelList.length: = ' + channel.readyState)
-                    console.log('channelList.length: = ' + channel.readyState)
-                    console.log('channelList.length: = ' + channelKey)
+                    // console.log('channelList.length: = ' + channel)
+                    // console.log('channelList.length: = ' + channel.readyState)
+                    // console.log('channelList.length: = ' + channel.readyState)
+                    // console.log('channelList.length: = ' + channelKey)
                     if (arr[0] === 'text') {
                         let params = {
                             user: this.account,
@@ -716,7 +719,7 @@
                     } else {
                         if (channel.readyState == 'open') {
                             // 画板信息，是这里传输的吗？是
-                            console.log('send', arr);
+                            // console.log('send', arr);
                             channel.send(JSON.stringify(arr));
                         }
                     }
@@ -727,9 +730,9 @@
             }
             ,
             colorChange() {
-                console.log('========================colorChange start')
-                console.log(this.color)
-                console.log('========================colorChange end')
+                // console.log('========================colorChange start')
+                // console.log(this.color)
+                // console.log('========================colorChange end')
                 this.palette[this.currentCanvasIndex].changeWay({color: this.color});
             }
             ,
@@ -738,16 +741,16 @@
             }
             ,
             handleClick(v) {
-                console.log('========================this.palette start')
-                console.log(this.palette)
-                console.log(this.currentCanvasIndex)
+                // console.log('========================this.palette start')
+                // console.log(this.palette)
+                // console.log(this.currentCanvasIndex)
                 let count = 0;
                 for (let k in this.channelList) {
                     count++;
-                    console.log('channelList.length:' + k);
+                    // console.log('channelList.length:' + k);
                 }
-                console.log('channelList.length:' + count)
-                console.log('========================this.palette end')
+                // console.log('channelList.length:' + count)
+                // console.log('========================this.palette end')
                 // return;
                 let palette = this.palette[this.currentCanvasIndex]
                 // if(palette == undefined){
@@ -785,7 +788,7 @@
                     let offer = await this.peerB.createOffer(this.offerOption2); // 创建 offer
                     await this.onCreateOffer(offer);
                 } catch (e) {
-                    console.log('createOffer: ', e);
+                    // console.log('createOffer: ', e);
                 }
 
                 this.allowCall = true;
@@ -807,18 +810,18 @@
                 try {
                     await this.peerB.setLocalDescription(desc); // 呼叫端设置本地 offer 描述
                 } catch (e) {
-                    console.log('Offer-setLocalDescription: ', e);
+                    // console.log('Offer-setLocalDescription: ', e);
                 }
                 try {
                     await this.peerA.setRemoteDescription(desc); // 接收端设置远程 offer 描述
                 } catch (e) {
-                    console.log('Offer-setRemoteDescription: ', e);
+                    // console.log('Offer-setRemoteDescription: ', e);
                 }
                 try {
                     let answer = await this.peerA.createAnswer(); // 接收端创建 answer
                     await this.onCreateAnswer(answer);
                 } catch (e) {
-                    console.log('createAnswer: ', e);
+                    // console.log('createAnswer: ', e);
                 }
             }
             ,
@@ -826,12 +829,12 @@
                 try {
                     await this.peerA.setLocalDescription(desc); // 接收端设置本地 answer 描述
                 } catch (e) {
-                    console.log('answer-setLocalDescription: ', e);
+                    // console.log('answer-setLocalDescription: ', e);
                 }
                 try {
                     await this.peerB.setRemoteDescription(desc); // 呼叫端设置远程 answer 描述
                 } catch (e) {
-                    console.log('answer-setRemoteDescription: ', e);
+                    // console.log('answer-setRemoteDescription: ', e);
                 }
             }
             ,
@@ -872,51 +875,24 @@
                 try {
                     let channel = this.paintPeerList[account].createDataChannel('messagechannel');
                     this.channelList[account] = channel
-                    console.log('createDataChannel start')
-                    console.log(this.paintPeerList[account])
-                    console.log(channel)
-                    console.log('createDataChannel end')
+                    // console.log('createDataChannel start')
+                    // console.log(this.paintPeerList[account])
+                    // console.log(channel)
+                    // console.log('createDataChannel end')
                     this.handleChannel(channel);
                 } catch (e) {
-                    console.log('createDataChannel:', e);
+                    // console.log('createDataChannel:', e);
                 }
             }
             ,
             // remote
             onDataChannel(account) { // 接收 DataChannel
                 this.paintPeerList[account].ondatachannel = (event) => {
-                    // console.log('ondatachannel', event);
+                    // // console.log('ondatachannel', event);
                     this.channelList[account] = event.channel
                     this.handleChannel(event.channel);
                 };
             },
-            // 判断对象是否相等
-            isObjectValueEqual(a, b) {
-                var aProps = Object.getOwnPropertyNames(a);
-                var bProps = Object.getOwnPropertyNames(b);
-                if (aProps.length != bProps.length) {
-                    return false;
-                }
-                for (var i = 0; i < aProps.length; i++) {
-                    var propName = aProps[i]
-
-                    var propA = a[propName]
-                    var propB = b[propName]
-                    if ((typeof (propA) === 'object')) {
-                        if (this.isObjectValueEqual(propA, propB)) {
-                            // return true     这里不能return ,后面的对象还没判断
-                        } else {
-                            return false
-                        }
-                    } else if (propA !== propB) {
-                        return false
-                    } else {
-
-                    }
-                }
-                return true
-            },
-
 
             handleChannel(channel) { // 处理 channel
                 channel.binaryType = 'arraybuffer';
@@ -938,10 +914,10 @@
                     if (Array.isArray(JSON.parse(e.data))) {
                         let [type, ...arr] = JSON.parse(e.data);
                         // alert('channel.onmessage')
-                        console.log('onmessage', type, arr);
+                        // console.log('onmessage', type, arr);
                         // 接收到的画板数据，需要传递给所有人，其中，要排除发送者
                         if (this.hostFlag == 1) {
-                            console.log('host 转发：' + arr)
+                            // console.log('host 转发：' + arr)
                             this.send(JSON.parse(e.data));
                         }
                         palette[type](...arr);
@@ -949,7 +925,7 @@
                         let msg = JSON.parse(e.data)
                         this.messageList.push(msg);
                     }
-                    console.log('channel onmessage', e.data);
+                    // console.log('channel onmessage', e.data);
                 };
                 channel.onerror = function (event) {
                     console.log('channel event.message:' + event.message)
@@ -991,9 +967,9 @@
                     mes2: msg,
                     type: 'text'
                 };
-                console.log('发送----------start')
-                console.log(params)
-                console.log('发送----------end')
+                // console.log('发送----------start')
+                // console.log(params)
+                // console.log('发送----------end')
                 socket.emit('manychat', params);
                 this.sendText = ''
             },
@@ -1024,9 +1000,9 @@
 
                     let context = canvas.getContext('2d');
                     this.context.push(context)
-                    console.log('this.context start')
-                    console.log(this.context)
-                    console.log('this.context end')
+                    // console.log('this.context start')
+                    // console.log(this.context)
+                    // console.log('this.context end')
                     var img = new Image();
                     // let context2 = this.context[this.currentCanvasIndex]
                     // let canvas2 = this.canvas[this.currentCanvasIndex]
@@ -1092,7 +1068,7 @@
             // 邀请参会
             invite(e) {
                 let target = e.target.nextElementSibling
-                console.log(target)
+                // console.log(target)
                 // alert(target)
                 let url = target.getAttribute('href')
                 // url = '&url=' + url
@@ -1103,11 +1079,11 @@
 
             // 主持人注销会议，中间服务器广播会议注销，并要求参会者执行非主持人退出会议操作
             hangup() {
-                console.log('注销会议')
+                // console.log('注销会议')
                 // socket.emit('hangup', {roomid: this.roomid, host: this.host});
                 // let params = {roomid: this.roomid, host: this.host};
                 let params = {roomid: this.roomid, host: this.account};
-                console.log('注销：' + params.roomid + ',' + params.host)
+                // console.log('注销：' + params.roomid + ',' + params.host)
                 // let params = {roomid: 33333, host: 'cg'};
                 socket.emit('hangup', params);
                 this.closePeers();
@@ -1119,9 +1095,9 @@
                 if(this.isInMeeting == false){
                     return
                 }
-                console.log('退出会议')
+                // console.log('退出会议')
                 let params = {roomid: this.roomid, host: this.host, account: this.account};
-                console.log('退出：' + params.host + ',' + params.account)
+                // console.log('退出：' + params.host + ',' + params.account)
                 socket.emit('logout', params);
                 this.closePeers();
 
@@ -1139,7 +1115,7 @@
                 this.$http.get((getMeetingApi), {
                     params: {roomid: this.roomid},
                 }).then(response => {
-                    console.log(response)
+                    // console.log(response)
                     this.meeting = response.body.data;
                     this.host = this.meeting.host
                     this.status = this.meeting.status
@@ -1148,9 +1124,9 @@
                     if (this.host == this.account) {
                         this.hostFlag = 1
                     }
-                    console.log('this.account start')
-                    console.log(this.account + ':' + this.host + ':' + this.hostFlag)
-                    console.log('this.account end')
+                    // console.log('this.account start')
+                    // console.log(this.account + ':' + this.host + ':' + this.hostFlag)
+                    // console.log('this.account end')
                     // 会议已经注销并且不是主持人
                     if (this.hostFlag == 0 && this.status == 0) {
                         this.$message({
@@ -1169,8 +1145,8 @@
                     }
 
                 }, response => {
-                    console.log('error:')
-                    console.log(response)
+                    // console.log('error:')
+                    // console.log(response)
                 }).finally(
                     response => {
                         // alert('over')
@@ -1181,7 +1157,7 @@
         },
 
         messageList: function () {
-            console.log("changed");
+            // console.log("changed");
             // this.show();
         },
 
@@ -1189,7 +1165,8 @@
             this.$nextTick(() => {
                 this.userId = localStorage.getItem('userId')
                 this.username = localStorage.getItem('username');
-                this.account = localStorage.getItem('account');
+                // this.account = localStorage.getItem('account');
+                this.account = this.$route.query.account
 
                 // 是0时才需要初始化，否则，使用上次的值。
                 if (this.roomid == 0) {
@@ -1210,7 +1187,7 @@
                 // }
 
 
-                console.log('this.roomid:' + this.roomid)
+                // console.log('this.roomid:' + this.roomid)
 
                 this.allowCall = true;
                 this.allowHangup = false;
@@ -1226,11 +1203,14 @@
                 this.socketInit();
                 this.boardLocalStream = this.$refs['canvas'].captureStream();
 
-                socket.on('joined', (users, meeting) => {
+                socket.on('joined', (users, meeting,account) => {
+
                     if (meeting == null) {
                         return
                     }
-                    this.account = localStorage.getItem('account');
+                    // 在本地测试，会有bug。先从url中获取吧
+                    // this.account = localStorage.getItem('account');
+
                     let msgList = meeting.msg
                     let paintContent = meeting.paint
                     // 和joined事件重复了，根本就不应该写这个方法
@@ -1245,9 +1225,9 @@
                     if (this.host == this.account) {
                         this.hostFlag = 1
                     }
-                    console.log('this.account start')
-                    console.log(this.account + ':' + this.host + ':' + this.hostFlag)
-                    console.log('this.account end')
+                    // console.log('this.account start')
+                    // console.log(this.account + ':' + this.host + ':' + this.hostFlag)
+                    // console.log('this.account end')
                     // 会议已经注销并且不是主持人
                     if (this.hostFlag == 0 && this.status == 0) {
                         this.$message({
@@ -1266,11 +1246,11 @@
                     }
 
                     this.messageList = msgList;
-                    console.log('主持人users start')
+                    // console.log('主持人users start')
                     for (let k = 0; k < users.length; k++) {
-                        console.log('user:' + users[k])
+                        // console.log('user:' + users[k])
                     }
-                    console.log('主持人users end')
+                    // console.log('主持人users end')
                     this.participants = users
                     this.participantNumber = users.length
                     // 创建canvas
@@ -1278,6 +1258,7 @@
                     // 参会人数
                     let userNum = users.length
                     console.log('userNum:' + userNum)
+                    console.log(account + 'joined')
                     if (userNum >= 1) {     // 这个条件，实际没啥用。空数组forEach不会执行。
                         users.forEach(v => {
                             let obj = {};
@@ -1288,7 +1269,7 @@
                             this.initPalette();
                             // 自己和自己不建立P2P连接。实际上是忽视了这里的判断条件。
                             if (!this.peerList[obj.account] && v.account !== this.account) {
-                                this.getPeerConnection(obj);
+                                // this.getPeerConnection(obj);
                                 // 非主持人建立P2P后，主持人才能建立
                                 // 优化为，所有非主持人建立P2P后，主持人才能建立。但是几乎不可能，因为总会有参会者
                                 // 随时加入进来
@@ -1300,13 +1281,13 @@
                                 }
                             }
                         });
-                        if (this.account != null) {
-                            // console.log('account', account);
+                        if (this.account == account) {
+                            // // console.log('account', account);
                             for (let k in this.peerList) {
-                                console.log('=======k start')
-                                console.log(k)
-                                console.log('=======k end')
-                                this.createOffer(k, this.peerList[k], 'video');
+                                // console.log('=======k start')
+                                // console.log(k)
+                                // console.log('=======k end')
+                                // this.createOffer(k, this.peerList[k], 'video');
                                 // this.createOfferPaint(k, this.paintPeerList[k], 'paint');
                             }
                         }

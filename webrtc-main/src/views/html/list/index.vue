@@ -338,10 +338,10 @@
 
             join() {
                 if (this.meeting) {
-                    let host = this.host
+                    let account = this.username
                     // this.$router.push({name: 'detail', params: params})
                     let url = this.hostAddress + '/#/detail' + '?roomid=' + this.meeting.roomid
-                        + '&host=' + host + '&account=' + host + '&hostFlag=1'
+                        + '&host=' + account + '&account=' + account + '&hostFlag=1'
                     window.open(url)
                 }
             },

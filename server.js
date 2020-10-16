@@ -108,6 +108,7 @@ app._io.on('connection', sock => {
                 app._io.in(meetingId).emit('joined',
                     users,
                     meeting,
+                    data.account,
                     sock.id); // 发给房间内所有人
             });
 

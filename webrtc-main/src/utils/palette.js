@@ -33,9 +33,9 @@ class Palette {
         this.paint.putImageData(this.imgDataInit, 0, 0);
 
         this.index = this.imgData.length - 1; // 储存完后将 index 重置为 imgData 最后一位
-        console.log('this.imgDataInit start')
-        console.log(this.index)
-        console.log('this.imgDataInit end')
+        // console.log('this.imgDataInit start')
+        // console.log(this.index)
+        // console.log('this.imgDataInit end')
         this.paint.fillStyle = '#fff';
         // this.paint.fillRect(0, 0, this.width, this.height);
         // this.gatherImage();
@@ -57,9 +57,9 @@ class Palette {
         let imgData = this.paint.getImageData(0, 0, this.width, this.height);
         this.imgData.push(imgData);
         this.index = this.imgData.length - 1; // 储存完后将 index 重置为 imgData 最后一位
-        console.log('this.imgDataInit2 start')
-        console.log(this.index)
-        console.log('this.imgDataInit2 end')
+        // console.log('this.imgDataInit2 start')
+        // console.log(this.index)
+        // console.log('this.imgDataInit2 end')
         this.allowCallback(this.index > 0, this.index < this.imgData.length - 1);
     }
     reSetImage() { // 重置为上一帧
@@ -120,10 +120,10 @@ class Palette {
         }
     }
     line(last, now, lineWidth, drawColor) { // 绘制线性
-        console.log('===============line start')
-        console.log(last)
-        console.log(now)
-        console.log('===============line end')
+        // console.log('===============line start')
+        // console.log(last)
+        // console.log(now)
+        // console.log('===============line end')
         this.paint.beginPath();
         this.paint.lineCap = "round"; // 设定线条与线条间接合处的样式
         this.paint.lineJoin = "round";
