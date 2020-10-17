@@ -81,7 +81,6 @@
         },
         methods: {
             register() {
-                alert(4)
                 if (!this.email || !this.password) {
                     this.$message({
                         message: '邮箱和密码都必须填写',

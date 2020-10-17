@@ -337,13 +337,19 @@
             },
 
             join() {
-                if (this.meeting) {
-                    let account = this.username
-                    // this.$router.push({name: 'detail', params: params})
-                    let url = this.hostAddress + '/#/detail' + '?roomid=' + this.meeting.roomid
-                        + '&host=' + account + '&account=' + account + '&hostFlag=1'
-                    window.open(url)
+                if (!this.meeting) {
+                    this.$message({
+                        message: '请先选择一个会议！',
+                        type: 'warning'
+                    });
+                    return
                 }
+
+                let account = this.username
+                // this.$router.push({name: 'detail', params: params})
+                let url = this.hostAddress + '/#/detail' + '?roomid=' + this.meeting.roomid
+                    + '&host=' + account + '&account=' + account + '&hostFlag=1'
+                window.open(url)
             },
 
             // 设置input里的会议链接
@@ -351,7 +357,10 @@
                 let target = e.target;
                 console.log(target)
                 let meetingUrl = target.getAttribute('meeting-url');
-                alert(meetingUrl)
+                if(meetingUrl == null){
+                    alert('请点击空白区')
+                    return
+                }
                 this.meetingUrl = meetingUrl;
                 let roomid = target.getAttribute('roomid');
                 this.roomid = roomid;

@@ -54,7 +54,7 @@
                         </ul>
                     </div>
                     <div id="msg-ipt">
-                        <textarea placeholder="请输入聊天信息" v-model="sendText"></textarea>
+                        <textarea placeholder="请输入聊天信息，点击Enter键发送信息" v-model="sendText" @keyup.enter="sendMsg"></textarea>
                         <button @click="sendMsg">发送</button>
                     </div>
                 </div>
@@ -1110,6 +1110,8 @@
                 });
 
                 this.isInMeeting = false
+
+                this.$router.push({path: 'login'})
             },
 
             //获取会议详情
