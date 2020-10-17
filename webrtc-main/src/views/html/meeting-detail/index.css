@@ -4,7 +4,7 @@ body {
     padding: 0;
 }
 
-div, ul, li, span, i, button, textarea, canvas,video {
+div, ul, li, span, i, button, textarea, canvas, video {
     margin: 0;
     padding: 0;
 }
@@ -18,26 +18,26 @@ div, ul, li, span, i, button, textarea, canvas,video {
 }
 
 #left-bar {
-    width: 300px;
-    height: 100%;
+    width: 25%;
+    /*!*height: 100%;*! 无效*/
+    min-height: 910px;
     float: left;
     margin-right: 20px;
     z-index: 100;
 
     position: absolute;
 
-    border: 1px solid red;
+    border: 1px solid darkblue;
 }
 
 #menu {
     width: 100%;
     height: 30px;
 
-    border: 1px solid gray;
+    /*border: 1px solid dodgerblue;*/
 }
 
 #menu ul li {
-    float: left;
     width: 49%;
     height: 30px;
     line-height: 30px;
@@ -53,6 +53,14 @@ div, ul, li, span, i, button, textarea, canvas,video {
 
 }
 
+#menu-users {
+    float: left;
+}
+
+#menu-message {
+    float: right;
+}
+
 #menu ul li:hover {
     border-bottom: 3px solid red;
 }
@@ -62,13 +70,13 @@ div, ul, li, span, i, button, textarea, canvas,video {
 }
 
 #message {
-    height: auto;
-    border: 1px solid darkblue;
+    min-height: 910px;
 }
 
 #user-list {
     margin-top: 20px;
-    /*margin-left: 5px;*/
+    margin-left: 20px;
+    min-height: 890px;
 }
 
 #user-list li {
@@ -82,7 +90,7 @@ div, ul, li, span, i, button, textarea, canvas,video {
 
     font-size: 18px;
 
-    border: 1px solid red;
+    /*border: 1px solid red;*/
 }
 
 #left-bar .user-icon {
@@ -113,11 +121,11 @@ div, ul, li, span, i, button, textarea, canvas,video {
     margin-right: 10px;
 
     width: 90%;
-    height: 600px;
+    height: 740px;
 
     overflow: auto;
 
-    border: 1px solid #e5ff3a;
+    /*border: 1px solid #e5ff3a;*/
 }
 
 #msg-list li {
@@ -142,8 +150,32 @@ div, ul, li, span, i, button, textarea, canvas,video {
     padding: 10px 10px 10px;
 
     border: none;
+    border-top: 1px solid gray;
 
     outline: none;
+}
+
+textarea::-webkit-input-placeholder {
+    /* WebKit browsers */
+    color: #979a91;
+    font-size: 15px;
+
+}
+
+textarea:-moz-placeholder {
+    /* Mozilla Firefox 4 to 18 */
+    color: #979a91;
+    font-size: 15px;
+}
+
+textarea::-moz-placeholder {
+    /* Mozilla Firefox 19+ */
+    color: #979a91;
+}
+
+textarea::-ms-input-placeholder {
+    /* Internet Explorer 10+ */
+    color: #979a91;
 }
 
 #msg-ipt button {
@@ -175,37 +207,40 @@ div, ul, li, span, i, button, textarea, canvas,video {
     position: absolute;
     top: 0px;
     left: 0px;
-    border: 1px solid darkgreen;
+    /*border: 1px solid darkgreen;*/
 }
 
 #canvas-container {
-    margin-left: 300px;
+    /*margin-left: 300px;*/
 }
 
 #paint-board {
-    width: 100%;
-    min-width: 1184px;
+    float: right;
+    width: 75%;
+    /*min-width: 1184px;*/
     position: relative;
+
+    /*border: 1px solid red;*/
 }
 
-#tools{
+#tools {
     position: absolute;
 
     width: 85px;
     height: auto;
 
     background-color: gray;
-    border: 1px solid red;
+    /*border: 1px solid red;*/
 
     top: 0px;
-    left: 310px;
+    left: 20px;
 }
 
-.tool{
+.tool {
     margin-bottom: 10px;
 }
 
-#my-big-title{
+#my-big-title {
     margin: 0;
     height: 30px;
     line-height: 30px;
@@ -218,7 +253,7 @@ div, ul, li, span, i, button, textarea, canvas,video {
     position: relative;
 }
 
-.my-small-title{
+.my-small-title {
     margin: 3px 0;
     height: 20px;
     line-height: 20px;
@@ -231,7 +266,7 @@ div, ul, li, span, i, button, textarea, canvas,video {
     position: relative;
 }
 
-.fold-btn{
+.fold-btn {
     position: absolute;
     right: 0px;
     top: -6px;
@@ -240,7 +275,7 @@ div, ul, li, span, i, button, textarea, canvas,video {
     cursor: pointer;
 }
 
-.big-fold-btn{
+.big-fold-btn {
     position: absolute;
     right: 0px;
     top: -12px;
@@ -249,44 +284,55 @@ div, ul, li, span, i, button, textarea, canvas,video {
     cursor: pointer;
 }
 
-.paint-tool li{
+.paint-tool li {
     margin-bottom: 3px;
     width: 80px;
     height: 25px;
 }
 
-.paint-tool li button{
+.paint-tool li button {
     margin-bottom: 3px;
     width: 100%;
     height: 100%;
-    text-align:left;
+    text-align: left;
     outline: none;
 
     cursor: pointer;
 }
 
-.active{
+.active {
     border: 1px solid mediumspringgreen;
 }
 
-#videoBox{
-    height: 50px;
+#video-list {
     position: absolute;
-    left: 400px;
-    top: 100px;
+    left: 10px;
+    bottom: -55px;
+
+    border: 1px solid greenyellow;
 }
-.video-container{
+
+#videoBox {
+    height: 50px;
+
+}
+
+.video-container {
     width: auto;
     height: auto;
     position: relative;
 
-    border: 1px solid red;
+    /*border: 1px solid red;*/
 }
 
-.video-user{
+.video-mine {
+    position: relative;
+}
+
+.video-user {
     position: absolute;
-    top: 70px;
-    left: 50px;
+    top: 110px;
+    left: 80px;
 
     font-weight: 800;
     color: #22ff40;

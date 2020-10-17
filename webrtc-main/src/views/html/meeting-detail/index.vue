@@ -4,13 +4,15 @@
             <div id="left-bar">
                 <div id="menu">
                     <ul>
-                        <li
-                                @click="hideMsgBox($event)"
-                                :class="[{ 'active':userMenuIsActive == true}, '']"
+                        <li id="menu-users"
+                            @click="hideMsgBox($event)"
+                            :class="[{ 'active':userMenuIsActive == true}, '']"
                         >会议成员({{participantNumber}})
                         </li>
-                        <li @click="hideUserBox($event)"
-                            :class="[{ 'active':msgMenuIsActive == true}, '']"
+                        <li
+                                id = "menu-message"
+                                @click="hideUserBox($event)"
+                                :class="[{ 'active':msgMenuIsActive == true}, '']"
                         >消息框
                         </li>
                     </ul>
@@ -24,7 +26,7 @@
                                 D
                             </span>
                                 <span v-else>
-                                <!--{{user.account.slice(0,1)}}-->
+                                {{user.account.slice(0,1)}}
                             </span>
                             </i>
                             <span v-if="user.account == undefined">
@@ -203,7 +205,7 @@
                     <div class="video-box" ref="video-box" id="videoBox">
                         <div class="video-container">
                             <video class="video-mine" autoplay controls ref="video-mine" id="video-test"
-                                   height="100"></video>
+                                   height="150"></video>
                             <span class="video-user">{{account}}</span>
                         </div>
                     </div>
