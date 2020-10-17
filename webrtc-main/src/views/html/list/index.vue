@@ -5,8 +5,10 @@
                 <div id="logo">在线会议</div>
                 <div id="menu">
                     <ul>
-                        <li><a href="#"><i class="home"></i>首页</a></li>
-                        <li><a href="#"><i class="video"></i>所有录像</a></li>
+                        <!--<li><a href="#"><i class="home"></i>首页</a></li>-->
+                        <!--<li><a href="#"><i class="video"></i>所有录像</a></li>-->
+                        <!--<li><a href="#">首页</a></li>-->
+                        <!--<li><a href="#">所有录像</a></li>-->
                         <li>
                             <span id="first-letter">C</span>
                             chuganghong

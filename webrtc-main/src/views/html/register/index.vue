@@ -5,12 +5,12 @@
                 <div id="logo">在线会议</div>
                 <div id="menu">
                     <ul>
-                        <li>
-                            <router-link :to="{path:'meeting-list'}"><i class="home"></i>首页</router-link>
-                        </li>
-                        <li>
-                            <router-link :to="{path:'meeting-list'}"><i class="video"></i>注册</router-link>
-                        </li>
+                        <!--<li>-->
+                            <!--<router-link :to="{path:'meeting-list'}"><i class="home"></i>首页</router-link>-->
+                        <!--</li>-->
+                        <!--<li>-->
+                            <!--<router-link :to="{path:'meeting-list'}"><i class="video"></i>注册</router-link>-->
+                        <!--</li>-->
                         <!--<li>-->
                         <!--<span id="first-letter">C</span>-->
                         <!--chuganghong-->
