@@ -227,6 +227,7 @@
         name: 'index',
         data() {
             return {
+                oldUrl: '',
                 // 画板start
                 // 画板预设数据
                 currentCanvasIndex: 0,   // 当前画板在canvas中的索引
@@ -623,10 +624,10 @@
                         message: '主持人已经注销会议！',
                         type: 'warning'
                     });
-                    if(this.hostFlag == 1){
-                        this.$router.push({name:'meeting-list'})
-                    }else{
-                        this.$router.push({name:'login'})
+                    if (this.hostFlag == 1) {
+                        this.$router.push({name: 'meeting-list'})
+                    } else {
+                        this.$router.push({name: 'login'})
                     }
                 });
 
@@ -1092,7 +1093,7 @@
             // 非主持人退出会议，由中间服务器广播用户A退出会议消息，不做其他事情。
             // todo 退会后，通知有连接的其他用户断开连接
             logout() {
-                if(this.isInMeeting == false){
+                if (this.isInMeeting == false) {
                     return
                 }
                 // console.log('退出会议')
@@ -1161,7 +1162,29 @@
             // this.show();
         },
 
+        // beforeRouteEnter(to, from, next) {
+        //     localStorage.setItem('backName', from.name);
+        //     next();
+        // },
+        // 获取上一个页面，不行
+        beforeRouteEnter(to, from, next) {
+            next(vm => {
+                // 通过 `vm` 访问组件实例,将值传入oldUrl
+                vm.oldUrl = from.path
+            })
+        },
+
+        beforeDestroy() {
+
+        },
+
+
         mounted() {
+            let test = localStorage.getItem('data')
+            console.log(JSON.parse(test))
+            console.log(this.$data)
+
+            console.log(this.$options.data())
             this.$nextTick(() => {
                 this.userId = localStorage.getItem('userId')
                 this.username = localStorage.getItem('username');
@@ -1203,7 +1226,7 @@
                 this.socketInit();
                 this.boardLocalStream = this.$refs['canvas'].captureStream();
 
-                socket.on('joined', (users, meeting,account) => {
+                socket.on('joined', (users, meeting, account) => {
 
                     if (meeting == null) {
                         return
@@ -1255,6 +1278,26 @@
                     this.participantNumber = users.length
                     // 创建canvas
                     this.createCanvas(paintContent)
+
+
+                    if (window.performance.navigation.type == 1) {
+
+                        let peerList = localStorage.getItem('peerList');
+                        let paintPeerList = localStorage.getItem('paintPeerList')
+                        let channelList = localStorage.getItem('channelList')
+                        this.peerList = JSON.parse(peerList)
+
+                        this.paintPeerList = JSON.parse(paintPeerList)
+                        console.log(this.paintPeerList)
+                        this.channelList = JSON.parse(channelList)
+
+                        console.log("页面被刷新")
+                        // return
+                    } else {
+                        console.log("首次被加载")
+                    }
+
+
                     // 参会人数
                     let userNum = users.length
                     console.log('userNum:' + userNum)
@@ -1295,7 +1338,10 @@
                 });
             });
 
-            // this.drawCircle()
+
+            localStorage.setItem('peerList', JSON.stringify(this.peerList))
+            localStorage.setItem('paintPeerList', JSON.stringify(this.paintPeerList))
+            localStorage.setItem('channelList', JSON.stringify(this.channelList))
         },
         created() {
         }
