@@ -136,7 +136,8 @@
                     localStorage.setItem('account',result.username)
                     localStorage.setItem('creatorId',result.creatorId)
 
-                    this.$router.push({name: 'meeting-list', params: params})
+                    // 加查询参数，是防止目标页面使用本页面的CSS文件
+                    this.$router.push({name: 'meeting-list', query: {username:this.email}})
 
                 }, response => {
                     console.log(response)

@@ -13,6 +13,7 @@
                             <span id="first-letter">{{username.slice(0,1).toUpperCase()}}</span>
                             {{username}}
                         </li>
+                        <li v-show="isLogin" @click="logout" style="cursor: pointer">退出</li>
                     </ul>
                 </div>
             </div>
@@ -208,8 +209,9 @@
                 meeting: null,             // 当前选中的会议
                 meetings: [],              // 从API获取的元素会议列表
                 userId: '',                 // 当前登录的用户ID
-                username: '小明',                // 当前登录的用户的用户名
+                username: '',                // 当前登录的用户的用户名
                 meetingTitle: '碰头会',          // 会议标题
+                isLogin: false,                // 是否登录
 
                 apiHost: 'http://127.0.0.1:4000',
                 getMeetingListApi: '/api/list',
@@ -399,7 +401,28 @@
 
                 this.userId = localStorage.getItem('userId')
                 this.username = localStorage.getItem('username');
-            }
+
+                // 判断是否登录
+                let username = this.username
+                if (username != undefined || username != null) {
+                    this.isLogin = true
+                }
+            },
+
+            // 退出登录
+            logout() {
+                // 若是非登录状态，不执行退出操作
+                let username = localStorage.getItem('username')
+                if (username != undefined || username != null) {
+                    localStorage.setItem('token', null)
+                    localStorage.setItem('userId', null)
+                    localStorage.setItem('username', null)
+                    localStorage.setItem('account', null)
+                    localStorage.setItem('creatorId', null)
+                    this.isLogin = false
+                    this.$router.push({path:'login'})
+                }
+            },
         }
         ,
         mounted() {

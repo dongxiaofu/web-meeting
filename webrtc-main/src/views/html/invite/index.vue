@@ -5,12 +5,22 @@
                 <div id="logo">在线会议</div>
                 <div id="menu">
                     <ul>
-                        <li>
-                            <router-link :to="{path:'login'}">登录</router-link>
-                        </li>
-                        <li>
-                            <router-link :to="{path:'register'}">注册</router-link>
-                        </li>
+                        <!--加一层div是为了使用vue的v-if，不影响页面效果-->
+                        <div v-if="isLogin">
+                            <li v-show="username != ''">
+                                <span id="first-letter">{{username.slice(0,1).toUpperCase()}}</span>
+                                {{username}}
+                            </li>
+                            <li @click="logout" style="cursor: pointer">退出</li>
+                        </div>
+                        <div v-else>
+                            <li>
+                                <router-link :to="{path:'login'}">登录</router-link>
+                            </li>
+                            <li>
+                                <router-link :to="{path:'register'}">注册</router-link>
+                            </li>
+                        </div>
                     </ul>
                 </div>
             </div>
@@ -105,6 +115,8 @@
                 roomid: '',
                 host: '',                    // 主持人
                 meeting: {},                  // 会议详情
+                isLogin: false,                // 是否登录
+                username: '',
 
                 hostAddress: 'http://127.0.0.1:4000',
                 getMeetingApi: '/noauth/meeting',
@@ -153,9 +165,30 @@
                         // this.reload()
                     }
                 )
-            }
+            },
+
+            // 退出登录
+            logout() {
+                // 若是非登录状态，不执行退出操作
+                let username = localStorage.getItem('username')
+                if (username != undefined || username != null) {
+                    localStorage.setItem('token', null)
+                    localStorage.setItem('userId', null)
+                    localStorage.setItem('username', null)
+                    localStorage.setItem('account', null)
+                    localStorage.setItem('creatorId', null)
+                    this.isLogin = false
+                }
+            },
         },
         mounted() {
+            // 判断是否登录
+            let username = localStorage.getItem('username')
+            console.log('username:' + username)
+            if (username != undefined || username != null) {
+                this.isLogin = true
+                this.username = username
+            }
             this.roomid = this.$route.query.roomid
             this.roomid == undefined ? '' : this.roomid
             if (this.roomid != '') {
