@@ -9,9 +9,9 @@
                         <!--<li><a href="#"><i class="video"></i>所有录像</a></li>-->
                         <!--<li><a href="#">首页</a></li>-->
                         <!--<li><a href="#">所有录像</a></li>-->
-                        <li>
-                            <span id="first-letter">C</span>
-                            chuganghong
+                        <li v-show="username != ''">
+                            <span id="first-letter">{{username.slice(0,1).toUpperCase()}}</span>
+                            {{username}}
                         </li>
                     </ul>
                 </div>
@@ -53,8 +53,8 @@
                     <div class="two-meeting">
                         <ul>
                             <!--<div>-->
-                            <li v-for="(meeting,index) in meetingsList"
-                                :class="[{'active-meeting':activeMeetingIndex == index},'last-meeting']"
+                            <li v-for="(meeting) in meetingsList"
+                                :class="[{'active-meeting':activeMeetingIndex == meeting.roomid},'last-meeting']"
                                 v-bind:meeting-url="meeting.meetingUrl"
                                 v-bind:roomid="meeting.roomid"
                                 v-on:click="setMeetingUrl($event)"
@@ -208,7 +208,7 @@
                 meeting: null,             // 当前选中的会议
                 meetings: [],              // 从API获取的元素会议列表
                 userId: '',                 // 当前登录的用户ID
-                username: '',                // 当前登录的用户的用户名
+                username: '小明',                // 当前登录的用户的用户名
                 meetingTitle: '碰头会',          // 会议标题
 
                 apiHost: 'http://127.0.0.1:4000',
@@ -357,9 +357,18 @@
             // 设置input里的会议链接
             setMeetingUrl(e) {
                 let target = e.target;
+                // console.log(target)
+                // 设置选中的会议的CSSA选中效果
+                // target.index 无这个值,undefined
+                let currentIndex = target.getAttribute('roomid')
+                console.log('target===========start')
                 console.log(target)
+                console.log(currentIndex)
+                console.log('target===========end')
+                this.activeMeetingIndex = currentIndex
+                localStorage.setItem('currentIndex', currentIndex)
                 let meetingUrl = target.getAttribute('meeting-url');
-                if(meetingUrl == null){
+                if (meetingUrl == null) {
                     alert('请点击空白区')
                     return
                 }
@@ -397,6 +406,19 @@
             // 检测登录
             // myComm.checkLogin() // TypeError: Cannot read property 'params' of undefined
             this.checkLogin();
+
+            // 当前选中的会议的CSS效果
+            // 不确定从localStorage中取出来的空值是null还是''，所以使用两个判断
+            if (this.activeMeetingIndex == 0) {
+                let activeMeetingIndex = localStorage.getItem('currentIndex')
+                if (activeMeetingIndex == undefined || activeMeetingIndex == '') {
+                    activeMeetingIndex = 0
+                }
+                console.log(activeMeetingIndex)
+                this.activeMeetingIndex = activeMeetingIndex
+            }
+
+
             // this.getMeetingListApi = this.apiHost + this.getMeetingListApi
             // 记住这段巨坑无比的代码 start
             this.getMeetings();

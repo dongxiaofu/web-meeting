@@ -140,7 +140,7 @@
                     this.host = this.meeting.host
                     // 如果是会议的创建者，跳转到会议列表页
                     let userId = localStorage.getItem('userId')
-                    if (userId != this.meeting.creatorId) {
+                    if (userId == this.meeting.creatorId) {
                         this.$router.push({path: 'meeting-list'})
                         return
                     }
