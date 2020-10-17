@@ -139,6 +139,7 @@
                     localStorage.setItem('userId', result.userId)
                     localStorage.setItem('username',result.username)
                     localStorage.setItem('account',result.username)
+                    localStorage.setItem('creatorId',result.creatorId)
 
                     // this.$route.push({path:'meeting-list',params:params});   // 错误
                     this.$router.push({name: 'meeting-list', params: params})

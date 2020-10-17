@@ -134,6 +134,7 @@
                     localStorage.setItem('userId', result.userId)
                     localStorage.setItem('username',result.username)
                     localStorage.setItem('account',result.username)
+                    localStorage.setItem('creatorId',result.creatorId)
 
                     this.$router.push({name: 'meeting-list', params: params})
 
