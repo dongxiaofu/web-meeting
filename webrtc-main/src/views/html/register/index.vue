@@ -80,14 +80,42 @@
             }
         },
         methods: {
+
+            // 验证邮箱和密码
+            validateInput(){
+                if(this.password.length < 6){
+                    this.$message({
+                        message: '密码至少6位',
+                        type: 'error'
+                    });
+                    return false
+                }
+
+                var reg=/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
+                if(!reg.test(this.email)){
+                    this.$message({
+                        message: '请输入有效的邮箱',
+                        type: 'error'
+                    });
+                    return false
+                }
+
+                return true
+            },
+
             register() {
                 if (!this.email || !this.password) {
                     this.$message({
                         message: '邮箱和密码都必须填写',
                         type: 'error'
                     });
-                    return;
+                    return
                 }
+
+                if(!this.validateInput()){
+                    return
+                }
+
                 let api = this.apiHost + '/noauth/users/register'
                 let params = {
                     username: this.email,

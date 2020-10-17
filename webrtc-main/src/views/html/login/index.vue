@@ -80,6 +80,29 @@
             }
         },
         methods: {
+
+            // 验证邮箱和密码
+            validateInput(){
+                if(this.password.length < 6){
+                    this.$message({
+                        message: '密码至少6位',
+                        type: 'error'
+                    });
+                    return false
+                }
+
+                var reg=/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
+                if(!reg.test(this.email)){
+                    this.$message({
+                        message: '请输入有效的邮箱',
+                        type: 'error'
+                    });
+                    return false
+                }
+
+                return true
+            },
+
             login() {
                 if (!this.email || !this.password) {
                     this.$message({
@@ -88,6 +111,11 @@
                     });
                     return;
                 }
+
+                if(!this.validateInput()){
+                    return
+                }
+
                 let api = this.apiHost + '/noauth/users/login'
                 let params = {
                     username: this.email,
@@ -112,7 +140,7 @@
                 }, response => {
                     console.log(response)
                     this.$message({
-                        message: '出问题啦',
+                        message: '密码或电子邮箱输入错误',
                         type: 'error'
                     });
                 }).finally(response => {
