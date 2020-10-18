@@ -91,7 +91,7 @@
                     return false
                 }
 
-                var reg=/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
+                let reg=/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
                 if(!reg.test(this.email)){
                     this.$message({
                         message: '请输入有效的邮箱',
