@@ -1177,12 +1177,6 @@
                 vm.oldUrl = from.path
             })
         },
-
-        beforeDestroy() {
-
-        },
-
-
         mounted() {
             let test = localStorage.getItem('data')
             console.log(JSON.parse(test))
