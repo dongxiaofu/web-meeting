@@ -372,10 +372,11 @@ export default {
         });
       });
     },
-    getVideoUserName(peerKey) {
-      return 'todo';
+    // todo 兼容旧代码，弄了这个没必要的嵌套
+    getVideoUserName(account, peerKey) {
+      return this.getNameOfOtherSide(account, peerKey);
     },
-    getPeerConnection(v) {
+    getPeerConnection(v, nameOfOtherSide) {
 
       let iceServer = {
         'iceServers': [
@@ -414,7 +415,7 @@ export default {
           div.append(video);
           let videoUser = document.createElement('span');
           videoUser.setAttribute('class', 'video-user');
-          videoUser.innerText = 'todo';
+          videoUser.innerText = nameOfOtherSide;
           div.append(videoUser);
           // console.log('============= getPeerConnection start')
           // console.log(videoBox)
@@ -1171,6 +1172,19 @@ export default {
       let prefix = arr[0];
       return prefix;
     },
+
+    // 获取jim-cg中的对方名字
+    getNameOfOtherSide(account, combineAccount) {
+      let arr = combineAccount.split('-');
+      let nameOfTOtherSide = '';
+      for (let i = 0; i < arr.length; i++) {
+        if (arr[i] != account) {
+          nameOfTOtherSide = arr[i];
+          break;
+        }
+      }
+      return nameOfTOtherSide;
+    },
   },
 
   messageList: function () {
@@ -1317,10 +1331,11 @@ export default {
             let obj = {};
             let vAccount = this.getPrefixOfUsername(v.account);
             let currentAccount = this.getPrefixOfUsername(this.account);
-            console.log('===================== getPrefixOfUsername start')
-            console.log(vAccount)
-            console.log(currentAccount)
-            console.log('===================== getPrefixOfUsername end')
+            let nameOfOtherSide = this.getNameOfOtherSide(currentAccount, vAccount);
+            console.log('===================== getPrefixOfUsername start');
+            console.log(vAccount);
+            console.log(currentAccount);
+            console.log('===================== getPrefixOfUsername end');
             let arr = [vAccount, currentAccount];
             obj.account = arr.sort().join('-');         // 必须如此
             obj.user = this.account;
@@ -1328,7 +1343,7 @@ export default {
             this.initPalette();
             // 自己和自己不建立P2P连接。实际上是忽视了这里的判断条件。
             if (!this.peerList[obj.account] && v.account !== this.account) {
-              this.getPeerConnection(obj);
+              this.getPeerConnection(obj, nameOfOtherSide);
               // 非主持人建立P2P后，主持人才能建立
               // 优化为，所有非主持人建立P2P后，主持人才能建立。但是几乎不可能，因为总会有参会者
               // 随时加入进来
