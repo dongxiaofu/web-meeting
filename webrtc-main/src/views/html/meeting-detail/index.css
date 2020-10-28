@@ -1,12 +1,18 @@
-body {
+html,body {
+    height: 100%;
     width: 100%;
     margin: 0;
     padding: 0;
+    overflow: hidden;
 }
 
 div, ul, li, span, i, button, textarea, canvas, video {
     margin: 0;
     padding: 0;
+}
+
+#app{
+    height: 100%;
 }
 
 #main-container {
@@ -20,7 +26,8 @@ div, ul, li, span, i, button, textarea, canvas, video {
 #left-bar {
     width: 25%;
     /*!*height: 100%;*! 无效*/
-    min-height: 910px;
+    /*min-height: 910px;*/
+    height: 100%;
     float: left;
     margin-right: 20px;
     z-index: 100;
@@ -32,15 +39,22 @@ div, ul, li, span, i, button, textarea, canvas, video {
 
 #menu {
     width: 100%;
-    height: 30px;
+    /*height: 30px;*/
+    height: 7%;
 
     /*border: 1px solid dodgerblue;*/
+}
+
+#menu ul{
+    height: 100%;
 }
 
 #menu ul li {
     width: 49%;
     height: 30px;
+    /*height: 100%;*/
     line-height: 30px;
+    /*line-height: 150%;*/
     text-align: center;
 
     background-color: dodgerblue;
@@ -70,13 +84,15 @@ div, ul, li, span, i, button, textarea, canvas, video {
 }
 
 #message {
-    min-height: 910px;
+    /*min-height: 715px;*/
+    height: 93%;
 }
 
 #user-list {
     margin-top: 20px;
     margin-left: 20px;
-    min-height: 890px;
+    /*min-height: 715px;*/
+    height: 93%;
 }
 
 #user-list li {
@@ -121,7 +137,8 @@ div, ul, li, span, i, button, textarea, canvas, video {
     margin-right: 10px;
 
     width: 90%;
-    height: 740px;
+    /*height: 740px;*/
+    height: 80%;
 
     overflow: auto;
 
@@ -142,10 +159,14 @@ div, ul, li, span, i, button, textarea, canvas, video {
     /*color: white;*/
 }
 
+#msg-ipt{
+    height: 20%;
+}
 
 #msg-ipt textarea {
-    height: 130px;
+    /*height: 130px;*/
     width: 95%;
+    height: 100%;
 
     padding: 10px 10px 10px;
 
@@ -207,11 +228,13 @@ textarea::-ms-input-placeholder {
     position: absolute;
     top: 0px;
     left: 0px;
-    /*border: 1px solid darkgreen;*/
+    /*border: 1px solid darkblue;*/
 }
 
 #canvas-container {
     /*margin-left: 300px;*/
+    border: 1px solid darkblue;
+    margin-left: 20px;
 }
 
 #paint-board {
@@ -307,7 +330,10 @@ textarea::-ms-input-placeholder {
 #video-list {
     position: absolute;
     left: 10px;
-    bottom: -55px;
+    /*bottom: -55px;*/
+    height: 50px;
+    top: 0px;
+    left: 120px;
 
     border: 1px solid greenyellow;
 }

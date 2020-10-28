@@ -47,13 +47,13 @@ app._io.on('connection', sock => {
     sock.on('join', data => {
         sock.join(data.roomid, () => {
             let meetingId = data.roomid;
-            console.log('会议不存在0:' + data.roomid)
+            console.log('会议不存在:' + data.roomid)
             let obj = {
                 account: data.account,
                 sockId: sock.id
             };
             // 留着做转发使用
-            // console.log('sockS[data.account]:' + data.account)
+            console.log('sockS[data.account]:' + data.account)
             sockS[data.account] = sock;
             // console.log('sockS[data.account]:' + sockS)
 
