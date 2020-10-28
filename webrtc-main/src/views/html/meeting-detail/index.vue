@@ -409,7 +409,7 @@ export default {
           video.autoplay = 'autoplay';
           video.srcObject = event.stream;
           video.id = v.account;
-          video.style.height = '100px';
+          video.style.height = '150px';
           // video.height = 100;  // 错误
           div.append(video);
           let videoUser = document.createElement('span');
@@ -1163,6 +1163,14 @@ export default {
           },
       );
     },
+
+    // todo 这是简化处理，还需要在注册那里写代码，要求注册的账号必须是合法的邮箱
+    // 获取字符串cg@qq.com的前部分
+    getPrefixOfUsername(username) {
+      let arr = username.split('@');
+      let prefix = arr[0];
+      return prefix;
+    },
   },
 
   messageList: function () {
@@ -1307,14 +1315,20 @@ export default {
         if (userNum >= 1) {     // 这个条件，实际没啥用。空数组forEach不会执行。
           users.forEach(v => {
             let obj = {};
-            let arr = [v.account, this.account];
+            let vAccount = this.getPrefixOfUsername(v.account);
+            let currentAccount = this.getPrefixOfUsername(this.account);
+            console.log('===================== getPrefixOfUsername start')
+            console.log(vAccount)
+            console.log(currentAccount)
+            console.log('===================== getPrefixOfUsername end')
+            let arr = [vAccount, currentAccount];
             obj.account = arr.sort().join('-');         // 必须如此
             obj.user = this.account;
             // 不管有没有建立连接，画板都要可以使用。在这里耗费了33分钟才找出问题。
             this.initPalette();
             // 自己和自己不建立P2P连接。实际上是忽视了这里的判断条件。
             if (!this.peerList[obj.account] && v.account !== this.account) {
-              // this.getPeerConnection(obj);
+              this.getPeerConnection(obj);
               // 非主持人建立P2P后，主持人才能建立
               // 优化为，所有非主持人建立P2P后，主持人才能建立。但是几乎不可能，因为总会有参会者
               // 随时加入进来
@@ -1332,7 +1346,7 @@ export default {
               // console.log('=======k start')
               // console.log(k)
               // console.log('=======k end')
-              // this.createOffer(k, this.peerList[k], 'video');
+              this.createOffer(k, this.peerList[k], 'video');
               // this.createOfferPaint(k, this.paintPeerList[k], 'paint');
             }
           }
