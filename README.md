@@ -11,6 +11,10 @@ node server.js
 
 cnpm run serve
 
+启动mongodb
+
+brew services restart mongodb-community
+
 vue 网页的的根DOM在
 
 /Users/cg/data/www/web-meeting/webrtc-main/src/App.vue
