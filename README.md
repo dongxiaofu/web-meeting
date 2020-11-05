@@ -139,3 +139,32 @@ chugangdeMacBook-Pro:web-meeting cg$ nodemon server.js
 [nodemon] starting `node server.js`
 
 ==================
+
+silly lifecycle webrtc@0.1.0~build: Args: [ '-c', 'vue-cli-service
+ build' ]
+ 
+ 
+====================================
+
+Error: Loading PostCSS Plugin failed: No valid exports main found for '/home/www/web-meeting/webrtc-main/node_modules
+/_autoprefixer@9.8.6@autoprefixer/node_modules/colorette'
+
+删除下面的文件，可以解决问题。
+
+/Users/cg/data/www/web-meeting/webrtc-main/postcss.config.js
+
+上线项目时，被这个问题阻碍1个小时左右。我的解决办法：
+
+1.删除、重新编译。
+
+2.搜索，资料也是删除重新编译，不过还有其他文件。
+
+3.添加build、config文件夹。无用。
+
+4.解决问题的关键：使用了正确的关键词。所以，要从报错信息中挑选正确的关键词。不知道哪个是正确的，就多尝试。
+
+5.一个方法试了两次后不行，就换其他方法。
+
+6.遇到这种问题，最先想到的措施就是去搜索。
+
+====================================
