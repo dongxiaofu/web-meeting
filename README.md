@@ -168,3 +168,47 @@ Error: Loading PostCSS Plugin failed: No valid exports main found for '/home/www
 6.遇到这种问题，最先想到的措施就是去搜索。
 
 ====================================
+
+chugangdeMacBook-Pro:webrtc-main cg$ cnpm run build
+
+> webrtc@0.1.0 build /Users/cg/data/www/web-meeting/webrtc-main
+> node build/build.js
+
+internal/modules/cjs/loader.js:883
+  throw err;
+  ^
+
+Error: Cannot find module 'shelljs'
+Require stack:
+- /Users/cg/data/www/web-meeting/webrtc-main/build/check-versions.js
+- /Users/cg/data/www/web-meeting/webrtc-main/build/build.js
+    at Function.Module._resolveFilename (internal/modules/cjs/loader.js:880:15)
+    at Function.Module._load (internal/modules/cjs/loader.js:725:27)
+    at Module.require (internal/modules/cjs/loader.js:952:19)
+    at require (internal/modules/cjs/helpers.js:88:18)
+    at Object.<anonymous> (/Users/cg/data/www/web-meeting/webrtc-main/build/check-versions.js:5:15)
+    at Module._compile (internal/modules/cjs/loader.js:1063:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1092:10)
+    at Module.load (internal/modules/cjs/loader.js:928:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:769:14)
+    at Module.require (internal/modules/cjs/loader.js:952:19) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/cg/data/www/web-meeting/webrtc-main/build/check-versions.js',
+    '/Users/cg/data/www/web-meeting/webrtc-main/build/build.js'
+  ]
+}
+npm ERR! code ELIFECYCLE
+npm ERR! errno 1
+npm ERR! webrtc@0.1.0 build: `node build/build.js`
+npm ERR! Exit status 1
+npm ERR! 
+npm ERR! Failed at the webrtc@0.1.0 build script.
+npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
+
+npm ERR! A complete log of this run can be found in:
+
+========================================================================
+Error: Cannot find module 'extract-text-webpack-plugin'
+
+

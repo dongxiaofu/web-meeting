@@ -4,12 +4,15 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build": "node build/build.js",
     "lint": "vue-cli-service lint",
     "start": "vue-cli-service serve"
   },
   "dependencies": {
     "element-ui": "^2.6.1",
+    "extract-text-webpack-plugin": "^3.0.2",
+    "optimize-css-assets-webpack-plugin": "^5.0.4",
+    "shelljs": "^0.8.4",
     "socket.io": "^2.1.1",
     "vue": "^2.5.17",
     "vue-router": "^3.0.1",
@@ -23,5 +26,9 @@
     "node-sass": "^4.9.0",
     "sass-loader": "^7.0.1",
     "vue-template-compiler": "^2.5.17"
+  },
+  "engines": {
+    "node": ">= 6.0.0",
+    "npm": ">= 3.0.0"
   }
 }
