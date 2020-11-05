@@ -38,8 +38,15 @@ Vue.prototype.$bus = new Vue();
 
 import global_ from './components/common/Global'//引用文件
 Vue.prototype.GLOBAL = global_//挂载到Vue实例上面
+//
+// new Vue({
+//     router,
+//     render: h => h(App)
+// }).$mount('#app');
 
 new Vue({
-    router,
-    render: h => h(App)
-}).$mount('#app');
+  el: '#app',
+  router,
+  components: {App},
+  template: '<App/>'
+})
