@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import App from './App.vue';
 import router from './router/router';
-import store from './store/store';
+// import store from './store/store';
 import socket from './utils/socket';
 import bus from './utils/eventBus';
 import ElementUI from 'element-ui';
@@ -41,6 +41,5 @@ Vue.prototype.GLOBAL = global_//挂载到Vue实例上面
 
 new Vue({
     router,
-    store,
     render: h => h(App)
 }).$mount('#app');
