@@ -1,0 +1,94 @@
+
+> main@1.0.0 build /Users/cg/data/www/web-meeting/main
+> node build/build.js
+
+Hash: [1mafd89ab501622d46d50f[39m[22m
+Version: webpack [1m3.12.0[39m[22m
+Time: [1m9968[39m[22mms
+                                                  [1mAsset[39m[22m       [1mSize[39m[22m  [1mChunks[39m[22m  [1m[39m[22m           [1m[39m[22m[1mChunk Names[39m[22m
+                             [1m[32mstatic/img/ad.bef69ce.jpeg[39m[22m    20.3 kB        [1m[39m[22m  [1m[32m[emitted][39m[22m  
+                    [1m[32mstatic/js/0.92ccacd2c2027709c294.js[39m[22m    14.2 kB       [1m0[39m[22m  [1m[32m[emitted][39m[22m  vendor-async
+                    [1m[32mstatic/js/1.53f8f45acbc544b64465.js[39m[22m    46.8 kB       [1m1[39m[22m  [1m[32m[emitted][39m[22m  
+                    [1m[32mstatic/js/2.7331267dbb921fd7442f.js[39m[22m      15 kB       [1m2[39m[22m  [1m[32m[emitted][39m[22m  
+                    [1m[32mstatic/js/3.6489ef5060b3267e55cc.js[39m[22m    66.7 kB       [1m3[39m[22m  [1m[32m[emitted][39m[22m  
+                    [1m[32mstatic/js/4.e8c28de5714b8c623345.js[39m[22m    3.82 kB       [1m4[39m[22m  [1m[32m[emitted][39m[22m  
+                    [1m[32mstatic/js/5.a2edae844f70bd0dd7be.js[39m[22m    3.72 kB       [1m5[39m[22m  [1m[32m[emitted][39m[22m  
+                    [1m[32mstatic/js/6.a129e86a67efea7052cf.js[39m[22m     4.1 kB   [1m6, 10[39m[22m  [1m[32m[emitted][39m[22m  
+                    [1m[32mstatic/js/7.b0874e708dd30f63acc2.js[39m[22m  238 bytes       [1m7[39m[22m  [1m[32m[emitted][39m[22m  
+                    [1m[32mstatic/js/8.3df2ccd88e126a4729e2.js[39m[22m    5.66 kB       [1m8[39m[22m  [1m[32m[emitted][39m[22m  
+                    [1m[32mstatic/js/9.372533dc1fd6121c818e.js[39m[22m    6.82 kB       [1m9[39m[22m  [1m[32m[emitted][39m[22m  
+                   [1m[32mstatic/js/10.50fe29e7b66bd4f4dc89.js[39m[22m    2.18 kB      [1m10[39m[22m  [1m[32m[emitted][39m[22m  
+                  [1m[32mstatic/js/app.7e2d6596731537796bd8.js[39m[22m      12 kB      [1m11[39m[22m  [1m[32m[emitted][39m[22m  app
+               [1m[32mstatic/js/vendor.3d55a18c1a4b5659ce00.js[39m[22m     123 kB      [1m12[39m[22m  [1m[32m[emitted][39m[22m  vendor
+             [1m[32mstatic/js/manifest.c4aaf596f1e8c5f5aaf1.js[39m[22m    1.71 kB      [1m13[39m[22m  [1m[32m[emitted][39m[22m  manifest
+    [1m[32mstatic/css/app.04f6cc6fead0de75bf396dc60e27c1a5.css[39m[22m     122 kB      [1m11[39m[22m  [1m[32m[emitted][39m[22m  app
+[1m[32mstatic/css/app.04f6cc6fead0de75bf396dc60e27c1a5.css.map[39m[22m     156 kB        [1m[39m[22m  [1m[32m[emitted][39m[22m  
+                [1m[32mstatic/js/0.92ccacd2c2027709c294.js.map[39m[22m      63 kB       [1m0[39m[22m  [1m[32m[emitted][39m[22m  vendor-async
+                [1m[32mstatic/js/1.53f8f45acbc544b64465.js.map[39m[22m     225 kB       [1m1[39m[22m  [1m[32m[emitted][39m[22m  
+                [1m[32mstatic/js/2.7331267dbb921fd7442f.js.map[39m[22m    71.9 kB       [1m2[39m[22m  [1m[32m[emitted][39m[22m  
+                [1m[32mstatic/js/3.6489ef5060b3267e55cc.js.map[39m[22m     294 kB       [1m3[39m[22m  [1m[32m[emitted][39m[22m  
+                [1m[32mstatic/js/4.e8c28de5714b8c623345.js.map[39m[22m    14.3 kB       [1m4[39m[22m  [1m[32m[emitted][39m[22m  
+                [1m[32mstatic/js/5.a2edae844f70bd0dd7be.js.map[39m[22m    15.3 kB       [1m5[39m[22m  [1m[32m[emitted][39m[22m  
+                [1m[32mstatic/js/6.a129e86a67efea7052cf.js.map[39m[22m    14.8 kB   [1m6, 10[39m[22m  [1m[32m[emitted][39m[22m  
+                [1m[32mstatic/js/7.b0874e708dd30f63acc2.js.map[39m[22m  112 bytes       [1m7[39m[22m  [1m[32m[emitted][39m[22m  
+                [1m[32mstatic/js/8.3df2ccd88e126a4729e2.js.map[39m[22m    19.9 kB       [1m8[39m[22m  [1m[32m[emitted][39m[22m  
+                [1m[32mstatic/js/9.372533dc1fd6121c818e.js.map[39m[22m    23.2 kB       [1m9[39m[22m  [1m[32m[emitted][39m[22m  
+               [1m[32mstatic/js/10.50fe29e7b66bd4f4dc89.js.map[39m[22m    7.72 kB      [1m10[39m[22m  [1m[32m[emitted][39m[22m  
+              [1m[32mstatic/js/app.7e2d6596731537796bd8.js.map[39m[22m    19.9 kB      [1m11[39m[22m  [1m[32m[emitted][39m[22m  app
+           [1m[32mstatic/js/vendor.3d55a18c1a4b5659ce00.js.map[39m[22m     620 kB      [1m12[39m[22m  [1m[32m[emitted][39m[22m  vendor
+         [1m[32mstatic/js/manifest.c4aaf596f1e8c5f5aaf1.js.map[39m[22m    8.23 kB      [1m13[39m[22m  [1m[32m[emitted][39m[22m  manifest
+                                             [1m[32mindex.html[39m[22m  506 bytes        [1m[39m[22m  [1m[32m[emitted][39m[22m  
+
+[1m[31mERROR in ./node_modules/babel-loader/lib!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./src/views/html/list/index.vue
+Module not found: Error: Can't resolve 'clipboard' in '/Users/cg/data/www/web-meeting/main/src/views/html/list'
+ @ ./node_modules/babel-loader/lib!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./src/views/html/list/index.vue 194:0-34
+ @ ./src/views/html/list/index.vue
+ @ ./src/views lazy ^\.\/.*\.vue$
+ @ ./src/router/_import.js
+ @ ./src/router/index.js
+ @ ./src/main.js[39m[22m
+
+[1m[31mERROR in ./src/views/communication/communication-sub.vue
+Module not found: Error: Can't resolve 'sass-loader' in '/Users/cg/data/www/web-meeting/main/src/views/communication'
+ @ ./src/views/communication/communication-sub.vue 2:2-422
+ @ ./src/views lazy ^\.\/.*\.vue$
+ @ ./src/router/_import.js
+ @ ./src/router/index.js
+ @ ./src/main.js[39m[22m
+
+[1m[31mERROR in ./src/views/communication/communication-min-sub.vue
+Module not found: Error: Can't resolve 'sass-loader' in '/Users/cg/data/www/web-meeting/main/src/views/communication'
+ @ ./src/views/communication/communication-min-sub.vue 2:2-426
+ @ ./src/views lazy ^\.\/.*\.vue$
+ @ ./src/router/_import.js
+ @ ./src/router/index.js
+ @ ./src/main.js[39m[22m
+
+[1m[31mERROR in ./src/views/communication/communication.vue
+Module not found: Error: Can't resolve 'sass-loader' in '/Users/cg/data/www/web-meeting/main/src/views/communication'
+ @ ./src/views/communication/communication.vue 2:2-418
+ @ ./src/views lazy ^\.\/.*\.vue$
+ @ ./src/router/_import.js
+ @ ./src/router/index.js
+ @ ./src/main.js[39m[22m
+
+[1m[31mERROR in ./src/views/responsive/responsive.vue
+Module not found: Error: Can't resolve 'sass-loader' in '/Users/cg/data/www/web-meeting/main/src/views/responsive'
+ @ ./src/views/responsive/responsive.vue 2:2-416
+ @ ./src/views lazy ^\.\/.*\.vue$
+ @ ./src/router/_import.js
+ @ ./src/router/index.js
+ @ ./src/main.js[39m[22m
+
+[1m[31mERROR in ./src/utils/socket.js
+Module not found: Error: Can't resolve 'socket.io-client' in '/Users/cg/data/www/web-meeting/main/src/utils'
+ @ ./src/utils/socket.js 2:0-34
+ @ ./node_modules/babel-loader/lib!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./src/views/html/list/index.vue
+ @ ./src/views/html/list/index.vue
+ @ ./src/views lazy ^\.\/.*\.vue$
+ @ ./src/router/_import.js
+ @ ./src/router/index.js
+ @ ./src/main.js[39m[22m
+
+  Build failed with errors.
+
