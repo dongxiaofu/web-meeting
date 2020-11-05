@@ -27,7 +27,7 @@
             <div class="inner">
                 <div id="left-bar">
                     <div id="ad">
-                        <img src="./ad.jpeg">
+                        <img src="ad.jpeg">
                     </div>
                 </div>
                 <div id="register-box">
@@ -160,6 +160,6 @@
     };
 </script>
 <style scoped>
-    @import "./index.css";
+    @import "index.css";
 </style>
 

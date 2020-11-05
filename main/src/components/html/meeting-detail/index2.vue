@@ -191,5 +191,5 @@
     };
 </script>
 <style scoped>
-    @import "./index.css";
+    @import "index.css";
 </style>
