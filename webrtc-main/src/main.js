@@ -34,6 +34,11 @@ socket.on('disconnect', () => {
 Vue.config.productionTip = false;
 // Vue.prototype.$bus = bus;
 Vue.prototype.$bus = new Vue();
+
+
+import global_ from './components/common/Global'//引用文件
+Vue.prototype.GLOBAL = global_//挂载到Vue实例上面
+
 new Vue({
     router,
     store,
