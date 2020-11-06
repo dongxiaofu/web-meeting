@@ -332,6 +332,25 @@ EXPOSE 8888
 在这里：/Users/cg/data/www/web-meeting/main/src/utils/socket.js
 
 
+MediaDevices.getUserMedia` undefined 的问题
+=======================================================
+
+https://www.cnblogs.com/Wayou/p/using_MediaDevices_getUserMedia_wihtout_https.html
+
+
+通过相应参数启动 Chrome
+传递相应参数来启动 Chrome，以 http://example.com 为例，
+
+ --unsafely-treat-insecure-origin-as-secure="http://example.com"
+开启相应 flag
+通过传递相应参数来启动 Chrome Insecure origins treated as secure flag 并填入相应白名单。
+
+打开 chrome://flags/#unsafely-treat-insecure-origin-as-secure
+将该 flag 切换成 enable 状态
+输入框中填写需要开启的域名，譬如 http://example.com"，多个以逗号分隔。
+重启后生效。
+
+
 
 
 
