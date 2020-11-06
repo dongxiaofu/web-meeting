@@ -10,9 +10,9 @@
             >会议成员({{ participantNumber }})
             </li>
             <li
-                id="menu-message"
-                @click="hideUserBox($event)"
-                :class="[{ 'active':msgMenuIsActive == true}, '']"
+              id="menu-message"
+              @click="hideUserBox($event)"
+              :class="[{ 'active':msgMenuIsActive == true}, '']"
             >消息框
             </li>
           </ul>
@@ -119,8 +119,8 @@
                 <li v-for="v in handleList" :key="v.type" :id="v.type === 'lineWidth' ? 'linewidth':''">
                   <!--颜色 start-->
                   <el-color-picker
-                      v-model="color" show-alpha v-if="v.type === 'color'" @change="colorChange"
-                      :disabled="allowHangup"
+                    v-model="color" show-alpha v-if="v.type === 'color'" @change="colorChange"
+                    :disabled="allowHangup"
                   >
                   </el-color-picker>
                   <!--颜色 end-->
@@ -135,10 +135,10 @@
                     {{ v.name }}
                   </button>
                   <el-popover
-                      placement="top"
-                      width="400"
-                      trigger="click"
-                      v-if="v.type === 'polygon'"
+                    placement="top"
+                    width="400"
+                    trigger="click"
+                    v-if="v.type === 'polygon'"
                   >
                     <el-input-number v-model="sides" controls-position="right" @change="sidesChange"
                                      :min="3"
@@ -148,10 +148,10 @@
                     </button>
                   </el-popover>
                   <el-popover
-                      placement="top"
-                      width="400"
-                      trigger="click"
-                      v-if="v.type === 'lineWidth'"
+                    placement="top"
+                    width="400"
+                    trigger="click"
+                    v-if="v.type === 'lineWidth'"
                   >
                     <el-slider v-model="lineWidth" :max=20 @change="lineWidthChange"></el-slider>
                     <button slot="reference" :disabled="allowHangup">{{ v.name }} <i>{{
@@ -304,7 +304,7 @@ export default {
       isInMeeting: false,
 
       // 获取会议详情
-      hostAddress: 'http://127.0.0.1:4000',
+      hostAddress: this.GLOBAL.apiHost,//'http://127.0.0.1:4000',
       getMeetingApi: '/noauth/meeting',
 
       meeting: {},         // 当前会议
@@ -352,9 +352,9 @@ export default {
       //兼容浏览器的getUserMedia写法
       let myVideo = this.$refs['video-mine'];
       let getUserMedia = (navigator.getUserMedia ||
-          navigator.webkitGetUserMedia ||
-          navigator.mozGetUserMedia ||
-          navigator.msGetUserMedia);
+        navigator.webkitGetUserMedia ||
+        navigator.mozGetUserMedia ||
+        navigator.msGetUserMedia);
       //获取本地的媒体流，并绑定到一个video标签上输出，并且发送这个媒体流给其他客户端
       return new Promise((resolve, reject) => {
         getUserMedia.call(navigator, {
@@ -387,8 +387,8 @@ export default {
       };
       //兼容浏览器的PeerConnection写法
       let PeerConnection = (window.RTCPeerConnection ||
-          window.webkitRTCPeerConnection ||
-          window.mozRTCPeerConnection);
+        window.webkitRTCPeerConnection ||
+        window.mozRTCPeerConnection);
       // 创建
       let peer = new PeerConnection(iceServer);
       //向PeerConnection中加入需要发送的流
@@ -559,8 +559,8 @@ export default {
         }
         if (v.candidate) {
           peerList[v.account] && peerList[v.account].addIceCandidate(v.candidate).catch((e) => {
-                // console.log('__ice_candidate_err', e)
-              },// // console.log('err', e)
+              // console.log('__ice_candidate_err', e)
+            },// // console.log('err', e)
           );
         }
       });
@@ -1158,10 +1158,10 @@ export default {
         // console.log('error:')
         // console.log(response)
       }).finally(
-          response => {
-            // alert('over')
-            // this.reload()
-          },
+        response => {
+          // alert('over')
+          // this.reload()
+        },
       );
     },
 
@@ -1241,10 +1241,10 @@ export default {
 
       this.getUserMedia().then(() => {
         socket.emit('join',
-            {
-              roomid: this.roomid,
-              account: this.account,
-            },
+          {
+            roomid: this.roomid,
+            account: this.account,
+          },
         );
       });
       this.socketInit();

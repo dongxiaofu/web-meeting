@@ -119,96 +119,96 @@ export default {
       username: '',
       participants: [],                // 参会者
 
-      hostAddress: 'http://127.0.0.1:4000',
+      hostAddress: this.GLOBAL.apiHost, //'http://127.0.0.1:4000',
       getMeetingApi: '/noauth/meeting',
-    }
+    };
   },
   methods: {
     join() {
       if (this.roomid == '' || this.participant == '') {
         this.$message({
           message: '请填写您的名字',
-          type: 'error'
+          type: 'error',
         });
-        return
+        return;
       }
       // 检测参会者名字是否重复
-      let participants = this.participants.filter(participant => this.participant === participant.account)
-      console.log(participants)
-      if(participants.length){
+      let participants = this.participants.filter(participant => this.participant === participant.account);
+      console.log(participants);
+      if (participants.length) {
         this.$message({
           message: '会议已经有人使用这个名字了，请用其他不同的名字参加会议',
-          type: 'error'
+          type: 'error',
         });
-        return
+        return;
       }
 
       let params = {
         account: this.participant,
         roomid: this.roomid,
-      }
+      };
       // 存储参会者名称
-      localStorage.setItem('account', this.participant)
+      localStorage.setItem('account', this.participant);
       // url中不带查询参数，除非路由写成和带查询参数一样的格式。
       // this.$router.push({name: 'detail', params: params})
       // url中带查询查询，不需要路由配合
-      this.$router.push({path: 'detail', query: params})
+      this.$router.push({path: 'detail', query: params});
     },
     //获取会议详情
     getMeeting() {
-      let getMeetingApi = this.hostAddress + this.getMeetingApi
+      let getMeetingApi = this.hostAddress + this.getMeetingApi;
       this.$http.get((getMeetingApi), {
         params: {roomid: this.roomid},
       }).then(response => {
-        console.log(response)
+        console.log(response);
         this.meeting = response.body.data;
-        this.host = this.meeting.host
-        this.participants = this.meeting.users
+        this.host = this.meeting.host;
+        this.participants = this.meeting.users;
         // 如果是会议的创建者，跳转到会议列表页
-        let userId = localStorage.getItem('userId')
+        let userId = localStorage.getItem('userId');
         if (userId == this.meeting.creatorId) {
-          this.$router.push({path: 'meeting-list'})
-          return
+          this.$router.push({path: 'meeting-list'});
+          return;
         }
       }, response => {
-        console.log('error:')
-        console.log(response)
+        console.log('error:');
+        console.log(response);
       }).finally(
-          response => {
-            // alert('over')
-            // this.reload()
-          }
-      )
+        response => {
+          // alert('over')
+          // this.reload()
+        },
+      );
     },
 
     // 退出登录
     logout() {
       // 若是非登录状态，不执行退出操作
-      let username = localStorage.getItem('username')
+      let username = localStorage.getItem('username');
       if (username != undefined || username != null) {
-        localStorage.setItem('token', null)
-        localStorage.setItem('userId', null)
-        localStorage.setItem('username', null)
-        localStorage.setItem('account', null)
-        localStorage.setItem('creatorId', null)
-        this.isLogin = false
+        localStorage.setItem('token', null);
+        localStorage.setItem('userId', null);
+        localStorage.setItem('username', null);
+        localStorage.setItem('account', null);
+        localStorage.setItem('creatorId', null);
+        this.isLogin = false;
       }
     },
   },
   mounted() {
     // 判断是否登录
-    let username = localStorage.getItem('username')
-    console.log('username:' + username)
+    let username = localStorage.getItem('username');
+    console.log('username:' + username);
     if (username != undefined || username != null) {
-      this.isLogin = true
-      this.username = username
+      this.isLogin = true;
+      this.username = username;
     }
-    this.roomid = this.$route.query.roomid
-    this.roomid == undefined ? '' : this.roomid
+    this.roomid = this.$route.query.roomid;
+    this.roomid == undefined ? '' : this.roomid;
     if (this.roomid != '') {
-      this.getMeeting()
+      this.getMeeting();
     }
-  }
+  },
 };
 </script>
 <style scoped>

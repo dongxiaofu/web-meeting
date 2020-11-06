@@ -324,7 +324,12 @@ FROM node:14
 # replace this with your application's default port
 EXPOSE 8888
 
+项目在哪里连接socket.io
 ========================================================================
+
+这么关键的问题，我居然没有做笔记。
+
+
 
 
 
