@@ -1208,6 +1208,8 @@ export default {
     console.log(JSON.parse(test));
     console.log(this.$data);
 
+    this.hostAddress = this.GLOBAL.apiHost;
+
     console.log(this.$options.data());
     this.$nextTick(() => {
       this.userId = localStorage.getItem('userId');
