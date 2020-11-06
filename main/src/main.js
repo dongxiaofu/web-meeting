@@ -5,7 +5,7 @@ import router from './router';
 import socket from './utils/socket';
 import bus from './utils/eventBus';
 import ElementUI from 'element-ui';
-import 'element-ui/lib/theme-chalk/index.css';
+// import 'element-ui/lib/theme-chalk/index.css';
 // es2015 module
 import VueCookies from 'vue-cookies'
 // 需要先安装依赖：cnpm install vue-resource
@@ -18,7 +18,7 @@ import VueResource from 'vue-resource'
 Vue.use(VueResource)
 Vue.config.productionTip = false
 
-Vue.use(ElementUI);
+// Vue.use(ElementUI);
 Vue.use(VueCookies)
 
 // set global cookie
