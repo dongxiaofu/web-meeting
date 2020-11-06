@@ -7,6 +7,8 @@ web会议系统
 
 node server.js
 
+替代命令：npm run prd # 使用 pm2，很好用
+
 在 /Users/cg/data/www/web-meeting/webrtc-main 运行：
 
 cnpm run serve

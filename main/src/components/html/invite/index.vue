@@ -73,7 +73,7 @@
             <div class="my-td">
               <ul>
                 <li>名字</li>
-                <li><img src="/static/html/pic.png"></li>
+                <li><img src="/static/pic.png"></li>
                 <li>1小时42分</li>
                 <li>3人</li>
                 <li>私密</li>
@@ -81,7 +81,7 @@
               </ul>
               <ul>
                 <li>名字</li>
-                <li><img src="/static/html/pic.png"></li>
+                <li><img src="/static/pic.png"></li>
                 <li>1小时42分</li>
                 <li>3人</li>
                 <li>私密</li>
@@ -89,7 +89,7 @@
               </ul>
               <ul>
                 <li>名字</li>
-                <li><img src="/static/html/pic.png"></li>
+                <li><img src="/static/pic.png"></li>
                 <li>1小时42分</li>
                 <li>3人</li>
                 <li>私密</li>
