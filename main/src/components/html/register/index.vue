@@ -27,7 +27,7 @@
       <div class="inner">
         <div id="left-bar">
           <div id="ad">
-            <img src="ad.jpeg">
+            <img src="/static/register/ad.jpeg">
           </div>
         </div>
         <div id="register-box">
