@@ -359,7 +359,7 @@ textarea::-ms-input-placeholder {
 .video-user {
     position: absolute;
     top: 110px;
-    left: 80px;
+    left: 0px;
 
     font-weight: 800;
     color: #22ff40;
