@@ -404,6 +404,7 @@ export default {
           let videoBox = document.getElementById('videoBox');
           let div = document.createElement('div');
           div.setAttribute('class', 'video-container');
+          div.setAttribute('style','width: auto;height: auto;position: relative;margin-right: 10px;float: left;');
           let video = document.createElement('video');
           video.setAttribute('class', 'video-mine');
           video.controls = true;
@@ -415,6 +416,7 @@ export default {
           div.append(video);
           let videoUser = document.createElement('span');
           videoUser.setAttribute('class', 'video-user');
+          videoUser.setAttribute('style', 'position: absolute;top: 110px;left: 0;font-weight: 800;color: #22ff40;font-size: 14px;');
           videoUser.innerText = nameOfOtherSide;
           div.append(videoUser);
           // console.log('============= getPeerConnection start')
