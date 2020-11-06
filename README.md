@@ -217,4 +217,114 @@ Module build failed: ModuleBuildError: Module build failed: TypeError [ERR_INVAL
 
 Module not found: Error: Can't resolve './store/store' in '/Users/cg/data/www/web-meeting/main/src'
 
+========================================================================
+
+[root@VM_0_9_centos web-meeting]# node server.js
+internal/modules/cjs/loader.js:628
+  throw e;
+  ^
+
+Error: No valid exports main found for '/home/cg/web-meeting/node_modules/koa'
+    at resolveExportsTarget (internal/modules/cjs/loader.js:625:9)
+    at applyExports (internal/modules/cjs/loader.js:502:14)
+    at resolveExports (internal/modules/cjs/loader.js:551:12)
+    at Function.Module._findPath (internal/modules/cjs/loader.js:657:22)
+    at Function.Module._resolveFilename (internal/modules/cjs/loader.js:960:27)
+    at Function.Module._load (internal/modules/cjs/loader.js:855:27)
+    at Module.require (internal/modules/cjs/loader.js:1033:19)
+    at require (internal/modules/cjs/helpers.js:72:18)
+    at Object.<anonymous> (/home/cg/web-meeting/server.js:5:13)
+    at Module._compile (internal/modules/cjs/loader.js:1144:30) {
+  code: 'MODULE_NOT_FOUND'
+}
+========================================================================
+../deps/icu-small/source/common/utext.cpp:572:5: 错误：‘max_align_t’不是命名空间‘std’中的一个类型名
+     std::max_align_t    extension;
+     ^
+../deps/icu-small/source/common/utext.cpp: 在函数‘UText* utext_setup_67(UText*, int32_t, UErrorCode*)’中:
+../deps/icu-small/source/common/utext.cpp:587:73: 错误：‘max_align_t’不是‘std’的成员
+             spaceRequired = sizeof(ExtendedUText) + extraSpace - sizeof(std::max_align_t);
+                                                                         ^
+../deps/icu-small/source/common/utext.cpp:587:73: 附注：建议的替代：
+In file included from /usr/include/c++/4.8.2/cstddef:42:0,
+                 from ../deps/icu-small/source/common/utext.cpp:19:
+/usr/lib/gcc/x86_64-redhat-linux/4.8.5/include/stddef.h:425:3: 附注：  ‘max_align_t’
+ } max_align_t;
+   ^
+../deps/icu-small/source/common/utext.cpp:598:57: 错误：‘struct ExtendedUText’没有名为‘extension’的成员
+
+[root@VM_0_9_centos node-v14.15.0]# ./configure --prefix=/usr/lnmp/node-v14.15.0
+Node.js configure: Found Python 3.7.3...
+WARNING: C++ compiler (CXX=g++, 4.8.5) too old, need g++ 6.3.0 or clang++ 8.0.0
+
+
+wget http://ftp.gnu.org/gnu/gcc/gcc-6.3.0/gcc-6.3.0.tar.gz
+
+2、离线的机器上，在rpm所在的文件夹内，执行以下脚本
+#rpm -Uvh --force --nodeps *.rpm
+ 
+
+	软件包 nodejs-14.14.0-1.aarch64 是针对 different 构架的
+	
+http://rpmfind.net/linux/rpm2html/search.php?query=nodejs
+
+rpm -Uvh --force --nodeps *.rpm
+
+node -v
+
+node: error while loading shared libraries: libbrotlidec.so.1: cannot open shared object file: No such file or directory
+
+
+curl --silent --location https://rpm.nodesource.com/setup_14.x | sudo bash
+
+node server.js 出现的奇怪问题，是由于node.js的版本太低导致，使用yum 安装指定版本的node.js 14,成功。
+
+详细文档：
+
+yum安装新版nodejs
+
+https://www.jianshu.com/p/e9db0baf781b
+
+第一步
+
+curl --silent --location https://rpm.nodesource.com/setup_14.x | sudo bash
+
+第二步
+
+yum -y install nodejs
+#yum install -y nodejs npm --skip-broken
+
+如果以上步骤不能安装 最新版 node，执行以下命令后再执行第二步：
+
+yum clean all
+
+如果存在多个 nodesoucre，执行以下命令删除，然后重新执行第一第二步：
+
+rm -fv /etc/yum.repos.d/nodesource*
+
+
+从源码编译安装node.js，可能需要升级gcc，这又是一个可能耗时很多的工作。
+
+使用docker 运行node.js
+
+1.占用空间非常大，10多G。
+2.我不是很熟。
+3.需要配置端口、把文件放到docker容器内等。
+
+官方文档如下：
+
+https://github.com/nodejs/docker-node
+
+我已经在服务器上执行了
+
+# specify the node base image with your desired version node:<version>
+FROM node:14
+# replace this with your application's default port
+EXPOSE 8888
+
+========================================================================
+
+
+
+
 

@@ -6,8 +6,10 @@
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
-    "start": "npm run dev",
-    "build": "node build/build.js"
+    "serve": "vue-cli-service serve",
+    "build": "node build/build.js",
+    "lint": "vue-cli-service lint",
+    "start": "vue-cli-service serve"
   },
   "dependencies": {
     "element-ui": "^2.14.0",
@@ -15,6 +17,7 @@
     "sass-loader": "^7.3.1",
     "socket.io-client": "^2.3.1",
     "vue": "^2.5.2",
+    "vue-cli": "^2.9.6",
     "vue-cookies": "^1.7.4",
     "vue-resource": "^1.5.1",
     "vue-router": "^3.0.1",
