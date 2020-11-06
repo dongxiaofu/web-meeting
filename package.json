@@ -4,7 +4,8 @@
   "description": "webrtc-demo",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "prd": "pm2 start server.js"
   },
   "keywords": [
     "koa"
