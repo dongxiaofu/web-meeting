@@ -404,7 +404,7 @@ export default {
           let videoBox = document.getElementById('videoBox');
           let div = document.createElement('div');
           div.setAttribute('class', 'video-container');
-          div.setAttribute('style','width: auto;height: auto;position: relative;margin-right: 10px;float: left;');
+          div.setAttribute('style','width: auto;height: auto;position: relative;margin-right: 10px;');
           let video = document.createElement('video');
           video.setAttribute('class', 'video-mine');
           video.controls = true;
