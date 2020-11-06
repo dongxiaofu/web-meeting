@@ -197,7 +197,7 @@ export default {
   data() {
     return {
       meetingUrl: '请在会议列表选择一个会议，点击选则',          // 会议地址
-      hostAddress: this.GLOBAL.apiHost, //'http://127.0.0.1:3221',
+      hostAddress: this.GLOBAL.webHost, //'http://127.0.0.1:3221',
 
       activeMeetingIndex: 0,       // 当前选中的会议
 
