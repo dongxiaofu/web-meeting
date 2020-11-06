@@ -304,7 +304,7 @@ export default {
       isInMeeting: false,
 
       // 获取会议详情
-      hostAddress: this.GLOBAL.apiHost,//'http://127.0.0.1:4000',
+      hostAddress: 'http://meeting-api.chugang.net',//this.GLOBAL.apiHost,//'http://127.0.0.1:4000',
       getMeetingApi: '/noauth/meeting',
 
       meeting: {},         // 当前会议
@@ -1208,7 +1208,7 @@ export default {
     console.log(JSON.parse(test));
     console.log(this.$data);
 
-    this.hostAddress = this.GLOBAL.apiHost;
+    // this.hostAddress = this.GLOBAL.apiHost;
 
     console.log(this.$options.data());
     this.$nextTick(() => {
