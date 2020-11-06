@@ -304,7 +304,7 @@ export default {
       isInMeeting: false,
 
       // 获取会议详情
-      hostAddress: 'http://meeting-api.chugang.net',//this.GLOBAL.apiHost,//'http://127.0.0.1:4000',
+      hostAddress: 'https://meeting-api.chugang.net',//this.GLOBAL.apiHost,//'http://127.0.0.1:4000',
       getMeetingApi: '/noauth/meeting',
 
       meeting: {},         // 当前会议

@@ -350,6 +350,97 @@ https://www.cnblogs.com/Wayou/p/using_MediaDevices_getUserMedia_wihtout_https.ht
 输入框中填写需要开启的域名，譬如 http://example.com"，多个以逗号分隔。
 重启后生效。
 
+服务器配置https协议，三种免费的方法
+=======================================================
+
+
+https://blog.csdn.net/t6546545/article/details/80508554
+
+
+#获取letsencrypt
+git clone https://github.com/letsencrypt/letsencrypt
+#进入letsencrypt目录
+cd letsencrypt
+#生成证书  --email后填写自己的邮箱   -d 后面填写需要配置证书的域名（支持多个哦）
+#./letsencrypt-auto certonly --standalone --email t@tsy6.com -d hxkj.vip -d www.hxkj.vip
+./letsencrypt-auto certonly --standalone --email chuganghong@qq.com -d chugang.net -d meeting.chugang.net
+
+Problem binding to port 80: Could not bind to IPv4 or IPv6
+
+关闭nginx后，再执行：
+
+[root@VM_0_9_centos letsencrypt]# ./letsencrypt-auto certonly --standalone --email chuganghong@qq.com -d chugang.net -d meeting.chugang.net
+Saving debug log to /var/log/letsencrypt/letsencrypt.log
+Plugins selected: Authenticator standalone, Installer None
+Obtaining a new certificate
+Performing the following challenges:
+http-01 challenge for chugang.net
+http-01 challenge for meeting.chugang.net
+Waiting for verification...
+Cleaning up challenges
+
+IMPORTANT NOTES:
+ - Congratulations! Your certificate and chain have been saved at:
+   /etc/letsencrypt/live/chugang.net/fullchain.pem
+   Your key file has been saved at:
+   /etc/letsencrypt/live/chugang.net/privkey.pem
+   Your cert will expire on 2021-02-04. To obtain a new or tweaked
+   version of this certificate in the future, simply run
+   letsencrypt-auto again. To non-interactively renew *all* of your
+   certificates, run "letsencrypt-auto renew"
+ - If you like Certbot, please consider supporting our work by:
+
+   Donating to ISRG / Let's Encrypt:   https://letsencrypt.org/donate
+   Donating to EFF:                    https://eff.org/donate-le
+   
+   
+cert.pem - Apache服务器端证书
+chain.pem - Apache根证书和中继证书
+fullchain.pem - Nginx所需要ssl_certificate文件
+privkey.pem - 安全证书KEY文件
+
+/etc/letsencrypt/live/
+
+
+nginx配置：
+
+server {
+        listen       443;
+        server_name  hxkj.vip www.hxkj.vip;
+        ssl on;
+        root         /usr/share/nginx/html;
+
+        ssl_certificate "/etc/letsencrypt/live/chugang.net/fullchain.pem";
+        ssl_certificate_key "/etc/letsencrypt/live/chugang.net/privkey.pem";
+        ssl_session_cache shared:SSL:1m;
+        ssl_session_timeout  5m;
+        ssl_protocols SSLv2 SSLv3 TLSv1;
+        ssl_ciphers HIGH:!aNULL:!MD5;
+        ssl_prefer_server_ciphers on;
+
+        location / {
+        }
+
+        error_page 404 /404.html;
+            location = /40x.html {
+        }
+
+        error_page 500 502 503 504 /50x.html;
+            location = /50x.html {
+        }
+    }
+    
+http重定向到https
+
+server {
+    listen 80;
+    server_name www.域名.com;
+    rewrite ^(.*)$ https://${server_name}$1 permanent;
+}
+
+
+
+
 
 
 
