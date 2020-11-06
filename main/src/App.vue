@@ -4,6 +4,11 @@
   </div>
 </template>
 
+
+<style lang="scss">
+@import "../static/css/base";
+</style>
+
 <script>
   export default {
       data() {
