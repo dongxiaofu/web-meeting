@@ -451,6 +451,20 @@ location /socket.io/ {
     proxy_set_header X-Real-IP $remote_addr;
 }
 
+删除分支
+======================
+
+删除本地master分支
+git branch -d master
+
+推送以删除的本地master分支
+git push origin :master
+
+ ! [remote rejected] master (refusing to delete the current branch: refs/heads/master)
+
+
+
+
 
 
 
