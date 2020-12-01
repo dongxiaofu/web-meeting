@@ -3,6 +3,14 @@ web会议系统
 
 #   启动项目
 
+需要修改：
+
+/Users/cg/data/www/web-meeting/main/src/utils/socket.js
+
+/Users/cg/data/www/web-meeting/main/build/build.js
+
+然后：
+
 在 /Users/cg/data/www/web-meeting 运行：
 
 node server.js

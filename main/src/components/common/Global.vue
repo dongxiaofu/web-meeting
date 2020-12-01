@@ -1,7 +1,7 @@
 <script>
 const serverSrc = 'www.baidu.com';
 const apiHost = process.env.NODE_ENV == 'development' ? 'http://localhost:4000' : 'http://meeting-api.chugang.net';
-const webHost = process.env.NODE_ENV == 'development' ? 'http://127.0.0.1:3221' : 'https://meeting.chugang.net';
+const webHost = process.env.NODE_ENV == 'development' ? 'http://127.0.0.1:8080' : 'https://meeting.chugang.net';
 const token = '12345678';
 const hasEnter = false;
 const userSite = '中国钓鱼岛';

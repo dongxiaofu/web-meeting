@@ -36,5 +36,10 @@ export default new Router({
       name: 'invite',
       component: _import('html/invite/index')
     },
+    {
+      path: '/phone',
+      name: 'phone',
+      component: _import('html/phone/index')
+    },
   ],
 });

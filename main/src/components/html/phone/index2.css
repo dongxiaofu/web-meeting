@@ -1,0 +1,685 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+
+    background-color: black;
+}
+
+div, ul, span, li, a {
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+ul {
+    list-style: none;
+}
+
+
+#wrapper {
+    /*padding-left: 400px;*/
+}
+
+#head-wrapper {
+    width: 100%;
+    background-color: black;
+}
+
+#my-head {
+    height: 50px;
+    line-height: 50px;
+    background: black;
+    width: 100%;
+    /*position:absolute;*/
+    /*z-index:5;*/
+    top: 0;
+    text-align: center;
+
+    position: relative;
+
+    width: 90%;
+
+    color: white;
+
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#paint-board {
+    background: #aad5cb;
+    width: 100%;
+    height: 800px;
+    /*overflow:auto;*/
+    /*top:50px;*/
+    /*position:absolute;*/
+    /*z-index:10;*/
+    /*bottom:30px;*/
+    /*_height:100%;*/
+
+    float: right;
+
+    position: relative;
+
+
+    border: 1px solid red;
+
+    /*padding-left: 20px;*/
+}
+
+#paint-board-container {
+    width: 90%;
+    height: 672px;
+    /*margin-top: 50px;*/
+    /*margin-bottom: 50px;*/
+
+    /*margin-left: auto;*/
+    /*margin-right: auto;*/
+
+    margin: 0px auto;
+    position: relative;
+
+    border: 1px solid gray;
+
+    /*margin-left: 200px;*/
+}
+
+#canvas-txt{
+    position: absolute;
+    top: 200px;
+    right: 70px;
+}
+
+#my-title {
+    font-size: 16px;
+    text-align: center;
+    border: 1px solid greenyellow;
+
+    padding-top: 20px;
+    padding-bottom: 10px;
+}
+
+#content {
+    height: 300px;
+    margin: 0px auto;
+    padding: 0px 20px;
+    padding: 0;
+    background-color: white;
+}
+
+#content ul {
+    width: 96%;
+    /*height: 80px;*/
+    margin: 0 auto;
+    border: 1px solid red;
+}
+
+#content ul li {
+    /*display: inline-block;*/
+    float: left;
+    width: 22.8%;
+    height: 120px;
+    padding-left: 2%;
+
+    white-space: nowrap;
+    overflow: hidden;
+
+    border: 1px solid forestgreen;
+}
+
+/*用户列表 start */
+#left-side {
+    width: 150px;
+    margin-left: 0;
+    float: left;
+    /*font-size: 12px;*/
+
+    padding-left: 10px;
+
+    height: 100%;
+
+    background-color: white;
+    border: 1px solid red;
+}
+
+#left-side li {
+    text-align: center;
+    font-size: 2px;
+    width: 140px;
+    height: 30px;
+    line-height: 30px;
+    margin-top: 10px;
+
+    position: relative;
+    /*border: 1px solid #22ff40;*/
+}
+
+#left-side h6 {
+    margin-top: 10px;
+    margin-bottom: 8px;
+    /*padding: 10px;*/
+    height: 10px;
+    font-weight: 400;
+}
+
+#left-side .user-list {
+    height: 700px;
+}
+
+
+#left-side .user-list li {
+    text-align: left;
+    width: 115px;
+    /*line-height: 30px;*/
+    padding-left: 35px;
+    position: relative;
+}
+
+/*用户列表 end */
+/*消息框 start*/
+.clear {
+    clear: both;
+}
+
+#message {
+    height: 100%;
+    width: 230px;
+    /*width: 210px;*/
+    float: left;
+    margin-left: 4px;
+
+    background-color: white;
+
+    border: 1px solid greenyellow;
+}
+
+#msg-title {
+    font-size: 13px;
+    margin-top: 10px;
+}
+
+.msg-list {
+    height: 693px;
+    font-size: 12px;
+
+    overflow: auto;
+
+    border: 1px solid #acb7bf;
+}
+
+.msg-list li {
+    background-color: #acb7bf;
+    margin: 10px 2px 10px 3px;
+    padding: 10px 10px;
+
+    border-radius: 2px;
+}
+
+.msg-ipt {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.msg-ipt input {
+    width: 80%;
+    height: 30px;
+
+    outline: none;
+}
+
+.msg-ipt button {
+    width: 10%;
+    height: 22px;
+
+    font-size: 5px;
+
+    background-color: #aad5cb;
+
+    /*font-size: 12px;*/
+}
+
+/*消息框 end*/
+
+
+#foot-wrapper {
+    width: 100%;
+    height: 50px;
+    background-color: black;
+
+    /*border: 1px solid red;*/
+}
+
+#my-foot {
+    height: 50px;
+    line-height: 50px;
+    background: black;
+    width: 90%;
+    margin: 0 auto;
+}
+
+/*icon start*/
+.message-icon {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+
+    position: absolute;
+    left: 0px;
+    top: 0px;
+
+    background-image: url("message.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+
+    /*border: 1px solid red;*/
+}
+
+.notes-icon {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+
+    position: absolute;
+    left: 0px;
+    top: 0px;
+
+    background-image: url("notes.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+
+    /*border: 1px solid red;*/
+}
+
+
+#left-side .user-icon {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+
+    font-size: 16px;
+
+    background-color: dodgerblue;
+    border: 1px solid dodgerblue;
+
+    border-radius: 5px;
+}
+
+.msg-ipt {
+    position: relative;
+}
+
+.msg-ipt .send-icon {
+    display: inline-block;
+    width: 31px;
+    height: 31px;
+
+    position: absolute;
+    right: 0px;
+    top: 1px;
+
+    background-image: url("send.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+
+    cursor: pointer;
+
+    /*border: 1px solid red;*/
+}
+
+#my-head .show-user-list {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+
+    position: absolute;
+    left: -30px;
+    top: 7px;
+
+
+    background-image: url("User.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+
+    cursor: pointer;
+
+    /*border: 1px solid red;*/
+}
+
+#my-foot #media-operation {
+    width: 120px;
+    height: 50px;
+    line-height: 50px;
+
+    margin: 0 auto;
+
+    /*border: 1px solid red;*/
+
+    position: relative;
+}
+
+#my-foot #media-operation .phone {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+
+    position: absolute;
+    left: 0px;
+    top: 2px;
+
+    border: 1px solid white;
+
+    border-radius: 100%;
+}
+
+#my-foot #media-operation .video {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+
+    position: absolute;
+    right: 0px;
+    top: 2px;
+
+    border: 1px solid white;
+
+    border-radius: 100%;
+}
+
+
+.phone-icon {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+
+    position: absolute;
+    right: 0px;
+    top: 0px;
+
+    background-image: url("phone.png");
+    background-repeat: no-repeat;
+    background-position-x: -3px;
+    background-position-y: 3px;
+
+    cursor: pointer;
+}
+
+.video-icon {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+
+    background-image: url("webcam.png");
+    background-repeat: no-repeat;
+    background-position-x: 8px;
+    background-position-y: 3px;
+
+    cursor: pointer;
+}
+
+/*icon end*/
+
+#common-chat {
+    background-color: darkgray;
+    border: 1px solid dodgerblue;
+    border-radius: 5px;
+
+    width: 130px;
+
+    cursor: pointer;
+}
+
+/*tool bar start*/
+#tool {
+    position: absolute;
+    bottom: 5px;
+    width: 100%;
+    margin: 0 auto;
+
+    height: 20px;
+    /*width: 100%;*/
+
+    border: 1px solid;
+}
+
+#switch {
+    width: 100px;
+
+    margin: 0 auto;
+}
+
+/*tool bar end*/
+
+/*右侧工具栏 start*/
+#side-tool {
+    width: 32px;
+    height: 68px;
+
+    border: 1px solid grey;
+    /*border-bottom: none;*/
+    border-radius: 5px;
+
+    position: absolute;
+    right: 2px;
+    top: 30%;
+}
+
+#side-tool ul li {
+    width: 32px;
+    height: 32px;
+    position: relative;
+
+
+    border-bottom: 1px solid grey;
+}
+
+#side-tool ul li i.more-tool-icon {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+
+    position: absolute;
+    right: 0px;
+    top: 0px;
+
+    background-image: url("hand.png");
+    background-repeat: no-repeat;
+    background-position-x: 6px;
+    background-position-y: 0px;
+
+    cursor: pointer;
+}
+
+#side-tool ul li i.delete-icon {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+
+    position: absolute;
+    right: 0px;
+    top: 0px;
+
+    background-image: url("Delete.png");
+    background-repeat: no-repeat;
+    background-position-x: 6px;
+    background-position-y: 0px;
+
+    cursor: pointer;
+}
+
+#side-tool ul li.last {
+    border-bottom: none;
+}
+
+/*右侧工具栏 end*/
+
+/*右侧工具栏--更多画板工具 start*/
+#paint-tool {
+    width: 64px;
+    height: 260px;
+
+    /*border: 1px solid grey;*/
+    /*border-radius: 5px;*/
+
+    position: absolute;
+    right: 34px;
+    top: 30%;
+
+    z-index: 200;
+}
+
+/*右侧工具栏--更多画板工具 end*/
+
+/*设置--退出按钮 start*/
+#my-head .logout {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+
+    position: absolute;
+    right: -36px;
+    top: 9px;
+
+    background-image: url("settings.png");
+    background-repeat: no-repeat;
+    /*background-position-x: 6px;*/
+    /*background-position-y: 0px;*/
+
+    cursor: pointer;
+
+    z-index: 200;
+}
+
+#setting-list {
+    width: 60px;
+    padding: 0 3px;
+    height: 36px;
+
+    border: 1px solid grey;
+
+    position: absolute;
+    right: -30px;
+    top: 41px;
+
+    margin: 0;
+    padding: 0;
+
+    background-color: white;
+
+    border-radius: 2px;
+
+    z-index: 200;
+}
+
+#setting-list li {
+    height: 17px;
+    line-height: 17px;
+    width: 60px;
+    text-align: left;
+    font-size: 3px;
+
+    color: black;
+
+    margin-top: 0px;
+
+    cursor: pointer;
+}
+
+#setting-list li:hover {
+    background-color: #acb7bf;
+}
+
+/*设置--退出按钮 end*/
+
+/*画板 start*/
+/*.my-canvas {*/
+/*width: 100%;*/
+/*height: 672px;*/
+/*}*/
+
+/*视频列表*/
+#video-list {
+    width: auto;
+    max-width: 100px;
+    max-height: 400px;
+    height: auto;
+
+    position: absolute;
+    z-index: 200;
+
+    top: 20px;
+
+    border: 1px solid red;
+}
+
+#video-list li{
+    position: relative;
+    margin: 0;
+    padding: 0;
+}
+
+#video-list .video-mine {
+    margin: 0;
+    padding: 0;
+    width: 100px;
+    height: 100px;
+    outline: none;
+}
+
+.video-user{
+    position: absolute;
+    left: 0px;
+    bottom: -12px;
+    display: inline-block;
+    width: 60px;
+    height: 20px;
+    line-height: 20px;
+    text-align: left;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 6px;
+
+    /*border: 1px solid red;*/
+}
+
+/*画板*/
+.active {
+    border: 1px solid darkblue;
+}
+
+#paint-tool ul li {
+    width: 60px;
+    height: 20px;
+    margin-bottom: 1px;
+}
+
+#paint-tool ul li button {
+    width: 60px;
+    height: 20px;
+    font-size: 5px;
+    outline: none;
+}
+
+.el-color-picker {
+    margin-top: 20px;
+}
+
+#linewidth {
+    position: absolute;
+    top: 167px;
+    left: 0px;
+    width: 65px;
+}
+
+#paint-tool ul li#linewidth button { /*这个选择器，花了点时间才写出来。与前面 #paint-tool ul li button 有关联*/
+    width: 65px;
+}
+

@@ -485,7 +485,7 @@ export default {
     createOffer(account, peer, type) {
       //发送offer，发送本地session描述
       peer.createOffer({
-        offerToReceiveAudio: 0,
+        offerToReceiveAudio: 1,
         offerToReceiveVideo: 1,
       }).then((desc) => {
         // // console.log('send-offer', desc);
