@@ -7,7 +7,7 @@ const path = require('path');
 const koaSend = require('koa-send');
 const static = require('koa-static');
 const socket = require('koa-socket');
-const users = {}; // 保存用户
+const users = []; // 保存用户
 const sockS = {}; // 保存客户端对应的socket
 const io = new socket({
     ioOptions: {

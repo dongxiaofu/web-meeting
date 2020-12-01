@@ -18,7 +18,7 @@
   </div>
   <!--视频区 end-->
 </template>
-
+<script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
 <script>
 import socket from '../../../utils/socket';     // 这是相对于本文件的路径
 import {Palette} from '../../../utils/palette';
@@ -155,7 +155,18 @@ export default {
       //获取本地的媒体流，并绑定到一个video标签上输出，并且发送这个媒体流给其他客户端
       return new Promise((resolve, reject) => {
         getUserMedia.call(navigator, {
-          'audio': true,
+          audio: {
+            mandatory: {
+              echoCancellation: false,
+              googEchoCancellation: false,
+              googAutoGainControl: false,
+              googAutoGainControl2: false,
+              googNoiseSuppression: false,
+              googHighpassFilter: false,
+              googTypingNoiseDetection: false,
+              //googAudioMirroring: false // For some reason setting googAudioMirroring causes a navigator.getUserMedia error:  NavigatorUserMediaError
+            }
+          },
           'video': false,
         }, (stream) => {
           //绑定本地媒体流到video标签用于输出
