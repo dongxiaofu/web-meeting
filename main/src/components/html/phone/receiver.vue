@@ -72,8 +72,8 @@
               <!--<video class="video-mine" autoplay controls ref="video-mine"></video>-->
               <!--</div>-->
               <div class="video-box" ref="video-box" id="videoBox">
-                <div class="video-container">
-                  <audio class="video-mine" autoplay controls ref="video-mine" id="video-test"
+                <div class="video-container" style="display: none">
+                  <audio class="video-mine" ref="video-mine" id="video-test"
                   ></audio>
                   <!--                  <span class="video-user">{{ account }}</span>-->
                 </div>
@@ -392,41 +392,40 @@ export default {
       // 创建
       let peer = new PeerConnection(iceServer);
       //向PeerConnection中加入需要发送的流
-      peer.addStream(this.localStream);       // 发送
+      // this.hostFlag == 1 && peer.addStream(this.localStream);       // 发送
       // let videoBox = this.$refs['video-box'];
       //如果检测到媒体流连接到本地，将其绑定到一个video标签上输出
-      // if (this.hostFlag != 1) {
-      //   peer.onaddstream = function (event) {           // 接收
-      //     console.log(event.stream);
-      //     let videos = document.querySelector('#' + v.account);
-      //     if (videos) {
-      //       videos.srcObject = event.stream;
-      //     } else {
-      //       let videoBox = document.getElementById('videoBox');
-      //       let div = document.createElement('div');
-      //       div.setAttribute('class', 'video-container');
-      //       // div.setAttribute('style','width: auto;height: auto;position: relative;margin-right: 10px;');
-      //       let video = document.createElement('audio');
-      //       // video.setAttribute('class', 'video-mine');
-      //       video.controls = true;
-      //       video.autoplay = 'autoplay';
-      //       video.srcObject = event.stream;
-      //       // video.id = v.account;
-      //       // video.style.height = '150px';
-      //       // video.height = 100;  // 错误
-      //       div.append(video);
-      //       let videoUser = document.createElement('span');
-      //       videoUser.setAttribute('class', 'video-user');
-      //       videoUser.setAttribute('style', 'position: absolute;top: 110px;left: 0;font-weight: 800;color: #22ff40;font-size: 14px;');
-      //       videoUser.innerText = nameOfOtherSide;
-      //       // div.append(videoUser);
-      //       // console.log('============= getPeerConnection start')
-      //       // console.log(videoBox)
-      //       // console.log('============= getPeerConnection end')
-      //       videoBox.append(div);
-      //     }
-      //   };
-      // }
+      peer.onaddstream = function (event) {           // 接收
+        alert(444)
+        console.log(event.stream);
+        let videos = document.querySelector('#' + v.account);
+        if (videos) {
+          videos.srcObject = event.stream;
+        } else {
+          let videoBox = document.getElementById('videoBox');
+          let div = document.createElement('div');
+          div.setAttribute('class', 'video-container');
+          // div.setAttribute('style','width: auto;height: auto;position: relative;margin-right: 10px;');
+          let video = document.createElement('audio');
+          // video.setAttribute('class', 'video-mine');
+          video.controls = true;
+          video.autoplay = true;
+          video.srcObject = event.stream;
+          // video.id = v.account;
+          // video.style.height = '150px';
+          // video.height = 100;  // 错误
+          div.append(video);
+          let videoUser = document.createElement('span');
+          videoUser.setAttribute('class', 'video-user');
+          videoUser.setAttribute('style', 'position: absolute;top: 110px;left: 0;font-weight: 800;color: #22ff40;font-size: 14px;');
+          videoUser.innerText = nameOfOtherSide;
+          // div.append(videoUser);
+          // console.log('============= getPeerConnection start')
+          // console.log(videoBox)
+          // console.log('============= getPeerConnection end')
+          videoBox.append(div);
+        }
+      };
 
       //发送ICE候选到其他客户端
       peer.onicecandidate = (event) => {

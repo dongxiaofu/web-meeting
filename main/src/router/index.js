@@ -41,5 +41,10 @@ export default new Router({
       name: 'phone',
       component: _import('html/phone/index')
     },
+    {
+      path: '/phone-receiver',
+      name: 'phone',
+      component: _import('html/phone/receiver')
+    },
   ],
 });
