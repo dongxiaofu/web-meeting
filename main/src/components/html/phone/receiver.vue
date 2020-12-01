@@ -1,225 +1,22 @@
 <template>
-  <div style="height: 100%;">
-    <div id="main-container" style="height: 100%;">
-      <div id="left-bar" style="height: 100%;">
-        <div id="menu">
-          <ul>
-            <li id="menu-users"
-                @click="hideMsgBox($event)"
-                :class="[{ 'active':userMenuIsActive == true}, '']"
-            >会议成员({{ participantNumber }})
-            </li>
-            <li
-              id="menu-message"
-              @click="hideUserBox($event)"
-              :class="[{ 'active':msgMenuIsActive == true}, '']"
-            >消息框
-            </li>
-          </ul>
-        </div>
-        <div id="user-list">
-          <ul>
-            <!--有更简单的if写法吗-->
-            <li v-for="user in participants">
-              <i class="user-icon">
-                            <span v-if="user.account == undefined">
-                                D
-                            </span>
-                <span v-else>
-                                {{ user.account.slice(0, 1) }}
-                            </span>
-              </i>
-              <span v-if="user.account == undefined">
-                            Default
-                        </span>
-              <span v-else>
-                            {{ user.account }}
-                        </span>
-              <span v-if="user.account== account">(您)</span>
-            </li>
-          </ul>
-        </div>
-        <div id="message" style="display: none">
-          <div id="msg-list">
-            <ul>
-              <li v-for="msg in messageList">
-                <p class="speaker">
-                  {{ msg.user }}
-                  <span class="post-time">{{ msg.time }}</span>
-                </p>
-                <p>
-                  {{ msg.content }}
-                </p>
-              </li>
-            </ul>
-          </div>
-          <div id="msg-ipt">
-            <textarea placeholder="请输入聊天信息，点击Enter键发送信息" v-model="sendText" @keyup.enter="sendMsg"></textarea>
-            <button @click="sendMsg">发送</button>
-          </div>
-        </div>
-
-      </div>
-      <div id="paint-board" style="height: 100%;">
-        <div id="paint-board-container" style="height: 100%;">
-          <!--my-canvas-->
-          <!--width="1040" height="675"-->
-          <div id="canvas-container" style="height: 100%;">
-            <canvas ref="canvas" id="my-canvas0" class="my-canvas" width="1184" height="780"></canvas>
-            <!--视频区 start-->
-            <div id="video-list">
-              <!--<div class="video-box" ref="video-box">-->
-              <!--<video class="video-mine" autoplay controls ref="video-mine"></video>-->
-              <!--</div>-->
-              <div class="video-box" ref="video-box" id="videoBox">
-                <div class="video-container" style="display: none">
-                  <audio class="video-mine" ref="video-mine" id="video-test"
-                  ></audio>
-                  <!--                  <span class="video-user">{{ account }}</span>-->
-                </div>
-              </div>
-              <!--<video src="" id="rtcB-Board" playsinline autoplay></video>-->
-              <!--<h5>演示画面</h5>-->
-              <!--<button @click="call2" :disabled="allowCall">call</button>-->
-              <!--<button @click="hangup2" :disabled="allowHangup">hangup</button>-->
-            </div>
-            <!--视频区 end-->
-          </div>
-
-          <!--<input id="canvas-txt"></input>-->
-          <!--切换幻灯片等工具 start-->
-          <div id="tool" style="display: none">
-            <div id="switch">
-              <select>
-                <option>幻灯片1</option>
-                <option>幻灯片2</option>
-                <option>幻灯片3</option>
-                <option>幻灯片4</option>
-                <option>幻灯片5</option>
-              </select>
-            </div>
-            <!--<div id="small-tool"></div>-->
-          </div>
-          <!--切换幻灯片等工具 end-->
-
-        </div>
-        <div id="tools">
-          <p id="my-big-title">
-            工具栏
-            <span class="big-fold-btn" @click="hideTool($event)">-</span>
-          </p>
-          <div>
-            <div class="tool  paint-tool">
-              <!--画板工具区 start-->
-              <p class="my-small-title">
-                画板工具
-                <span class="fold-btn" @click="hideTool($event)">-</span>
-              </p>
-              <ul>
-                <li v-for="v in handleList" :key="v.type" :id="v.type === 'lineWidth' ? 'linewidth':''">
-                  <!--颜色 start-->
-                  <el-color-picker
-                    v-model="color" show-alpha v-if="v.type === 'color'" @change="colorChange"
-                    :disabled="allowHangup"
-                  >
-                  </el-color-picker>
-                  <!--颜色 end-->
-
-                  <button :disabled="v.type === 'cancel' ? allowHangup || allowCancel:
-                            v.type === 'go' ? allowHangup || allowGo
-                            :allowHangup"
-                          @click="handleClick(v)"
-                          v-if="!['color', 'lineWidth', 'polygon'].includes(v.type)"
-                          :class="{active: currHandle === v.type}"
-                  >
-                    {{ v.name }}
-                  </button>
-                  <el-popover
-                    placement="top"
-                    width="400"
-                    trigger="click"
-                    v-if="v.type === 'polygon'"
-                  >
-                    <el-input-number v-model="sides" controls-position="right" @change="sidesChange"
-                                     :min="3"
-                                     :max="10"></el-input-number>
-                    <button slot="reference" :disabled="allowHangup" @click="handleClick(v)"
-                            :class="{active: currHandle === v.type}">{{ v.name }}
-                    </button>
-                  </el-popover>
-                  <el-popover
-                    placement="top"
-                    width="400"
-                    trigger="click"
-                    v-if="v.type === 'lineWidth'"
-                  >
-                    <el-slider v-model="lineWidth" :max=20 @change="lineWidthChange"></el-slider>
-                    <button slot="reference" :disabled="allowHangup">{{ v.name }} <i>{{
-                        lineWidth +
-                        'px'
-                      }}</i>
-                    </button>
-                  </el-popover>
-                </li>
-              </ul>
-              <!--画板工具区 end-->
-            </div>
-            <div class="tool paint-tool">
-              <p class="my-small-title">
-                会议管理
-                <span class="fold-btn" @click="hideTool($event)">-</span>
-              </p>
-              <ul>
-                <li v-show="!hostFlag">
-                  <button @click="logout">退出会议</button>
-                </li>
-                <li v-show="hostFlag">
-                  <button @click="hangup">注销会议</button>
-                </li>
-                <li v-show="hostFlag">
-                  <button @click="invite($event)">邀请参会</button>
-                  <!--<router-link :to="{path:'invite',query:{roomid:roomid}}"-->
-                  <!--style="display: none">-->
-                  <!--</router-link>-->
-                  <router-link :to="{path:'meeting-list',query:{roomid:roomid}}"
-                               style="display: none">
-                  </router-link>
-                </li>
-              </ul>
-            </div>
-            <div class="tool paint-tool">
-              <p class="my-small-title">
-                视频管理
-                <span class="fold-btn" @click="hideTool($event)">-</span>
-              </p>
-              <ul>
-                <li>
-                  <button>开启声音</button>
-                </li>
-                <li>
-                  <button>开启视频</button>
-                </li>
-                <li>
-                  <button @click="hideVideoBox($event)">隐藏视频</button>
-                </li>
-              </ul>
-            </div>
-            <div class="tool paint-tool">
-              <p class="my-small-title">
-                存储管理
-                <span class="fold-btn" @click="hideTool($event)">-</span>
-              </p>
-              <ul>
-                <li>
-                  <button @click="savePaint($event)">保存画板</button>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
+  <!--视频区 start-->
+  <div id="video-list">
+    <!--<div class="video-box" ref="video-box">-->
+    <!--<video class="video-mine" autoplay controls ref="video-mine"></video>-->
+    <!--</div>-->
+    <div class="video-box" ref="video-box" id="videoBox">
+      <div class="video-container" style="display: none;">
+        <audio class="video-mine" autoplay controls ref="video-mine" id="video-test"
+        ></audio>
+        <!--                  <span class="video-user">{{ account }}</span>-->
       </div>
     </div>
+    <!--<video src="" id="rtcB-Board" playsinline autoplay></video>-->
+    <!--<h5>演示画面</h5>-->
+    <!--<button @click="call2" :disabled="allowCall">call</button>-->
+    <!--<button @click="hangup2" :disabled="allowHangup">hangup</button>-->
   </div>
+  <!--视频区 end-->
 </template>
 
 <script>
@@ -396,13 +193,17 @@ export default {
       // let videoBox = this.$refs['video-box'];
       //如果检测到媒体流连接到本地，将其绑定到一个video标签上输出
       peer.onaddstream = function (event) {           // 接收
-        alert(444)
         console.log(event.stream);
         let videos = document.querySelector('#' + v.account);
         if (videos) {
           videos.srcObject = event.stream;
         } else {
           let videoBox = document.getElementById('videoBox');
+          let children = videoBox.childElementCount;
+          alert(children);
+          if(children > 2){
+            return ;
+          }
           let div = document.createElement('div');
           div.setAttribute('class', 'video-container');
           // div.setAttribute('style','width: auto;height: auto;position: relative;margin-right: 10px;');
@@ -1172,6 +973,8 @@ export default {
     // todo 这是简化处理，还需要在注册那里写代码，要求注册的账号必须是合法的邮箱
     // 获取字符串cg@qq.com的前部分
     getPrefixOfUsername(username) {
+      alert('username:' + username);
+     return username;
       let arr = username.split('@');
       let prefix = arr[0];
       return prefix;
@@ -1179,6 +982,7 @@ export default {
 
     // 获取jim-cg中的对方名字
     getNameOfOtherSide(account, combineAccount) {
+      alert('combineAccount:' + combineAccount)
       let arr = combineAccount.split('-');
       let nameOfTOtherSide = '';
       for (let i = 0; i < arr.length; i++) {
@@ -1221,6 +1025,8 @@ export default {
       // this.account = localStorage.getItem('account');
       this.account = this.$route.query.account;
 
+      this.roomid = '5fc5d0344da4a1348d424973';
+
       // 是0时才需要初始化，否则，使用上次的值。
       if (this.roomid == 0) {
         this.roomid = this.$route.query.roomid;
@@ -1254,42 +1060,14 @@ export default {
         );
       });
       this.socketInit();
-      this.boardLocalStream = this.$refs['canvas'].captureStream();
+      // this.boardLocalStream = this.$refs['canvas'].captureStream();
 
       socket.on('joined', (users, meeting, account) => {
-
-        if (meeting == null) {
-          return;
-        }
-        // 在本地测试，会有bug。先从url中获取吧
-        // this.account = localStorage.getItem('account');
-
-        let msgList = meeting.msg;
-        let paintContent = meeting.paint;
-        // 和joined事件重复了，根本就不应该写这个方法
-        // this.getMeeting();
-
-        // 为了兼容而已
-        this.meeting = meeting;
-        this.host = this.meeting.host;
-        this.status = this.meeting.status;
         // 参会者用户名等于该会议的主持人，则该参会者是主持人
-
-        if (this.host == this.account) {
-          this.hostFlag = 1;
-        }
+        this.hostFlag = 0;
         // console.log('this.account start')
         // console.log(this.account + ':' + this.host + ':' + this.hostFlag)
         // console.log('this.account end')
-        // 会议已经注销并且不是主持人
-        if (this.hostFlag == 0 && this.status == 0) {
-          this.$message({
-            message: '会议已经结束',
-            type: 'warning',
-          });
-          this.$router.push({name: 'login'});
-          return;
-        }
 
         // 检查当前参会者是否仍在参会状态，初始化状态，无人参会，但
         for (let i = 0; i < users.length; i++) {
@@ -1298,7 +1076,7 @@ export default {
           }
         }
 
-        this.messageList = msgList;
+        this.messageList = [];
         // console.log('主持人users start')
         for (let k = 0; k < users.length; k++) {
           // console.log('user:' + users[k])
@@ -1307,7 +1085,7 @@ export default {
         this.participants = users;
         this.participantNumber = users.length;
         // 创建canvas
-        this.createCanvas(paintContent);
+        // this.createCanvas(paintContent);
 
 
         if (window.performance.navigation.type == 1) {
@@ -1335,21 +1113,16 @@ export default {
         if (userNum >= 1) {     // 这个条件，实际没啥用。空数组forEach不会执行。
           users.forEach(v => {
             let obj = {};
-            let vAccount = this.getPrefixOfUsername(v.account);
-            let currentAccount = this.getPrefixOfUsername(this.account);
-            let nameOfOtherSide = this.getNameOfOtherSide(currentAccount, vAccount);
-            console.log('===================== getPrefixOfUsername start');
-            console.log(vAccount);
-            console.log(currentAccount);
-            console.log('===================== getPrefixOfUsername end');
+            let vAccount = v.account;
+            let currentAccount = this.account;
             let arr = [vAccount, currentAccount];
             obj.account = arr.sort().join('-');         // 必须如此
             obj.user = this.account;
             // 不管有没有建立连接，画板都要可以使用。在这里耗费了33分钟才找出问题。
-            this.initPalette();
+            // this.initPalette();
             // 自己和自己不建立P2P连接。实际上是忽视了这里的判断条件。
             if (!this.peerList[obj.account] && v.account !== this.account) {
-              this.getPeerConnection(obj, nameOfOtherSide);
+              this.getPeerConnection(obj, 'nameOfOtherSide');
               // 非主持人建立P2P后，主持人才能建立
               // 优化为，所有非主持人建立P2P后，主持人才能建立。但是几乎不可能，因为总会有参会者
               // 随时加入进来
@@ -1357,7 +1130,7 @@ export default {
               // B收到H建立的所有P2P连接，检查有没有和自己相关的，若没有，自己不建立P20；若有，自己
               // 建立P2P。如此，可保证：H在B之前建立P2P。
               if (userNum > 1) {
-                this.getPaintPeerConnection(obj);
+                // this.getPaintPeerConnection(obj);
               }
             }
           });
@@ -1367,7 +1140,7 @@ export default {
               // console.log('=======k start')
               // console.log(k)
               // console.log('=======k end')
-              this.createOffer(k, this.peerList[k], 'video');
+              this.createOffer(k, this.peerList[k], 'audio');
               // this.createOfferPaint(k, this.paintPeerList[k], 'paint');
             }
           }
